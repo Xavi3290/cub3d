@@ -1,0 +1,24 @@
+# System files
+.DS_Store
+.nfs*
+
+# Object files
+*.o
+*.a
+*.d
+
+# Executables
+*.out
+*.exe
+*.html
+minishell
+
+# Temp files
+*.swp
+
+# Debug files
+*.dSYM/
+
+# VS Code directory
+.vscode/
+build
