@@ -6,7 +6,7 @@
 #    By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 18:43:43 by xroca-pe          #+#    #+#              #
-#    Updated: 2024/10/21 20:33:33 by xroca-pe         ###   ########.fr        #
+#    Updated: 2024/10/22 20:00:57 by xroca-pe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ RED = \033[1;91m
 NONE=\033[0m
 
 BUILD_DIR = build
-SRC = src/main.c 
+SRC = src/main.c src//raycasting.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 DEPS = $(OBJ:.o=.d)
