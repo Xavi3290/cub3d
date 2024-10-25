@@ -12,6 +12,11 @@
 *.exe
 *.html
 cub3d
+Maps/*
+Maps
+MLX42/*
+MLX42
+MLX42/CMakeFiles/mlx42.dir/compiler_depend.make
 
 # Temp files
 *.swp

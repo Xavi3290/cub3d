@@ -1,38 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/10/25 13:21:54 by cgaratej         ###   ########.fr       */
+/*   Created: 2024/10/25 12:53:00 by cgaratej          #+#    #+#             */
+/*   Updated: 2024/10/25 12:54:20 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void close_window(void* param)
+int err_msg(char *detail, char *str, int code)
 {
-	(void)param;
-	printf("Window closed\n");
-	exit(0);
-}
-
-int main(int argc, char **argv)
-{
-	if (argc != 2)
-		return (1);
-	if (check_args(argv[1], 1))
-		return (1);
-	/*mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "cub3D", true);
-	if (!mlx)
+	ft_putstr_fd("cub3D: Error", 2);
+	if (detail)
 	{
-		printf("Error initializing MLX\n");
-		return (1);
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(detail, 2);
 	}
-	mlx_close_hook(mlx, &close_window, NULL);
-	mlx_loop(mlx);
-	mlx_terminate(mlx);*/
-	return (0);
+	if (str)
+	{
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(str, 2);
+	}
+	ft_putstr_fd("\n", 2);
+	return (code);
 }
