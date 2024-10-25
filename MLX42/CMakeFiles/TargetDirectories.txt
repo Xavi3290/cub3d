@@ -1,7 +1,7 @@
-/home/cgaratej/sgoinfre/cub3d/MLX42/CMakeFiles/mlx42.dir
-/home/cgaratej/sgoinfre/cub3d/MLX42/CMakeFiles/edit_cache.dir
-/home/cgaratej/sgoinfre/cub3d/MLX42/CMakeFiles/rebuild_cache.dir
-/home/cgaratej/sgoinfre/cub3d/MLX42/CMakeFiles/list_install_components.dir
-/home/cgaratej/sgoinfre/cub3d/MLX42/CMakeFiles/install.dir
-/home/cgaratej/sgoinfre/cub3d/MLX42/CMakeFiles/install/local.dir
-/home/cgaratej/sgoinfre/cub3d/MLX42/CMakeFiles/install/strip.dir
+/home/cgaratej/42/cub3d/MLX42/CMakeFiles/mlx42.dir
+/home/cgaratej/42/cub3d/MLX42/CMakeFiles/edit_cache.dir
+/home/cgaratej/42/cub3d/MLX42/CMakeFiles/rebuild_cache.dir
+/home/cgaratej/42/cub3d/MLX42/CMakeFiles/list_install_components.dir
+/home/cgaratej/42/cub3d/MLX42/CMakeFiles/install.dir
+/home/cgaratej/42/cub3d/MLX42/CMakeFiles/install/local.dir
+/home/cgaratej/42/cub3d/MLX42/CMakeFiles/install/strip.dir

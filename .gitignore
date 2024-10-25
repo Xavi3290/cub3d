@@ -11,7 +11,7 @@
 *.out
 *.exe
 *.html
-minishell
+cub3d
 
 # Temp files
 *.swp
@@ -22,3 +22,4 @@ minishell
 # VS Code directory
 .vscode/
 build
+MLX42/CMakeCache.txt
