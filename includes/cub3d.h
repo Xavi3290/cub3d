@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
+/*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/10/22 20:08:20 by xroca-pe         ###   ########.fr       */
+/*   Updated: 2024/10/28 19:30:49 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,25 @@ typedef struct s_game {
     mlx_t *mlx;
     mlx_image_t *image;
     t_player player;
-    const int (*worldMap)[MAP_HEIGHT];
+    int (*worldMap)[MAP_HEIGHT];
 } t_game;
 
+typedef struct s_ray {
+    double cameraX;
+    double rayDirX;
+    double rayDirY;
+    int mapX;
+    int mapY;
+    double sideDistX;
+    double sideDistY;
+    double deltaDistX;
+    double deltaDistY;
+    int stepX;
+    int stepY;
+    int side;
+} t_ray;
+
+
 void perform_raycasting(mlx_image_t *image, t_player *player, const int worldMap[MAP_WIDTH][MAP_HEIGHT]);
+
 #endif

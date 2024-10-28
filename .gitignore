@@ -22,3 +22,7 @@ minishell
 # VS Code directory
 .vscode/
 build
+
+# MLX42 Files
+MLX42/CMakeFiles/*/*
+MLX42/CMakeCache.txt
