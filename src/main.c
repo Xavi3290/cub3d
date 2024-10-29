@@ -3,20 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/10/28 19:33:18 by xavi             ###   ########.fr       */
+/*   Updated: 2024/10/29 20:24:56 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+// Verifica si una posición específica en el mapa contiene una pared
+/*int is_wall(t_game *game, double x, double y)
+{
+    int mapX = (int)x;
+    int mapY = (int)y;
+
+    if (mapX < 0 || mapX >= MAP_WIDTH || mapY < 0 || mapY >= MAP_HEIGHT)
+        return 1;  // Trata posiciones fuera de límites como paredes
+
+    return game->worldMap[mapY][mapX] == 1;
+}*/
+
+// Verifica si una posición específica en el mapa contiene una pared
+int is_wall(t_game *game, double x, double y)
+{
+    int mapX = (int)x;
+    int mapY = (int)y;
+
+    // Verifica si está dentro de los límites del mapa
+    if (mapX < 0 || mapX >= MAP_WIDTH || mapY < 0 || mapY >= MAP_HEIGHT)
+        return 1;  // Trata posiciones fuera de los límites como paredes
+
+    // Solo considera como pared las celdas que contienen el valor 1
+    if (game->worldMap[mapY][mapX] == 1)
+        return 1;
+
+    return 0; // Permite cualquier otra celda
+}
+
+
+
+// Función para liberar recursos del juego
+void free_game_resources(t_game *game)
+{
+    if (game->worldMap)
+        free(game->worldMap);
+    if (game->image)
+        mlx_delete_image(game->mlx, game->image);
+    if (game->mlx)
+        mlx_terminate(game->mlx);
+}
+
 
 // Función para cerrar la ventana correctamente
 void close_window(void* param)
 {
     (void)param;
     printf("Window closed\n");
+    free_game_resources(param);
     exit(0);
 }
 
@@ -62,7 +106,83 @@ mlx_t *init_mlx()
     return mlx;
 }
 
-// Función de enganche para movimiento y rotación del jugador
+// Función para manejar el movimiento hacia adelante y hacia atrás
+/*void handle_movement(t_game *game, int key)
+{
+    if (key == MLX_KEY_W)
+    {
+        game->player.posX += game->player.dirX * MOVE_SPEED;
+        game->player.posY += game->player.dirY * MOVE_SPEED;
+    }
+    else if (key == MLX_KEY_S)
+    {
+        game->player.posX -= game->player.dirX * MOVE_SPEED;
+        game->player.posY -= game->player.dirY * MOVE_SPEED;
+    }
+}*/
+
+// Maneja el movimiento con verificación de colisiones
+void handle_movement(t_game *game, int key)
+{
+    double nextX, nextY;
+
+    if (key == MLX_KEY_W)
+    {
+        nextX = game->player.posX + game->player.dirX * MOVE_SPEED;
+        nextY = game->player.posY + game->player.dirY * MOVE_SPEED;
+    }
+    else if (key == MLX_KEY_S)
+    {
+        nextX = game->player.posX - game->player.dirX * MOVE_SPEED;
+        nextY = game->player.posY - game->player.dirY * MOVE_SPEED;
+    }
+    else
+        return;
+
+    // Verifica si la siguiente posición tiene una pared antes de mover
+    if (!is_wall(game, nextX, game->player.posY))
+        game->player.posX = nextX;
+    if (!is_wall(game, game->player.posX, nextY))
+        game->player.posY = nextY;
+}
+
+// Función para manejar la rotación de la vista (sin mover al jugador)
+void handle_rotation_view(t_game *game, int key)
+{
+    double oldDirX = game->player.dirX;
+    double oldPlaneX = game->player.planeX;
+    double angle = 0.0;
+
+    if (key == MLX_KEY_A)
+        angle = ROTATE_VIEW_SPEED;
+    else if (key == MLX_KEY_D)
+        angle = -ROTATE_VIEW_SPEED;
+
+    game->player.dirX = game->player.dirX * cos(angle) - game->player.dirY * sin(angle);
+    game->player.dirY = oldDirX * sin(angle) + game->player.dirY * cos(angle);
+    game->player.planeX = game->player.planeX * cos(angle) - game->player.planeY * sin(angle);
+    game->player.planeY = oldPlaneX * sin(angle) + game->player.planeY * cos(angle);
+}
+
+// Función para manejar la rotación del jugador con las flechas
+void handle_rotation_player(t_game *game, int key)
+{
+    double oldDirX = game->player.dirX;
+    double oldPlaneX = game->player.planeX;
+    double angle = 0.0;
+
+    if (key == MLX_KEY_LEFT)
+        angle = ROTATE_PLAYER_SPEED;
+    else if (key == MLX_KEY_RIGHT)
+        angle = -ROTATE_PLAYER_SPEED;
+
+    game->player.dirX = game->player.dirX * cos(angle) - game->player.dirY * sin(angle);
+    game->player.dirY = oldDirX * sin(angle) + game->player.dirY * cos(angle);
+    game->player.planeX = game->player.planeX * cos(angle) - game->player.planeY * sin(angle);
+    game->player.planeY = oldPlaneX * sin(angle) + game->player.planeY * cos(angle);
+}
+
+// Función de enganche para gestionar teclas
 void key_hook(struct mlx_key_data keydata, void *param)
 {
     t_game *game = (t_game *)param;
@@ -70,29 +190,14 @@ void key_hook(struct mlx_key_data keydata, void *param)
     if (keydata.key == MLX_KEY_ESCAPE)
         close_window(param);
 
-    if (keydata.key == MLX_KEY_W)
-    {
-        game->player.posX += game->player.dirX * 0.1;
-        game->player.posY += game->player.dirY * 0.1;
-    }
-    else if (keydata.key == MLX_KEY_S)
-    {
-        game->player.posX -= game->player.dirX * 0.1;
-        game->player.posY -= game->player.dirY * 0.1;
-    }
-    else if (keydata.key == MLX_KEY_A)
-    {
-        double oldDirX = game->player.dirX;
-        game->player.dirX = game->player.dirX * cos(0.1) - game->player.dirY * sin(0.1);
-        game->player.dirY = oldDirX * sin(0.1) + game->player.dirY * cos(0.1);
-    }
-    else if (keydata.key == MLX_KEY_D)
-    {
-        double oldDirX = game->player.dirX;
-        game->player.dirX = game->player.dirX * cos(-0.1) - game->player.dirY * sin(-0.1);
-        game->player.dirY = oldDirX * sin(-0.1) + game->player.dirY * cos(-0.1);
-    }
+    if (keydata.key == MLX_KEY_W || keydata.key == MLX_KEY_S)
+        handle_movement(game, keydata.key);
+    else if (keydata.key == MLX_KEY_A || keydata.key == MLX_KEY_D)
+        handle_rotation_view(game, keydata.key);
+    else if (keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_RIGHT)
+        handle_rotation_player(game, keydata.key);
 
+    // Redibuja la escena después de la actualización de la posición o dirección
     perform_raycasting(game->image, &game->player, game->worldMap);
     mlx_image_to_window(game->mlx, game->image, 0, 0);
 }
@@ -145,8 +250,8 @@ int main(void)
     perform_raycasting(game.image, &game.player, game.worldMap);
     mlx_image_to_window(game.mlx, game.image, 0, 0);
     mlx_key_hook(game.mlx, key_hook, &game);
+    mlx_close_hook(game.mlx, close_window, &game);
     mlx_loop(game.mlx);
-    mlx_terminate(game.mlx);
 
     return (0);
 }

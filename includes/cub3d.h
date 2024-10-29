@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/10/28 19:30:49 by xavi             ###   ########.fr       */
+/*   Updated: 2024/10/29 19:13:26 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # define HEIGHT 1600
 # define MAP_WIDTH 8
 # define MAP_HEIGHT 8
+# define MOVE_SPEED 0.05
+# define ROTATE_VIEW_SPEED 0.03
+# define ROTATE_PLAYER_SPEED 0.03
 
 # include "../libft/libft.h"
 # include "MLX42/MLX42.h"
