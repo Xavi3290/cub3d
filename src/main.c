@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/10/25 13:21:54 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:11:41 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,14 @@ void close_window(void* param)
 
 int main(int argc, char **argv)
 {
+	t_game	game;
+
 	if (argc != 2)
 		return (1);
 	if (check_args(argv[1], 1))
+		return (1);
+	parce_data(argv[1], &game);
+	if (check_textures(&game))
 		return (1);
 	/*mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "cub3D", true);
 	if (!mlx)
