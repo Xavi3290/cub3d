@@ -6,13 +6,13 @@
 #    By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 18:43:43 by xroca-pe          #+#    #+#              #
-#    Updated: 2024/10/25 13:13:24 by cgaratej         ###   ########.fr        #
+#    Updated: 2024/10/30 11:26:35 by cgaratej         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3d
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -I$(MLX_DIR)/include -fsanitize=address -g
+CFLAGS = -Wall -Werror -Wextra -I$(MLX_DIR)/include -g -fsanitize=address
 RM = rm -f
 MLX_DIR = MLX42
 MLX = $(MLX_DIR)/libmlx42.a
@@ -28,8 +28,8 @@ RED = \033[1;91m
 NONE=\033[0m
 
 BUILD_DIR = build
-SRC = src/main.c src/parsing/check_args.c src/utils.c
-
+SRC = src/main.c src/parsing/check_args.c src/utils.c src/parsing/check_textures.c \
+	src/parsing/parce_data.c
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 DEPS = $(OBJ:.o=.d)
 

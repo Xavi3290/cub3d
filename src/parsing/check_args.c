@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 11:26:23 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/10/29 14:29:23 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/10/31 12:00:13 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,6 @@ static int is_cub_file(char *arg)
 	return (0);
 }
 
-static int is_xmp_file(char *arg)
-{
-	if (ft_strncmp(arg + ft_strlen(arg) - 4, ".xpm", 4))
-		return (1);
-	return (0);
-}
-
 int	check_args(char *argv, int flag)
 {
 	int fd;
@@ -52,7 +45,5 @@ int	check_args(char *argv, int flag)
 	close(fd);
 	if (flag && is_cub_file(argv))
 		err_msg(argv, ERR_FILE_NOT_CUB, 1);
-	if (!flag && is_xmp_file(argv))
-		err_msg(argv, ERR_FILE_NOT_XMP, 1);
 	return (0);
 }

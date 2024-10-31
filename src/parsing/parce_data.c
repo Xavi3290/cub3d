@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:37:26 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/10/30 11:10:52 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/10/30 11:24:54 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void fill_tab(int row, int column, int i, t_game *game)
 	line = get_next_line(game->mapinfo.fd);
 	while (line != NULL)
 	{
-		game->mapinfo.map[row] = ft_calloc(ft_strlen(line), sizeof(char));
+		game->mapinfo.map[row] = ft_calloc(ft_strlen(line) + 1, sizeof(char));
 		if (!game->mapinfo.map[row])
 		{
 			err_msg(NULL, ERR_IN_MALLOC, 0);
@@ -53,9 +53,11 @@ void fill_tab(int row, int column, int i, t_game *game)
 		game->mapinfo.map[row++][column] = '\0';
 		column = 0;
 		i = 0;
+		free(line);
 		line = get_next_line(game->mapinfo.fd);
 	}
 	game->mapinfo.map[row] = NULL;
+	free(line);
 }
 
 void parce_data(char *path, t_game *game)

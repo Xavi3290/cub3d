@@ -12,7 +12,6 @@
 *.exe
 *.html
 cub3d
-Maps/*
 Maps
 MLX42/*
 MLX42

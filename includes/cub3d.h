@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/10/30 11:07:29 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/10/31 12:59:16 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # define WIDTH 800
 # define HEIGHT 600
+# define NUM_TEXTURES 4
 
 # include "../libft/libft.h"
 # include "MLX42/MLX42.h"
@@ -40,7 +41,6 @@ enum e_texture_index
 	EAST = 2,
 	WEST = 3
 };
-
 
 typedef struct s_tex
 {
@@ -69,11 +69,15 @@ typedef struct s_game
     /*t_player player;
     int (*worldMap)[MAP_HEIGHT];*/
     t_map mapinfo;
+	t_tex textures;
+	char		**cc;
+	char		**ff;
 }   t_game;
 
 int		check_args(char *argv, int flag);
 int		err_msg(char *detail, char *str, int code);
-void	free_tab(void **tab);
+void	free_tab(char **tab);
 void	parce_data(char *path, t_game *game);
+int		check_textures(t_game *game);
 
 #endif

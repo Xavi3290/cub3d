@@ -1,0 +1,122 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_textures.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/30 11:12:06 by cgaratej          #+#    #+#             */
+/*   Updated: 2024/10/31 13:21:35 by cgaratej         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/cub3d.h"
+
+int get_texture(char *linea, mlx_texture_t *textures)
+{
+	char	*path;
+
+	path = ft_strchr(linea, ' ');
+	if (path)
+	{
+		path++;
+		/*if (check_args(path, 0))
+			return (1);
+		textures = mlx_load_png(path);
+		if (!textures)
+			return (1);*/
+		(void)textures;
+	}
+	return (0);
+}
+
+int check_texture(char *map_entry, const char *prefix, mlx_texture_t *texture)
+{
+    if (!ft_strncmp(map_entry, prefix, 2))
+    {
+        if (get_texture(map_entry, texture))
+            return (1);
+        return (1);
+    }
+    return (0);
+}
+int	check_color_values(char **rgb)
+{
+	int	i;
+	char *new_rgb0;
+	char *space;
+
+	i = -1;
+	space = ft_strchr(rgb[0], ' ');
+	if (space)
+	{
+		new_rgb0 = strdup(space + 1);
+		if (!new_rgb0)
+			return (free_tab(rgb), 0);
+		free(rgb[0]);
+		rgb[0] = new_rgb0;
+    }
+	while (rgb[++i])
+		if (ft_atoi(rgb[i]) > 255 || ft_atoi(rgb[i]) < 0)
+			return (free_tab(rgb), 0);
+	return (free_tab(rgb), 1);
+}
+
+void	ft_process_rgb_color(char *tmp, t_game *game)
+{
+	if (!ft_strncmp(tmp, "F", 2))
+		game->ff = ft_split(tmp, ',');
+	else if (!ft_strncmp(tmp, "C", 2))
+		game->cc = ft_split(tmp, ',');
+	return ;
+}
+
+int check_colors(t_game *game)
+{
+	int i;
+	int colors;
+
+	i = 0;
+	colors = 0;
+	game->cc = NULL;
+	game->ff = NULL;
+	while (game->mapinfo.map[i])
+	{
+		if (!ft_strncmp(game->mapinfo.map[i], "F", 1) || !ft_strncmp(game->mapinfo.map[i], "C", 1))
+		{
+			if (!check_color_values(ft_split(game->mapinfo.map[i], ',')))
+				return (err_msg("Colors", "Invalid color values", 1), 1);
+			ft_process_rgb_color(game->mapinfo.map[i], game);
+			colors++;
+		}
+		i++;
+	}
+	if (colors != 2)
+		return (err_msg("Colors", "Missing colors", 1), 1);
+	return (0);
+}
+
+int check_textures(t_game *game)
+{
+   	int i;
+   	int textures;
+
+	i = 0;
+	textures = 0;
+   	while (game->mapinfo.map[i])
+   	{
+   	    if (check_texture(game->mapinfo.map[i], "NO", game->textures.no) ||
+   	        check_texture(game->mapinfo.map[i], "SO", game->textures.so) ||
+   	        check_texture(game->mapinfo.map[i], "WE", game->textures.we) ||
+   	        check_texture(game->mapinfo.map[i], "EA", game->textures.ea))
+   	    {
+   	        textures++;
+   	    }
+   	    i++;
+   	}
+	if (textures != NUM_TEXTURES)
+		return (err_msg("Textures", "Missing textures", 1));
+	if (check_colors(game))
+		return (1);
+   	return (0);
+}

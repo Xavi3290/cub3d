@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:46:19 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/08/22 12:12:38 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/10/31 11:04:37 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@ int	ft_isprint(int c)
 	return (c >= 32 && c <= 126);
 }
 
-int	ft_check_only_space(char *s)
+int	ft_isspace(char *s)
 {
 	int	i;
 	int	j;
