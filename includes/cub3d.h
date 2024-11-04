@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
+/*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/10/29 19:13:26 by xroca-pe         ###   ########.fr       */
+/*   Updated: 2024/11/04 21:19:45 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# define WIDTH 2400
-# define HEIGHT 1600
+# define WIDTH 1000
+# define HEIGHT 800
 # define MAP_WIDTH 8
 # define MAP_HEIGHT 8
 # define MOVE_SPEED 0.05
@@ -57,7 +57,18 @@ typedef struct s_ray {
     int side;
 } t_ray;
 
+typedef struct s_line_params {
+    int x;
+    int drawStart;
+    int drawEnd;
+    int color;
+    int lineHeight;
+    double perpWallDist;
+} t_line_params;
+
+
 
 void perform_raycasting(mlx_image_t *image, t_player *player, const int worldMap[MAP_WIDTH][MAP_HEIGHT]);
+int is_player_cell(t_game *game, int x, int y);
 
 #endif
