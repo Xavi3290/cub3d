@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:41:56 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/10/31 11:04:48 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/04 11:48:35 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 size_t	ft_strcat(char *dest, const char *src);
 size_t	ft_strcpy(char *dest, const char *src);
-int		ft_isspace(char *s);
+int		ft_isspace(char c);
+int		ft_strisspace(char *s);
 
 /* adicionales */
 t_list	*ft_lstnew(void *content);

@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/10/31 12:59:16 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:18:58 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,13 @@
 # include <errno.h>
 # include <string.h>
 
-# define ERR_FILE_NOT_CUB "Error\nWrong file extension .cub\n"
-# define ERR_FILE_NOT_XMP "Error\nWrong file extension .xmp\n"
-# define ERR_IS_DIR "Error\nWrong is a directory\n"
-# define ERR_IN_MALLOC "Error\nMalloc Error\n"
+# define ERR_FILE_NOT_CUB "Wrong file extension .cub"
+# define ERR_FILE_NOT_XMP "Wrong file extension .xmp"
+# define ERR_IS_DIR "Wrong is a directory"
+# define ERR_IN_MALLOC "Malloc Error"
+# define ERR_IN_MAP "Invadio map not closed"
+# define ERR_IN_CHAR "Invalid character in map"
+# define ERR_IN_PLAYER "There must be exactly one player character"
 
 enum e_texture_index
 {
@@ -50,11 +53,16 @@ typedef struct s_tex
 	mlx_texture_t		*ea;
 }	t_tex;
 
+typedef struct s_vectro2
+{
+	int	x;
+	int y;
+}	t_vector2;
 
 typedef struct s_map
 {
 	int			fd;
-    char        **map;
+    char        **map_textures;
 	int			line_count;
 	char		*path;
 	int			height;
@@ -69,6 +77,8 @@ typedef struct s_game
     /*t_player player;
     int (*worldMap)[MAP_HEIGHT];*/
     t_map mapinfo;
+	char	**map;
+	t_vector2	player_pos;
 	t_tex textures;
 	char		**cc;
 	char		**ff;
@@ -79,5 +89,7 @@ int		err_msg(char *detail, char *str, int code);
 void	free_tab(char **tab);
 void	parce_data(char *path, t_game *game);
 int		check_textures(t_game *game);
+int		check_map(t_game *game);
+int		ft_strlen_d(char **str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/10/31 12:14:50 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/04 12:26:29 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,18 @@ int main(int argc, char **argv)
 	parce_data(argv[1], &game);
 	if (check_textures(&game))
 	{
-		free_tab(game.mapinfo.map);
+		free_tab(game.mapinfo.map_textures);
+		free_tab(game.map);
 		return (1);
 	}
-	free_tab(game.mapinfo.map);
+	if (check_map(&game))
+	{
+		free_tab(game.mapinfo.map_textures);
+		free_tab(game.map);
+		return (1);
+	}
+	free_tab(game.mapinfo.map_textures);
+	free_tab(game.map);
 	/*mlx_t* mlx = mlx_init(WIDTH, HEIGHT, "cub3D", true);
 	if (!mlx)
 	{
@@ -42,6 +50,6 @@ int main(int argc, char **argv)
 	}
 	mlx_close_hook(mlx, &close_window, NULL);
 	mlx_loop(mlx);
-	mlx_terminate(mlx);*/
-	return (0);
+	mlx_terminate(mlx);
+	return (0);*/
 }

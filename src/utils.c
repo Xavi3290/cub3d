@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:53:00 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/10/30 11:22:22 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/04 12:00:00 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,18 @@ void	free_tab(char **tab)
 		free(tab);
 		tab = NULL;
 	}
+}
+
+int	ft_strlen_d(char **str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+		i++;
+	return (i);
 }
 
 /*void	clean_exit(t_data *data, int code)

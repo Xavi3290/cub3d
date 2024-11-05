@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:12:06 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/10/31 13:21:35 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/04 12:24:39 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,13 @@ int check_colors(t_game *game)
 	colors = 0;
 	game->cc = NULL;
 	game->ff = NULL;
-	while (game->mapinfo.map[i])
+	while (game->mapinfo.map_textures[i])
 	{
-		if (!ft_strncmp(game->mapinfo.map[i], "F", 1) || !ft_strncmp(game->mapinfo.map[i], "C", 1))
+		if (!ft_strncmp(game->mapinfo.map_textures[i], "F", 1) || !ft_strncmp(game->mapinfo.map_textures[i], "C", 1))
 		{
-			if (!check_color_values(ft_split(game->mapinfo.map[i], ',')))
+			if (!check_color_values(ft_split(game->mapinfo.map_textures[i], ',')))
 				return (err_msg("Colors", "Invalid color values", 1), 1);
-			ft_process_rgb_color(game->mapinfo.map[i], game);
+			ft_process_rgb_color(game->mapinfo.map_textures[i], game);
 			colors++;
 		}
 		i++;
@@ -103,12 +103,12 @@ int check_textures(t_game *game)
 
 	i = 0;
 	textures = 0;
-   	while (game->mapinfo.map[i])
+   	while (game->mapinfo.map_textures[i])
    	{
-   	    if (check_texture(game->mapinfo.map[i], "NO", game->textures.no) ||
-   	        check_texture(game->mapinfo.map[i], "SO", game->textures.so) ||
-   	        check_texture(game->mapinfo.map[i], "WE", game->textures.we) ||
-   	        check_texture(game->mapinfo.map[i], "EA", game->textures.ea))
+   	    if (check_texture(game->mapinfo.map_textures[i], "NO", game->textures.no) ||
+   	        check_texture(game->mapinfo.map_textures[i], "SO", game->textures.so) ||
+   	        check_texture(game->mapinfo.map_textures[i], "WE", game->textures.we) ||
+   	        check_texture(game->mapinfo.map_textures[i], "EA", game->textures.ea))
    	    {
    	        textures++;
    	    }
