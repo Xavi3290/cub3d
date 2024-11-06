@@ -6,16 +6,16 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 11:26:23 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/10/31 12:00:13 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/06 13:21:14 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 #include <fcntl.h>
 
-static int is_dir(char *arg)
+static int	is_dir(char *arg)
 {
-	int fd;
+	int	fd;
 
 	fd = open(arg, O_DIRECTORY);
 	if (fd != -1)
@@ -26,7 +26,7 @@ static int is_dir(char *arg)
 	return (0);
 }
 
-static int is_cub_file(char *arg)
+static int	is_cub_file(char *arg)
 {
 	if (ft_strncmp(arg + ft_strlen(arg) - 4, ".cub", 4))
 		return (1);
@@ -35,7 +35,7 @@ static int is_cub_file(char *arg)
 
 int	check_args(char *argv, int flag)
 {
-	int fd;
+	int	fd;
 
 	if (is_dir(argv))
 		err_msg(argv, ERR_IS_DIR, 1);

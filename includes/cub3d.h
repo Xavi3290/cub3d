@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/04 14:18:58 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/06 12:38:04 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,6 @@
 # define ERR_IN_CHAR "Invalid character in map"
 # define ERR_IN_PLAYER "There must be exactly one player character"
 
-enum e_texture_index
-{
-	NORTH = 0,
-	SOUTH = 1,
-	EAST = 2,
-	WEST = 3
-};
-
 typedef struct s_tex
 {
 	mlx_texture_t		*no;
@@ -62,12 +54,12 @@ typedef struct s_vectro2
 typedef struct s_map
 {
 	int			fd;
-    char        **map_textures;
-	int			line_count;
 	char		*path;
+    char        **map_textures;
+	char		**map;
+	int			line_count;
 	int			height;
 	int			width;
-	int			index_end_of_map;
 }	t_map;
 
 typedef struct s_game
@@ -77,7 +69,6 @@ typedef struct s_game
     /*t_player player;
     int (*worldMap)[MAP_HEIGHT];*/
     t_map mapinfo;
-	char	**map;
 	t_vector2	player_pos;
 	t_tex textures;
 	char		**cc;
