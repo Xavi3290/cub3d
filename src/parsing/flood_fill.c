@@ -1,42 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isprint.c                                       :+:      :+:    :+:   */
+/*   flood_fill.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/09 15:46:19 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/04 11:49:31 by cgaratej         ###   ########.fr       */
+/*   Created: 2024/11/06 13:23:42 by cgaratej          #+#    #+#             */
+/*   Updated: 2024/11/07 16:41:20 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isprint(int c)
-{
-	return (c >= 32 && c <= 126);
-}
+#include "../../includes/cub3d.h"
 
-int	ft_strisspace(char *s)
+char	**copy_map(char **map)
 {
-	int	i;
-	int	j;
+	char	**map_tmp;
+	int		i;
+	int		rows;
 
-	i = -1;
-	j = 0;
-	while (s[++i])
+	i = 0;
+	rows = ft_strlen_d(map);
+	map_tmp = malloc(sizeof(char *) * rows + 1);
+	if (!map_tmp)
+		return (NULL);
+	while (i < rows)
 	{
-		if (s[i] == '\t' || s[i] == '\n'
-			|| s[i] == '\v' || s[i] == '\f'
-			|| s[i] == '\r' || s[i] == ' ')
-			j++;
+		map_tmp[i] = ft_strdup(map[i]);
+		if (!map_tmp[i])
+			return (free_tab(map_tmp), NULL);
+		i++;
 	}
-	if (j == i)
-		return (-1);
-	return (0);
-}
-
-int	ft_isspace(char c)
-{
-	return (c == '\t' || c == '\n'
-		|| c == '\v' || c == '\f'
-		|| c == '\r' || c == ' ');
+	map_tmp[rows] = NULL;
+	return (map_tmp);
 }

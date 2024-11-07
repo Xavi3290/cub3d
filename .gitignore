@@ -1,25 +1,25 @@
-# System files
+#System files
 .DS_Store
 .nfs*
 
-# Object files
+#Object files
 *.o
 *.a
 *.d
 
-# Executables
+#Executables
 *.out
 *.exe
 *.html
 cub3D
 
-# Temp files
+#Temp files
 *.swp
 
-# Debug files
-*.dSYM/
+#Debug files
+.dSYM/
 
-# VS Code directory
+#VS Code directory
 .vscode/
 build
 

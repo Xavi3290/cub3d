@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+         #
+#    By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 18:43:43 by xroca-pe          #+#    #+#              #
-#    Updated: 2024/10/22 20:00:57 by xroca-pe         ###   ########.fr        #
+#    Updated: 2024/11/07 16:40:51 by cgaratej         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3d
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -I$(MLX_DIR)/include -fsanitize=address -g
+CFLAGS = -Wall -Werror -Wextra -I$(MLX_DIR)/include -g -fsanitize=address
 RM = rm -f
 MLX_DIR = MLX42
 MLX = $(MLX_DIR)/libmlx42.a
@@ -28,8 +28,8 @@ RED = \033[1;91m
 NONE=\033[0m
 
 BUILD_DIR = build
-SRC = src/main.c src//raycasting.c
-
+SRC = src/main.c src/parsing/check_args.c src/utils.c src/parsing/check_textures.c \
+	src/parsing/parce_data.c src/parsing/check_map.c
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 DEPS = $(OBJ:.o=.d)
 
@@ -52,7 +52,7 @@ libft:
 
 mlx:
 	@echo "$(ORANGE)Compiling MLX42...$(NONE)"
-	@make -C $(MLX_DIR)
+	@make --no-print-directory -C $(MLX_DIR)
 
 clean:
 	@$(RM) -r $(BUILD_DIR)
