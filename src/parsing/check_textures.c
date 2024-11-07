@@ -6,13 +6,13 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:12:06 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/06 12:54:46 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:36:53 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-int	get_texture(char *linea, mlx_texture_t *textures)
+int	get_texture(char *linea, xpm_t *textures)
 {
 	char	*path;
 
@@ -21,16 +21,16 @@ int	get_texture(char *linea, mlx_texture_t *textures)
 	{
 		path++;
 		/*if (check_args(path, 0))
-			return (1);
-		textures = mlx_load_png(path);
-		if (!textures)
 			return (1);*/
+		textures = mlx_load_xpm42(path);
+		if (!textures)
+			return (1);
 		(void)textures;
 	}
 	return (0);
 }
 
-int	check_texture(char *map_entry, const char *prefix, mlx_texture_t *texture)
+int	check_texture(char *map_entry, const char *prefix, xpm_t *texture)
 {
 	if (!ft_strncmp(map_entry, prefix, 2))
 	{

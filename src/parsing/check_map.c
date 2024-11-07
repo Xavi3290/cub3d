@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:54:15 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/06 12:48:00 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:33:21 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,12 @@ int	check_edges(t_game *game)
 	return (0);
 }
 
+int check_valid_char(char c)
+{
+	return (c == '0' || c == '1' || c == 'N' || c == 'S' \
+			|| c == 'E' || c == 'W' || ft_isspace(c));
+}
+
 int check_charactes(char **map, t_game *game)
 {
 	int	i;
@@ -74,9 +80,7 @@ int check_charactes(char **map, t_game *game)
 		j = -1;
 		while (map[i][++j])
 		{
-			if (map[i][j] != '0' && map[i][j] != '1' && map[i][j] != 'N' \
-				&& map[i][j] != 'S' && map[i][j] != 'E' && map[i][j] != 'W' \
-				&& !ft_isspace(map[i][j]))
+			if (!check_valid_char(map[i][j]))
 				return (err_msg(NULL, ERR_IN_CHAR, 1), 1);
 			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E' \
 				|| map[i][j] == 'W')
@@ -98,5 +102,6 @@ int check_map(t_game *game)
 		return (1);
 	if (check_charactes(game->mapinfo.map, game))
 		return (1);
+	//if (flodfill())
 	return (0);
 }

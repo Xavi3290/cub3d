@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:37:26 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/06 13:19:56 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:33:06 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,16 @@ void	parce_data(char *path, t_game *game)
 		+ 1, sizeof(char *));
 	game->mapinfo.map = ft_calloc(game->mapinfo.line_count + 1, sizeof(char *));
 	if (!game->mapinfo.map_textures || !game->mapinfo.map)
-		return (err_msg(NULL, ERR_IN_MALLOC, 0));
+	{
+		err_msg(NULL, ERR_IN_MALLOC, 0);
+		return ;
+	}
 	game->mapinfo.fd = open(path, O_RDONLY);
 	if (game->mapinfo.fd < 0)
+	{
 		err_msg(path, strerror(errno), 1);
+		return ;
+	}
 	else
 	{
 		fill_tabs(game);
