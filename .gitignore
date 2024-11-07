@@ -11,7 +11,7 @@
 *.out
 *.exe
 *.html
-minishell
+cub3D
 
 # Temp files
 *.swp
