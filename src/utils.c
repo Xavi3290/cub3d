@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:53:00 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/04 12:00:00 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/11 13:43:40 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,23 @@ int	ft_strlen_d(char **str)
 	return (i);
 }
 
-/*void	clean_exit(t_data *data, int code)
+char	**copy_map(char **map)
 {
-	if (!data)
-		exit(code);
-	if (data->win && data->mlx)
-		mlx_destroy_window(data->mlx, data->win);
-	if (data->mlx)
+	char	**map_tmp;
+	int		i;
+	int		rows;
+
+	i = 0;
+	rows = ft_strlen_d(map);
+	map_tmp = ft_calloc(rows + 1, sizeof(char *));
+	if (!map_tmp)
+		return (NULL);
+	while (i < rows)
 	{
-		mlx_destroy_display(data->mlx);
-		mlx_loop_end(data->mlx);
-		free(data->mlx);
+		map_tmp[i] = ft_strdup(map[i]);
+		if (!map_tmp[i])
+			return (free_tab(map_tmp), NULL);
+		i++;
 	}
-	free_data(data);
-	exit(code);
-}*/
+	return (map_tmp);
+}
