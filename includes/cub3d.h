@@ -6,7 +6,7 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/04 21:19:45 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/12 21:31:17 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # define HEIGHT 800
 # define MAP_WIDTH 8
 # define MAP_HEIGHT 8
-# define MOVE_SPEED 0.05
+# define MOVE_SPEED 0.04
 # define ROTATE_VIEW_SPEED 0.03
 # define ROTATE_PLAYER_SPEED 0.03
 
@@ -35,11 +35,29 @@ typedef struct s_player {
     double planeY;
 } t_player;
 
+typedef struct s_rgb {
+    int r;
+    int g;
+    int b;
+} t_rgb;
+
 typedef struct s_game {
     mlx_t *mlx;
     mlx_image_t *image;
     t_player player;
-    int (*worldMap)[MAP_HEIGHT];
+    //int (*worldMap)[MAP_HEIGHT];
+    char **map;
+    int startX;
+    int startY;
+    int tileSize;
+    t_rgb sky_color;
+    t_rgb floor_color;
+    t_rgb wall_color_light;
+    t_rgb wall_color_dark;
+    t_rgb minimap_wall_color;
+    t_rgb minimap_floor_color;
+    t_rgb minimap_player_color;
+    t_rgb color;
 } t_game;
 
 typedef struct s_ray {
@@ -68,7 +86,9 @@ typedef struct s_line_params {
 
 
 
-void perform_raycasting(mlx_image_t *image, t_player *player, const int worldMap[MAP_WIDTH][MAP_HEIGHT]);
+void perform_raycasting(t_game *game);
 int is_player_cell(t_game *game, int x, int y);
+int is_wall(t_game *game, double x, double y);
+int rgb_to_int(t_rgb color);
 
 #endif
