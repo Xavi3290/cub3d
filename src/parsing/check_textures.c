@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:12:06 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/13 11:48:58 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/13 13:36:12 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,20 @@ int	check_texture(char *map_entry, const char *prefix, xpm_t *texture)
 	}
 	return (0);
 }
+int	check_nums(char *num)
+{
+	int	i;
 
+	i = 0;
+	while (num[i])
+	{
+		if (!ft_isspace(num[i]))
+			if (!ft_isdigit(num[i]))
+				return (1);
+		i++;
+	}
+	return (0);
+}
 int	check_color_values(char **rgb, t_game *game)
 {
 	int		i;
@@ -81,7 +94,7 @@ int	check_color_values(char **rgb, t_game *game)
 		return (free_tab(rgb), 0);
 	while (rgb[++i])
 	{
-		if (ft_atoi(rgb[i]) > 255 || ft_atoi(rgb[i]) < 0)
+		if (check_nums(rgb[i]) || (ft_atoi(rgb[i]) > 255 || ft_atoi(rgb[i]) < 0 || rgb[i][0] == '\n'))
 			return (free_tab(rgb), 0);
 		if (flag)
 		{

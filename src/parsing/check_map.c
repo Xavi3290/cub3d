@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:54:15 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/13 11:27:22 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/13 12:07:15 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,15 +96,43 @@ int check_charactes(char **map, t_game *game)
 	return (0);
 }
 
+int is_blank_line(const char *line)
+{
+	int i = 0;
+
+	while (line[i])
+	{
+		if (line[i] != ' ' && line[i] != '\t' && line[i] != '\n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	check_blank_lines(char **map)
+{
+	int i = 0;
+
+	while (map[i])
+	{
+		if (is_blank_line(map[i]))
+			return (err_msg(NULL, ERR_IN_MAP, 1), 1);
+		i++;
+	}
+	return (0);
+}
+
 int check_map(t_game *game)
 {
 	char	**map_tmp;
 
-	map_tmp = copy_map(game->mapinfo.map);
+	if (check_blank_lines(game->mapinfo.map))
+		return (1);
 	if (check_edges(game))
 		return (1);
 	if (check_charactes(game->mapinfo.map, game))
 		return (1);
+	map_tmp = copy_map(game->mapinfo.map);
 	if (!flood_fill_recursive(map_tmp, game->player_pos.x, game->player_pos.y, \
 		&game->mapinfo))
 		return (free_tab(map_tmp), err_msg(NULL, ERR_IN_MAP, 1), 1);
