@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:23:42 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/13 09:09:21 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/13 11:00:32 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int is_surrounded_by_walls(char **map_cpy, int x, int y, t_map *map)
 
 int flood_fill_recursive(char **map_cpy, int x, int y, t_map *map)
 {
-	//printf("%d, %d\n", x , y);
 	if (x < 0 || y < 0 || x >= map->height || y >= map->width || \
 		map_cpy[x][y] == '1' || map_cpy[x][y] == 'F')
 		return (1);

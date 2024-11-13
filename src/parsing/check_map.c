@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:54:15 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/11 14:33:51 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/13 11:27:22 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,15 +99,14 @@ int check_charactes(char **map, t_game *game)
 int check_map(t_game *game)
 {
 	char	**map_tmp;
-	
+
 	map_tmp = copy_map(game->mapinfo.map);
-	game->player_pos.x = 0;
-	game->player_pos.y = 0;
 	if (check_edges(game))
 		return (1);
 	if (check_charactes(game->mapinfo.map, game))
 		return (1);
-	if (!flood_fill_recursive(map_tmp, game->player_pos.x, game->player_pos.y, &game->mapinfo))
+	if (!flood_fill_recursive(map_tmp, game->player_pos.x, game->player_pos.y, \
+		&game->mapinfo))
 		return (free_tab(map_tmp), err_msg(NULL, ERR_IN_MAP, 1), 1);
 	return (free_tab(map_tmp), 0);
 }

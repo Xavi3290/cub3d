@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/13 09:24:36 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/13 11:48:39 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,6 @@ typedef struct s_game {
     t_map        mapinfo;
     t_vector2    player_pos;
     t_tex        textures;
-    char        **cc;
-    char        **ff;
     int startX;
     int startY;
     int tileSize;

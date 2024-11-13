@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/13 09:22:31 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/13 11:53:36 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,14 +165,15 @@ void set_player_position(t_game *game)
             if (is_player_cell(game, x, y))
             {
                 set_player_position_and_direction(game, x, y);
-                game->player.planeX = 0.66 * game->player.dirY;
-                game->player.planeY = -0.66 * game->player.dirX;
+                /*game->player.planeX = 0.66 * game->player.dirY;
+                game->player.planeY = -0.66 * game->player.dirX;*/
                 return; // Termina la función al encontrar al jugador
             }
             x++;
         }
         y++;
     }
+	//game->player.planeX
 }
 
 // Función para inicializar MLX
@@ -285,7 +286,6 @@ void key_hook(struct mlx_key_data keydata, void *param)
     game = (t_game *)param;
     if (keydata.key == MLX_KEY_ESCAPE)
         close_window(param);
-
     if (keydata.key == MLX_KEY_W || keydata.key == MLX_KEY_S)
         handle_movement(game, keydata.key);
     else if (keydata.key == MLX_KEY_A || keydata.key == MLX_KEY_D)
@@ -293,7 +293,6 @@ void key_hook(struct mlx_key_data keydata, void *param)
     else if (keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_RIGHT)
         handle_rotation_player(game, keydata.key);
     printf("Player position1: (%f, %f)\n", game->player.posX, game->player.posY);
-
     // Redibuja la escena después de la actualización de la posición o dirección
     perform_raycasting(game);
     draw_minimap(game);
@@ -304,71 +303,81 @@ void key_hook(struct mlx_key_data keydata, void *param)
 // Inicialización del juego y asignación de recursos
 void init_game(t_game *game)
 {
-
-    char *initial_map[] = {
-        "11111111",
-        "10001001",
-        "10001001",
-        "10000001",
-        "10010001",
-        "11110111",
-        "1E000001",
-        "11111111",
-        NULL
-    };
-    game->map = copy_map(initial_map);
-    if (!game->map)
-    {
-        printf("Error: Could not allocate memory for map.\n");
-        exit(1);
-    }
-    game->mlx = init_mlx();
-    game->image = mlx_new_image(game->mlx, WIDTH, HEIGHT);
-    if (!game->image)
-    {
-        mlx_terminate(game->mlx);
-        printf("Error: Image could not be created.\n");
-        free_tab(game->map);
-        exit(1);
-    }
-    game->startX = 0;
-    game->startY = 0;
-    game->tileSize = (WIDTH / MAP_WIDTH) / 5;
-    game->sky_color = (t_rgb){135, 206, 235};        // Azul claro para el cielo
-    game->floor_color = (t_rgb){139, 69, 19};        // Marrón para el suelo
-    game->wall_color_light = (t_rgb){255, 255, 255}; // Blanco para pared clara
-    game->wall_color_dark = (t_rgb){170, 170, 170};  // Gris para pared oscura
-    game->minimap_wall_color = (t_rgb){85, 85, 85};  // Gris oscuro para paredes del minimapa
-    game->minimap_floor_color = (t_rgb){204, 204, 204}; // Gris claro para el suelo del minimapa
-    game->minimap_player_color = (t_rgb){0, 255, 0}; // Verde para el jugador en el minimapa
-    set_player_position(game);
+	/*char *initial_map[] = {
+		"11111111",
+		"10001001",
+		"10001001",
+		"10000001",
+		"10010001",
+		"11110111",
+		"1E000001",
+		"11111111",
+		NULL
+	};*/
+	/*game->map = copy_map(initial_map);
+	if (!game->map)
+	{
+		printf("Error: Could not allocate memory for map.\n");
+		exit(1);
+	}*/
+	game->mlx = init_mlx();
+	game->image = mlx_new_image(game->mlx, WIDTH, HEIGHT);
+	game->mapinfo.fd = 0;
+	game->mapinfo.height = 0;
+	game->mapinfo.width = 0;
+	game->player_pos.x = 0;
+	game->player_pos.y = 0;
+	if (!game->image)
+	{
+		mlx_terminate(game->mlx);
+		printf("Error: Image could not be created.\n");
+		free_tab(game->map);
+		exit(1);
+	}
+	game->startX = 0;
+	game->startY = 0;
+	game->tileSize = (WIDTH / MAP_WIDTH) / 5;
+	//game->sky_color = (t_rgb){135, 206, 235};			// Azul claro para el cielo
+	//game->floor_color = (t_rgb){139, 69, 19};			// Marrón para el suelo
+	game->wall_color_light = (t_rgb){255, 255, 255};	// Blanco para pared clara
+	game->wall_color_dark = (t_rgb){170, 170, 170};		// Gris para pared oscura
+	game->minimap_wall_color = (t_rgb){85, 85, 85};		// Gris oscuro para paredes del minimapa
+	game->minimap_floor_color = (t_rgb){204, 204, 204};	// Gris claro para el suelo del minimapa
+	game->minimap_player_color = (t_rgb){0, 255, 0};	// Verde para el jugador en el minimapa
 }
 
+int	parce_map(int argc, char **argv, t_game *game)
+{
+	if (argc != 2)
+        return (1);
+    if (check_args(argv[1], 1))
+        return (1);
+    parce_data(argv[1], game);
+    if (check_textures(game))
+    {
+        free_tab(game->mapinfo.map_textures);
+        free_tab(game->mapinfo.map);
+        return (1);
+    }
+    if (check_map(game))
+    {
+        free_tab(game->mapinfo.map_textures);
+        free_tab(game->mapinfo.map);
+        return (1);
+    }
+    free_tab(game->mapinfo.map_textures);
+	return (0);
+}
 
 int main(int argc, char **argv)
 {
     t_game game;
 
-	if (argc != 2)
-        return (1);
-    if (check_args(argv[1], 1))
-        return (1);
-    parce_data(argv[1], &game);
-    if (check_textures(&game))
-    {
-        free_tab(game.mapinfo.map_textures);
-        free_tab(game.mapinfo.map);
-        return (1);
-    }
-    if (check_map(&game))
-    {
-        free_tab(game.mapinfo.map_textures);
-        free_tab(game.mapinfo.map);
-        return (1);
-    }
-    /*free_tab(game.mapinfo.map_textures);
-    free_tab(game.mapinfo.map);*/
     init_game(&game);
+	if (parce_map(argc, argv, &game))
+		return (1);
+	game.map = copy_map(game.mapinfo.map);
+	set_player_position(&game);
     perform_raycasting(&game);
     draw_minimap(&game);
     draw_player_on_minimap(&game);
