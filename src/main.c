@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/12 21:38:16 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/13 09:22:31 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,56 +22,6 @@ void print_world_map(const int worldMap[MAP_HEIGHT][MAP_WIDTH]) {
         printf("\n");
     }
 }*/
-
-void	free_tab(char **tab)
-{
-	size_t	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	if (tab)
-	{
-		free(tab);
-		tab = NULL;
-	}
-}
-
-int	ft_strlen_d(char **str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i])
-		i++;
-	return (i);
-}
-
-char	**copy_map(char **map)
-{
-	char	**map_tmp;
-	int		i;
-	int		rows;
-
-	i = 0;
-	rows = ft_strlen_d(map);
-	map_tmp = ft_calloc(rows + 1, sizeof(char *));
-	if (!map_tmp)
-		return (NULL);
-	while (i < rows)
-	{
-		map_tmp[i] = ft_strdup(map[i]);
-		if (!map_tmp[i])
-			return (free_tab(map_tmp), NULL);
-		i++;
-	}
-	return (map_tmp);
-}
 
 int rgb_to_int(t_rgb color) {
     return (color.r << 24) | (color.g << 16) | (color.b << 8) | 255;
@@ -163,7 +113,7 @@ void close_window(void* param)
     (void)param;
     printf("Window closed\n");
     free_game_resources(param);
-    
+
     exit(0);
 }
 
@@ -354,7 +304,7 @@ void key_hook(struct mlx_key_data keydata, void *param)
 // Inicialización del juego y asignación de recursos
 void init_game(t_game *game)
 {
-    
+
     char *initial_map[] = {
         "11111111",
         "10001001",
@@ -381,9 +331,9 @@ void init_game(t_game *game)
         free_tab(game->map);
         exit(1);
     }
-    game->startX = 0;   
-    game->startY = 0;   
-    game->tileSize = (WIDTH / MAP_WIDTH) / 5;  
+    game->startX = 0;
+    game->startY = 0;
+    game->tileSize = (WIDTH / MAP_WIDTH) / 5;
     game->sky_color = (t_rgb){135, 206, 235};        // Azul claro para el cielo
     game->floor_color = (t_rgb){139, 69, 19};        // Marrón para el suelo
     game->wall_color_light = (t_rgb){255, 255, 255}; // Blanco para pared clara
@@ -395,12 +345,30 @@ void init_game(t_game *game)
 }
 
 
-int main(void)
+int main(int argc, char **argv)
 {
     t_game game;
 
+	if (argc != 2)
+        return (1);
+    if (check_args(argv[1], 1))
+        return (1);
+    parce_data(argv[1], &game);
+    if (check_textures(&game))
+    {
+        free_tab(game.mapinfo.map_textures);
+        free_tab(game.mapinfo.map);
+        return (1);
+    }
+    if (check_map(&game))
+    {
+        free_tab(game.mapinfo.map_textures);
+        free_tab(game.mapinfo.map);
+        return (1);
+    }
+    /*free_tab(game.mapinfo.map_textures);
+    free_tab(game.mapinfo.map);*/
     init_game(&game);
-
     perform_raycasting(&game);
     draw_minimap(&game);
     draw_player_on_minimap(&game);
@@ -409,6 +377,5 @@ int main(void)
     mlx_scroll_hook(game.mlx, mouse_scroll_hook, &game);
     mlx_close_hook(game.mlx, close_window, &game);
     mlx_loop(game.mlx);
-
     return (0);
 }
