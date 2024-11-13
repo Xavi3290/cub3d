@@ -6,30 +6,42 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 13:23:42 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/07 16:50:47 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/13 09:09:21 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-char	**copy_map(char **map)
+int is_surrounded_by_walls(char **map_cpy, int x, int y, t_map *map)
 {
-	char	**map_tmp;
-	int		i;
-	int		rows;
+	if (x <= 0 || y <= 0 || x >= map->height - 1 || y >= map->width - 1)
+		return 0;
+	return (map_cpy[x - 1][y] == '1' && map_cpy[x + 1][y] == '1' &&
+			map_cpy[x][y - 1] == '1' && map_cpy[x][y + 1] == '1');
+}
 
-	i = 0;
-	rows = ft_strlen_d(map);
-	map_tmp = malloc(sizeof(char *) * rows + 1);
-	if (!map_tmp)
-		return (NULL);
-	while (i < rows)
+
+int flood_fill_recursive(char **map_cpy, int x, int y, t_map *map)
+{
+	//printf("%d, %d\n", x , y);
+	if (x < 0 || y < 0 || x >= map->height || y >= map->width || \
+		map_cpy[x][y] == '1' || map_cpy[x][y] == 'F')
+		return (1);
+	if (map_cpy[x][y] == ' ')
 	{
-		map_tmp[i] = ft_strdup(map[i]);
-		if (!map_tmp[i])
-			return (free_tab(map_tmp), NULL);
-		i++;
+		if (!is_surrounded_by_walls(map_cpy, x, y, map))
+		{
+			return (0);
+		}
 	}
-	map_tmp[rows] = NULL;
-	return (map_tmp);
+	map_cpy[x][y] = 'F';
+	if (!flood_fill_recursive(map_cpy, x - 1, y, map))
+		return (0);
+	if (!flood_fill_recursive(map_cpy, x + 1, y, map))
+		return (0);
+	if (!flood_fill_recursive(map_cpy, x, y - 1, map))
+		return (0);
+	if (!flood_fill_recursive(map_cpy, x, y + 1, map))
+		return (0);
+	return (1);
 }

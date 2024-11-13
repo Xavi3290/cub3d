@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 13:37:26 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/07 10:33:06 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/11 14:23:30 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	fill_tabs(t_game *game)
 
 	row_mapinfo = 0;
 	game->mapinfo.height = 0;
+	game->mapinfo.width = 0;
 	is_map_section = 0;
 	line = get_next_line(game->mapinfo.fd);
 	while (line != NULL)
