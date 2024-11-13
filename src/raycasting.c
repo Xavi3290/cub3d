@@ -6,36 +6,35 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 19:36:35 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/04 21:31:07 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/12 21:35:41 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
 // Función para llenar cielo y suelo con colores
-static void draw_sky_and_floor(mlx_image_t *image, int sky_color, int floor_color)
-{
-    int y;
+static void draw_sky_and_floor(t_game *game) {
+    int y = 0;
     int x;
+    int sky_color = rgb_to_int(game->sky_color);
+    int floor_color = rgb_to_int(game->floor_color);
 
-    y = 0;
-    while (y < HEIGHT / 2)
-    {
+    while (y < HEIGHT / 2) {
         x = 0;
-        while (x < WIDTH)
-        {
-            mlx_put_pixel(image, x, y, sky_color);
-            mlx_put_pixel(image, x, y + HEIGHT / 2, floor_color);
+        while (x < WIDTH) {
+            mlx_put_pixel(game->image, x, y, sky_color);
+            mlx_put_pixel(game->image, x, y + HEIGHT / 2, floor_color);
             x++;
         }
         y++;
     }
 }
 
+
 // Inicialización del rayo para cada columna de la pantalla
 static void init_ray(t_ray *ray, t_player *player, int x)
 {
-    ray->cameraX = 2 * x / (double)WIDTH - 1;
+    ray->cameraX = 2 * (WIDTH - x) / (double)WIDTH - 1;
     ray->rayDirX = player->dirX + player->planeX * ray->cameraX;
     ray->rayDirY = player->dirY + player->planeY * ray->cameraX;
     ray->mapX = (int)player->posX;
@@ -70,108 +69,47 @@ static void set_step_and_initial_side_dist(t_ray *ray, t_player *player)
 }
 
 // Función DDA para detectar colisiones
-static void perform_dda(t_ray *ray, const int worldMap[MAP_WIDTH][MAP_HEIGHT])
-{
-    int hit;
+static void perform_dda(t_ray *ray, t_game *game) {
+    int hit = 0;
+    int max_steps = MAP_WIDTH * MAP_HEIGHT;
+    int steps = 0;
 
-    hit = 0;
-    while (hit == 0)
-    {
-        if (ray->sideDistX < ray->sideDistY)
-        {
+    while (hit == 0 && steps < max_steps) {
+        steps++;
+        if (ray->sideDistX < ray->sideDistY) {
             ray->sideDistX += ray->deltaDistX;
             ray->mapX += ray->stepX;
             ray->side = 0;
-        }
-        else
-        {
+        } else {
             ray->sideDistY += ray->deltaDistY;
             ray->mapY += ray->stepY;
             ray->side = 1;
         }
-        if (worldMap[ray->mapX][ray->mapY] == 1)
+
+        if (ray->mapX < 0 || ray->mapX >= MAP_WIDTH || ray->mapY < 0 || ray->mapY >= MAP_HEIGHT) {
             hit = 1;
-        else if (worldMap[ray->mapX][ray->mapY] == 'N' || worldMap[ray->mapX][ray->mapY] == 'S' ||
-                 worldMap[ray->mapX][ray->mapY] == 'E' || worldMap[ray->mapX][ray->mapY] == 'W')
-            continue;
+            break;
+        }
+        if (is_wall(game, ray->mapX, ray->mapY)) {
+            hit = 1;
+            break;
+        }
     }
 }
-
-/*// Dibujo de línea utilizando Bresenham
-static void draw_line_bresenham(mlx_image_t *image, int x, int y_start, int y_end, int color)
-{
-    int y = y_start;
-    int delta_y = abs(y_end - y_start);
-    int error = 0;
-    int y_step;
-
-    if (y_start < y_end)
-        y_step = 1;
-    else
-        y_step = -1;
-
-    while (y != y_end)
-    {
-        mlx_put_pixel(image, x, y, color);
-        y += y_step;
-        error += delta_y;
-        if (error >= 1)
-            error -= 1;
-    }
-}
-
-// Función principal de raycasting
-void perform_raycasting(mlx_image_t *image, t_player *player, const int worldMap[MAP_WIDTH][MAP_HEIGHT])
-{
-    draw_sky_and_floor(image, 0x87CEEB, 0x8B4513);  // Colores de cielo y suelo
-    int x = 0;
-    while (x < WIDTH)
-    {
-        t_ray ray;
-        init_ray(&ray, player, x);
-        set_step_and_initial_side_dist(&ray, player);
-        perform_dda(&ray, worldMap);
-
-        double perpWallDist;
-        if (ray.side == 0)
-            perpWallDist = (ray.mapX - player->posX + (1 - ray.stepX) / 2) / ray.rayDirX;
-        else
-            perpWallDist = (ray.mapY - player->posY + (1 - ray.stepY) / 2) / ray.rayDirY;
-
-        int lineHeight = (int)(HEIGHT / perpWallDist);
-
-        int drawStart = -lineHeight / 2 + HEIGHT / 2;
-        if (drawStart < 0)
-            drawStart = 0;
-
-        int drawEnd = lineHeight / 2 + HEIGHT / 2;
-        if (drawEnd >= HEIGHT)
-            drawEnd = HEIGHT - 1;
-
-        int color;
-        if (ray.side == 1)
-            color = 0xAAAAAA;
-        else
-            color = 0xFFFFFF;
-
-        draw_line_bresenham(image, x, drawStart, drawEnd, color);
-        x++;
-    }
-}*/
 
 
 // Procesa un rayo y calcula los parámetros necesarios para dibujar la línea de la pared
-static void process_ray(t_ray *ray, t_player *player, const int worldMap[MAP_WIDTH][MAP_HEIGHT], t_line_params *line)
+static void process_ray(t_ray *ray, t_game *game, t_line_params *line)
 {
-    init_ray(ray, player, line->x);
-    set_step_and_initial_side_dist(ray, player);
-    perform_dda(ray, worldMap);
+    init_ray(ray, &game->player, line->x);
+    set_step_and_initial_side_dist(ray, &game->player);
+    perform_dda(ray, game);
 
     // Calcula la distancia perpendicular a la pared
     if (ray->side == 0)
-        line->perpWallDist = (ray->mapX - player->posX + (1 - ray->stepX) / 2) / ray->rayDirX;
+        line->perpWallDist = (ray->mapX - game->player.posX + (1 - ray->stepX) / 2) / ray->rayDirX;
     else
-        line->perpWallDist = (ray->mapY - player->posY + (1 - ray->stepY) / 2) / ray->rayDirY;
+        line->perpWallDist = (ray->mapY - game->player.posY + (1 - ray->stepY) / 2) / ray->rayDirY;
 
     // Calcula la altura de la línea a dibujar
     line->lineHeight = (int)(HEIGHT / line->perpWallDist);
@@ -184,12 +122,6 @@ static void process_ray(t_ray *ray, t_player *player, const int worldMap[MAP_WID
     line->drawEnd = line->lineHeight / 2 + HEIGHT / 2;
     if (line->drawEnd >= HEIGHT)
         line->drawEnd = HEIGHT - 1;
-
-    // Establece el color basado en el lado del impacto
-    if (ray->side == 1)
-        line->color = 0xAAAAAA;
-    else
-        line->color = 0xFFFFFF;
 }
 
 // Dibuja una línea vertical en la imagen utilizando el algoritmo de Bresenham
@@ -212,7 +144,8 @@ static void draw_line_bresenham(mlx_image_t *image, t_line_params *line)
     // Dibuja la línea píxel por píxel
     while (y != line->drawEnd)
     {
-        mlx_put_pixel(image, line->x, y, line->color);
+        if (y >= 0 && y < HEIGHT)
+            mlx_put_pixel(image, line->x, y, line->color);
         y += y_step;
         error += delta_y;
         if (error >= 1)
@@ -221,23 +154,26 @@ static void draw_line_bresenham(mlx_image_t *image, t_line_params *line)
 }
 
 // Función principal para realizar el raycasting y dibujar las paredes en la pantalla
-void perform_raycasting(mlx_image_t *image, t_player *player, const int worldMap[MAP_WIDTH][MAP_HEIGHT])
-{
-    int x;
-    
-    draw_sky_and_floor(image, 0x87CEEB, 0x8B4513);  // Colores de cielo y suelo
-    x = 0;
-    while (x < WIDTH)
-    {
+void perform_raycasting(t_game *game) {
+    int x = 0;
+    draw_sky_and_floor(game);
+
+    while (x < WIDTH) {
         t_ray ray;
         t_line_params line;
-        line.x = x;  // Inicializa el valor de X para cada rayo
+        line.x = x;
 
-        // Procesa el rayo y llena los detalles de la línea en la estructura
-        process_ray(&ray, player, worldMap, &line);
+        process_ray(&ray, game, &line);
 
-        // Dibuja la línea utilizando los parámetros calculados
-        draw_line_bresenham(image, &line);
+        // Selección del color de pared en función del lado
+        if (ray.side == 1) {
+            line.color = rgb_to_int(game->wall_color_dark);
+        } else {
+            line.color = rgb_to_int(game->wall_color_light);
+        }
+
+        draw_line_bresenham(game->image, &line);
         x++;
     }
 }
+
