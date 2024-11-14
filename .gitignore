@@ -11,7 +11,7 @@
 *.out
 *.exe
 *.html
-cub3D
+cub3d
 
 #Temp files
 *.swp
@@ -24,5 +24,7 @@ cub3D
 build
 
 # MLX42 Files
-MLX42/CMakeFiles/*/*
 MLX42/CMakeCache.txt
+MLX42/CMakeFiles/
+MLX42/Makefile
+MLX42/cmake_install.cmake

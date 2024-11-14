@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/13 11:48:39 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/14 11:34:41 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@
 # define ERR_IN_MAP "Invadio map not closed"
 # define ERR_IN_CHAR "Invalid character in map"
 # define ERR_IN_PLAYER "There must be exactly one player character"
+# define ERR_IN_ARGS "arguments are missing"
+# define ERR_MANY_ARGS "many arguments"
 
 typedef struct s_tex
 {
@@ -89,7 +91,7 @@ typedef struct s_game {
     mlx_image_t *image;
     t_player player;
     //int (*worldMap)[MAP_HEIGHT];
-    char **map;
+    //char **map;
     t_map        mapinfo;
     t_vector2    player_pos;
     t_tex        textures;

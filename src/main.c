@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/13 11:53:36 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/14 11:52:55 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void draw_minimap(t_game *game) {
             game->startX = x * game->tileSize;
             game->startY = y * game->tileSize;
 
-            if (game->map[y][x] == '1') {
+            if (game->mapinfo.map[y][x] == '1') {
                 game->color = game->minimap_wall_color; // Pared
             } else {
                 game->color = game->minimap_floor_color; // Suelo
@@ -93,14 +93,14 @@ int is_wall(t_game *game, double x, double y) {
         return 1;  // Trata posiciones fuera de los límites como paredes
 
     // Devuelve 1 si la celda contiene una pared ('1')
-    return game->map[mapY][mapX] == '1';
+    return game->mapinfo.map[mapY][mapX] == '1';
 }
 
 // Función para liberar recursos del juego
 void free_game_resources(t_game *game)
 {
-    if (game->map)
-        free_tab(game->map);
+    if (game->mapinfo.map)
+        free_tab(game->mapinfo.map);
     if (game->image)
         mlx_delete_image(game->mlx, game->image);
     if (game->mlx)
@@ -120,8 +120,8 @@ void close_window(void* param)
 // Verifica si la celda actual es una posición válida del jugador
 int is_player_cell(t_game *game, int x, int y)
 {
-    return (game->map[y][x] == 'N' || game->map[y][x] == 'S' ||
-        game->map[y][x] == 'E' || game->map[y][x] == 'W');
+    return (game->mapinfo.map[y][x] == 'N' || game->mapinfo.map[y][x] == 'S' ||
+        game->mapinfo.map[y][x] == 'E' || game->mapinfo.map[y][x] == 'W');
 }
 
 // Establece la dirección y posición del jugador en el juego
@@ -130,22 +130,22 @@ void set_player_position_and_direction(t_game *game, int x, int y)
     game->player.posX = x + 0.5;
     game->player.posY = y + 0.5;
 
-    if (game->map[y][x] == 'N')
+    if (game->mapinfo.map[y][x] == 'N')
     {
         game->player.dirX = 0;
         game->player.dirY = -1;
     }
-    else if (game->map[y][x] == 'S')
+    else if (game->mapinfo.map[y][x] == 'S')
     {
         game->player.dirX = 0;
         game->player.dirY = 1;
     }
-    else if (game->map[y][x] == 'E')
+    else if (game->mapinfo.map[y][x] == 'E')
     {
         game->player.dirX = 1;
         game->player.dirY = 0;
     }
-    else if (game->map[y][x] == 'W')
+    else if (game->mapinfo.map[y][x] == 'W')
     {
         game->player.dirX = -1;
         game->player.dirY = 0;
@@ -313,8 +313,8 @@ void init_game(t_game *game)
 		"1E000001",
 		"11111111",
 		NULL
-	};*/
-	/*game->map = copy_map(initial_map);
+	};
+	game->map = copy_map(initial_map);
 	if (!game->map)
 	{
 		printf("Error: Could not allocate memory for map.\n");
@@ -331,7 +331,7 @@ void init_game(t_game *game)
 	{
 		mlx_terminate(game->mlx);
 		printf("Error: Image could not be created.\n");
-		free_tab(game->map);
+		//free_tab(game->map);
 		exit(1);
 	}
 	game->startX = 0;
@@ -344,47 +344,47 @@ void init_game(t_game *game)
 	game->minimap_wall_color = (t_rgb){85, 85, 85};		// Gris oscuro para paredes del minimapa
 	game->minimap_floor_color = (t_rgb){204, 204, 204};	// Gris claro para el suelo del minimapa
 	game->minimap_player_color = (t_rgb){0, 255, 0};	// Verde para el jugador en el minimapa
+	//set_player_position(game);
 }
 
 int	parce_map(int argc, char **argv, t_game *game)
 {
-	if (argc != 2)
-        return (1);
+	if (argc > 2)
+		return (err_msg("Args", ERR_MANY_ARGS, 1));
+	if (argc < 2)
+		return (err_msg("Args", ERR_IN_ARGS, 1));
     if (check_args(argv[1], 1))
         return (1);
     parce_data(argv[1], game);
+	if (!game->mapinfo.map[0] && !game->mapinfo.map_textures[0])
+		return (free_tab(game->mapinfo.map_textures), \
+			free_tab(game->mapinfo.map), err_msg("File", "File Empy", 1));
     if (check_textures(game))
-    {
-        free_tab(game->mapinfo.map_textures);
-        free_tab(game->mapinfo.map);
-        return (1);
-    }
+        return (free_tab(game->mapinfo.map_textures), \
+				free_tab(game->mapinfo.map), 1);
     if (check_map(game))
-    {
-        free_tab(game->mapinfo.map_textures);
-        free_tab(game->mapinfo.map);
-        return (1);
-    }
-    free_tab(game->mapinfo.map_textures);
+		return (free_tab(game->mapinfo.map_textures), \
+				free_tab(game->mapinfo.map), 1);
+	free_tab(game->mapinfo.map_textures);
 	return (0);
 }
 
 int main(int argc, char **argv)
 {
-    t_game game;
-
-    init_game(&game);
+	t_game game;
+	
+	init_game(&game);
 	if (parce_map(argc, argv, &game))
 		return (1);
-	game.map = copy_map(game.mapinfo.map);
+	//game.map = copy_map(game.mapinfo.map);
 	set_player_position(&game);
-    perform_raycasting(&game);
-    draw_minimap(&game);
-    draw_player_on_minimap(&game);
-    mlx_image_to_window(game.mlx, game.image, 0, 0);
-    mlx_key_hook(game.mlx, key_hook, &game);
-    mlx_scroll_hook(game.mlx, mouse_scroll_hook, &game);
-    mlx_close_hook(game.mlx, close_window, &game);
-    mlx_loop(game.mlx);
-    return (0);
+	perform_raycasting(&game);
+	draw_minimap(&game);
+	draw_player_on_minimap(&game);
+	mlx_image_to_window(game.mlx, game.image, 0, 0);
+	mlx_key_hook(game.mlx, key_hook, &game);
+	mlx_scroll_hook(game.mlx, mouse_scroll_hook, &game);
+	mlx_close_hook(game.mlx, close_window, &game);
+	mlx_loop(game.mlx);
+	return (0);
 }

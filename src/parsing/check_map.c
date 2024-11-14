@@ -6,11 +6,28 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:54:15 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/13 12:07:15 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/14 12:41:08 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
+int	check_border_row(char *row)
+{
+	size_t	i;
+
+	i = 0;
+	while (ft_isspace(row[i]))
+		i++;
+	while (row[i] && row[i] != '\n')
+	{
+		if (row[i] != '1')
+			return (0);
+		i++;
+	}
+	while (row[i] == '\n' || ft_isspace(row[i]))
+		i++;
+	return (row[i] == '\0');
+}
 
 int check_sides(t_game *game, int rows)
 {
@@ -36,26 +53,12 @@ int check_sides(t_game *game, int rows)
 
 int	check_edges(t_game *game)
 {
-	size_t	i;
-	int		rows;
-
+	int rows;
+	
 	rows = ft_strlen_d(game->mapinfo.map);
-	i = 0;
-	while (i < ft_strlen(game->mapinfo.map[0]))
-	{
-		if (!ft_isspace(game->mapinfo.map[0][i]) && \
-			game->mapinfo.map[0][i] != '1')
-			return (err_msg(NULL, ERR_IN_MAP, 1), 1);
-		i++;
-	}
-	i = 0;
-	while (i < ft_strlen(game->mapinfo.map[rows - 1]))
-	{
-		if (!ft_isspace(game->mapinfo.map[rows - 1][i]) && \
-			game->mapinfo.map[rows - 1][i] != '1')
-			return (err_msg(NULL, ERR_IN_MAP, 1), 1);
-		i++;
-	}
+	if (!check_border_row(game->mapinfo.map[0]) || 
+		!check_border_row(game->mapinfo.map[rows - 1]))
+		return (err_msg(NULL, ERR_IN_MAP, 1), 1);
 	if (check_sides(game, rows))
 		return (err_msg(NULL, ERR_IN_MAP, 1), 1);
 	return (0);
@@ -126,6 +129,8 @@ int check_map(t_game *game)
 {
 	char	**map_tmp;
 
+	if (!game->mapinfo.map[0])
+		return (err_msg("Map", "Map empy", 1));
 	if (check_blank_lines(game->mapinfo.map))
 		return (1);
 	if (check_edges(game))
@@ -135,6 +140,6 @@ int check_map(t_game *game)
 	map_tmp = copy_map(game->mapinfo.map);
 	if (!flood_fill_recursive(map_tmp, game->player_pos.x, game->player_pos.y, \
 		&game->mapinfo))
-		return (free_tab(map_tmp), err_msg(NULL, ERR_IN_MAP, 1), 1);
+		return (free_tab(map_tmp), /*err_msg(NULL, ERR_IN_MAP, 1),*/ 1);
 	return (free_tab(map_tmp), 0);
 }

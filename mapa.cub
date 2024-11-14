@@ -1,0 +1,17 @@
+NO /home/cgaratej/42/cub3d/assets/img_no.xpm
+SO /home/cgaratej/42/cub3d/assets/img_so.xpm
+WE /home/cgaratej/42/cub3d/assets/img_we.xpm
+EA /home/cgaratej/42/cub3d/assets/img_ea.xpm
+
+F 139,69,19
+C 135,206,235
+
+    11111111
+    10001001
+    10000001
+111110000111
+100001001
+100100001
+110101101
+1E0000001
+111111111
