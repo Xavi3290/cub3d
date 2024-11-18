@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/14 11:34:41 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/18 18:16:20 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # include <unistd.h>
 # include <errno.h>
 # include <string.h>
+# include <sys/time.h>
 
 # define ERR_FILE_NOT_CUB "Wrong file extension .cub"
 # define ERR_FILE_NOT_XMP "Wrong file extension .xmp"
@@ -45,6 +46,7 @@
 # define ERR_IN_PLAYER "There must be exactly one player character"
 # define ERR_IN_ARGS "arguments are missing"
 # define ERR_MANY_ARGS "many arguments"
+# define BPP sizeof(int32_t)
 
 typedef struct s_tex
 {
@@ -86,12 +88,28 @@ typedef struct s_rgb {
     int b;
 } t_rgb;
 
+typedef struct s_animation
+{
+	mlx_texture_t *frame0;
+	mlx_texture_t *frame1;
+	mlx_texture_t *frame2;
+	mlx_texture_t *frame3;
+	mlx_texture_t *frame4;
+	mlx_texture_t *frame5;
+	mlx_texture_t *frame6;
+	mlx_texture_t *frame7;
+	mlx_image_t *curren_img;
+	int	index;
+	int time;
+}	t_animation;
+
 typedef struct s_game {
     mlx_t *mlx;
     mlx_image_t *image;
     t_player player;
     //int (*worldMap)[MAP_HEIGHT];
     //char **map;
+	t_animation anim;
     t_map        mapinfo;
     t_vector2    player_pos;
     t_tex        textures;
@@ -107,6 +125,9 @@ typedef struct s_game {
     t_rgb minimap_player_color;
     t_rgb color;
 } t_game;
+
+void	draw_animation(t_game *game);
+void	init_anim(t_game *game);
 
 typedef struct s_ray {
     double cameraX;
@@ -148,5 +169,7 @@ int        check_map(t_game *game);
 int        ft_strlen_d(char **str);
 char	**copy_map(char **map);
 int flood_fill_recursive(char **map_cpy, int x, int y, t_map *map);
+long long	timestamp(void);
+void	animation_loop(void *param);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:53:00 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/11 13:43:40 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:40:48 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,12 @@ char	**copy_map(char **map)
 		i++;
 	}
 	return (map_tmp);
+}
+
+long long	timestamp(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }

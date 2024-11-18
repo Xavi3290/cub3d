@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/14 11:52:55 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/18 18:18:01 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,14 @@ int is_wall(t_game *game, double x, double y) {
 // Función para liberar recursos del juego
 void free_game_resources(t_game *game)
 {
-    if (game->mapinfo.map)
-        free_tab(game->mapinfo.map);
-    if (game->image)
-        mlx_delete_image(game->mlx, game->image);
-    if (game->mlx)
-        mlx_terminate(game->mlx);
+	if (game->mapinfo.map)
+		free_tab(game->mapinfo.map);
+	if (game->image)
+		mlx_delete_image(game->mlx, game->image);
+	if (game->anim.curren_img)
+		mlx_delete_image(game->mlx, game->anim.curren_img);
+	if (game->mlx)
+		mlx_terminate(game->mlx);
 }
 
 // Función para cerrar la ventana correctamente
@@ -345,6 +347,7 @@ void init_game(t_game *game)
 	game->minimap_floor_color = (t_rgb){204, 204, 204};	// Gris claro para el suelo del minimapa
 	game->minimap_player_color = (t_rgb){0, 255, 0};	// Verde para el jugador en el minimapa
 	//set_player_position(game);
+	init_anim(game);
 }
 
 int	parce_map(int argc, char **argv, t_game *game)
@@ -372,7 +375,7 @@ int	parce_map(int argc, char **argv, t_game *game)
 int main(int argc, char **argv)
 {
 	t_game game;
-	
+
 	init_game(&game);
 	if (parce_map(argc, argv, &game))
 		return (1);
@@ -382,6 +385,7 @@ int main(int argc, char **argv)
 	draw_minimap(&game);
 	draw_player_on_minimap(&game);
 	mlx_image_to_window(game.mlx, game.image, 0, 0);
+	mlx_loop_hook(game.mlx, animation_loop, &game);
 	mlx_key_hook(game.mlx, key_hook, &game);
 	mlx_scroll_hook(game.mlx, mouse_scroll_hook, &game);
 	mlx_close_hook(game.mlx, close_window, &game);
