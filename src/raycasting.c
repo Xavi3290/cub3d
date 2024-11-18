@@ -6,11 +6,21 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 19:36:35 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/12 21:35:41 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/18 19:49:45 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+// Función auxiliar para obtener el color de la textura basado en coordenadas
+int get_texture_color(t_texture *texture, int texX, int texY) {
+    if (texX >= 0 && texX < texture->width && texY >= 0 && texY < texture->height) {
+        int *pixels = (int *)texture->texture_ptr->pixels; // Obtener los píxeles como un array de int
+        return pixels[texY * texture->width + texX];
+    }
+    return 0; // Retorna negro si está fuera de límites
+}
+
 
 // Función para llenar cielo y suelo con colores
 static void draw_sky_and_floor(t_game *game) {
@@ -95,6 +105,10 @@ static void perform_dda(t_ray *ray, t_game *game) {
             break;
         }
     }
+    if (ray->sideDistX < 0.0001) 
+        ray->sideDistX = 0.0001;
+    if (ray->sideDistY < 0.0001) 
+        ray->sideDistY = 0.0001;
 }
 
 
@@ -111,6 +125,9 @@ static void process_ray(t_ray *ray, t_game *game, t_line_params *line)
     else
         line->perpWallDist = (ray->mapY - game->player.posY + (1 - ray->stepY) / 2) / ray->rayDirY;
 
+    if (line->perpWallDist < 0.01) 
+        line->perpWallDist = 0.01;
+
     // Calcula la altura de la línea a dibujar
     line->lineHeight = (int)(HEIGHT / line->perpWallDist);
 
@@ -125,7 +142,7 @@ static void process_ray(t_ray *ray, t_game *game, t_line_params *line)
 }
 
 // Dibuja una línea vertical en la imagen utilizando el algoritmo de Bresenham
-static void draw_line_bresenham(mlx_image_t *image, t_line_params *line)
+/*static void draw_line_bresenham(mlx_image_t *image, t_line_params *line)
 {
     int y;
     int delta_y;
@@ -151,9 +168,9 @@ static void draw_line_bresenham(mlx_image_t *image, t_line_params *line)
         if (error >= 1)
             error -= 1;
     }
-}
+}*/
 
-// Función principal para realizar el raycasting y dibujar las paredes en la pantalla
+/*// Función principal para realizar el raycasting y dibujar las paredes en la pantalla
 void perform_raycasting(t_game *game) {
     int x = 0;
     draw_sky_and_floor(game);
@@ -175,5 +192,49 @@ void perform_raycasting(t_game *game) {
         draw_line_bresenham(game->image, &line);
         x++;
     }
+}*/
+
+t_texture *select_texture(t_ray *ray, t_game *game) {
+    if (ray->side == 0 && ray->stepX < 0)
+        return &game->wall_textures[0]; // Norte
+    else if (ray->side == 0 && ray->stepX > 0)
+        return &game->wall_textures[1]; // Sur
+    else if (ray->side == 1 && ray->stepY < 0)
+        return &game->wall_textures[2]; // Oeste
+    return &game->wall_textures[3]; // Este
 }
+
+void draw_textured_line(t_game *game, t_ray *ray, t_line_params *line, t_texture *texture) {
+    double wallX = (ray->side == 0) ? (game->player.posY + line->perpWallDist * ray->rayDirY) : (game->player.posX + line->perpWallDist * ray->rayDirX);
+    wallX -= floor(wallX);
+    int texX = (int)(wallX * texture->width);
+    if ((ray->side == 0 && ray->rayDirX > 0) || (ray->side == 1 && ray->rayDirY < 0))
+        texX = texture->width - texX - 1;
+
+    int y = line->drawStart;
+    while (y < line->drawEnd) {
+        int d = y * 256 - HEIGHT * 128 + line->lineHeight * 128;
+        int texY = ((d * texture->height) / line->lineHeight) / 256;
+        int color = get_texture_color(texture, texX, texY);
+        mlx_put_pixel(game->image, line->x, y, color);
+        y++;
+    }
+}
+
+
+void perform_raycasting(t_game *game) {
+    int x = 0;
+
+    draw_sky_and_floor(game);
+    while (x < WIDTH) {
+        t_ray ray;
+        t_line_params line;
+        line.x = x;
+        process_ray(&ray, game, &line);
+        t_texture *texture = select_texture(&ray, game);
+        draw_textured_line(game, &ray, &line, texture);
+        x++;
+    }
+}
+
 

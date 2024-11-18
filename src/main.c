@@ -6,7 +6,7 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/12 21:38:16 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/18 19:46:30 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,64 @@ char	**copy_map(char **map)
 	}
 	return (map_tmp);
 }
+
+void free_textures(t_game *game) {
+    int i = 0;
+
+    while (i < 4) {
+        if (game->wall_textures[i].texture_ptr) {
+            mlx_delete_image(game->mlx, game->wall_textures[i].texture_ptr);
+            game->wall_textures[i].texture_ptr = NULL;
+        }
+        i++;
+    }
+}
+
+void load_ptr_textures_in_array(t_game *game, t_texture texture[4]) {
+    int i = 0;
+
+    while (i < 4) {
+        mlx_texture_t *temp_texture = mlx_load_png(texture[i].path); // Cargar textura
+        if (!temp_texture) {
+            printf("Error: No se pudo cargar la textura %s\n", texture[i].path);
+            exit(1);
+        }
+
+        // Convertir textura a imagen y guardar puntero
+        texture[i].texture_ptr = mlx_texture_to_image(game->mlx, temp_texture);
+        if (!texture[i].texture_ptr) {
+            mlx_delete_texture(temp_texture);
+            printf("Error: No se pudo convertir la textura %s a imagen\n", texture[i].path);
+            exit(1);
+        }
+
+        // Configurar dimensiones y datos de textura
+        texture[i].width = temp_texture->width;
+        texture[i].height = temp_texture->height;
+        texture[i].wall_texture = (int *)texture[i].texture_ptr->pixels; // Obtener píxeles
+
+        mlx_delete_texture(temp_texture); // Liberar textura temporal después de convertirla
+        i++;
+    }
+}
+
+
+void setup_textures(t_game *game) {
+    t_texture textures[4];
+    textures[0] = (t_texture){"img/img_no.png", NULL, NULL, 0, 0};
+    textures[1] = (t_texture){"img/img_so.png", NULL, NULL, 0, 0};
+    textures[2] = (t_texture){"img/img_ea.png", NULL, NULL, 0, 0};
+    textures[3] = (t_texture){"img/img_we.png", NULL, NULL, 0, 0};
+
+    load_ptr_textures_in_array(game, textures); // Cargar las texturas en memoria
+
+    int i = 0;
+    while (i < 4) {
+        game->wall_textures[i] = textures[i]; // Copiar al juego
+        i++;
+    }
+}
+
 
 int rgb_to_int(t_rgb color) {
     return (color.r << 24) | (color.g << 16) | (color.b << 8) | 255;
@@ -146,9 +204,47 @@ int is_wall(t_game *game, double x, double y) {
     return game->map[mapY][mapX] == '1';
 }
 
+int is_safe_position(t_game *game, double x, double y) {
+    // Añade un margen pequeño para evitar que el jugador entre en la pared
+    double margin = 0.2;
+
+    // Verifica las cuatro esquinas alrededor del jugador
+    if (is_wall(game, x - margin, y - margin))
+        return 0;
+    if (is_wall(game, x + margin, y - margin))
+        return 0;
+    if (is_wall(game, x - margin, y + margin))
+        return 0;
+    if (is_wall(game, x + margin, y + margin))
+        return 0;
+
+    return 1; // Si ninguna de las esquinas tiene pared, es seguro
+}
+
+/*int is_wall(t_game *game, double x, double y, double margin) {
+    int mapX = (int)x;
+    int mapY = (int)y;
+
+    // Verificar si está dentro de los límites del mapa
+    if (mapX < 0 || mapX >= MAP_WIDTH || mapY < 0 || mapY >= MAP_HEIGHT)
+        return 1;
+
+    // Verificar el margen alrededor del jugador
+    if (game->map[mapY][mapX] == '1') {
+        double dx = x - mapX;
+        double dy = y - mapY;
+
+        if (dx < margin || dx > (1.0 - margin) || dy < margin || dy > (1.0 - margin))
+            return 1;
+    }
+
+    return 0;
+}*/
+
 // Función para liberar recursos del juego
 void free_game_resources(t_game *game)
 {
+    free_textures(game);
     if (game->map)
         free_tab(game->map);
     if (game->image)
@@ -254,10 +350,16 @@ void handle_movement(t_game *game, int key) {
     }
 
     // Verifica colisiones con el mapa y limita el movimiento a áreas libres
-    if (!is_wall(game, nextX, game->player.posY)) {
+    /*if (!is_wall(game, nextX, game->player.posY)) {
         game->player.posX = nextX;
     }
     if (!is_wall(game, game->player.posX, nextY)) {
+        game->player.posY = nextY;
+    }*/
+    if (is_safe_position(game, nextX, game->player.posY)) {
+        game->player.posX = nextX;
+    }
+    if (is_safe_position(game, game->player.posX, nextY)) {
         game->player.posY = nextY;
     }
 }
@@ -282,9 +384,13 @@ void handle_movement_sides(t_game *game, int key)
         return;
 
     // Verifica si la siguiente posición tiene una pared antes de mover
-    if (!is_wall(game, nextX, game->player.posY))
+    /*if (!is_wall(game, nextX, game->player.posY))
         game->player.posX = nextX;
     if (!is_wall(game, game->player.posX, nextY))
+        game->player.posY = nextY;*/
+    if (is_safe_position(game, nextX, game->player.posY))
+        game->player.posX = nextX;
+    if (is_safe_position(game, game->player.posX, nextY))
         game->player.posY = nextY;
 }
 
@@ -307,6 +413,30 @@ void handle_rotation_player(t_game *game, int key)
     game->player.planeX = game->player.planeX * cos(angle) - game->player.planeY * sin(angle);
     game->player.planeY = oldPlaneX * sin(angle) + game->player.planeY * cos(angle);
 }
+
+/*void handle_jump(t_game *game) {
+    if (game->player.is_jumping) {
+        game->player.vertical_offset += game->player.jump_speed;
+        game->player.jump_speed -= 0.02; // Gravedad que reduce la velocidad del salto
+
+        // Limitar la altura máxima del salto
+        if (game->player.vertical_offset > 0.2) {
+            game->player.vertical_offset = 0.2;
+            game->player.jump_speed = -0.02; // Inicia la caída
+        }
+
+        // Finalizar el salto al tocar el suelo
+        if (game->player.vertical_offset <= 0) {
+            game->player.vertical_offset = 0;
+            game->player.is_jumping = 0;
+            game->player.jump_speed = 0;
+        }
+    }
+}*/
+
+
+
+
 
 // Función de enganche para gestionar la rueda del ratón
 void mouse_scroll_hook(double xdelta, double ydelta, void *param)
@@ -342,9 +472,14 @@ void key_hook(struct mlx_key_data keydata, void *param)
         handle_movement_sides(game, keydata.key);
     else if (keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_RIGHT)
         handle_rotation_player(game, keydata.key);
+    /*else if (keydata.key == MLX_KEY_SPACE && !game->player.is_jumping) {
+        game->player.is_jumping = 1;
+        game->player.jump_speed = 0.1; // Velocidad inicial del salto
+    }*/
     printf("Player position1: (%f, %f)\n", game->player.posX, game->player.posY);
 
     // Redibuja la escena después de la actualización de la posición o dirección
+    //handle_jump(game);
     perform_raycasting(game);
     draw_minimap(game);
     draw_player_on_minimap(game);
@@ -391,8 +526,22 @@ void init_game(t_game *game)
     game->minimap_wall_color = (t_rgb){85, 85, 85};  // Gris oscuro para paredes del minimapa
     game->minimap_floor_color = (t_rgb){204, 204, 204}; // Gris claro para el suelo del minimapa
     game->minimap_player_color = (t_rgb){0, 255, 0}; // Verde para el jugador en el minimapa
+    //load_textures(game);
     set_player_position(game);
 }
+
+/*void game_loop(void *param) {
+    t_game *game = (t_game *)param;
+
+    if (game->player.is_jumping) {
+        handle_jump(game);
+    }
+
+    perform_raycasting(game);
+    draw_minimap(game);
+    draw_player_on_minimap(game);
+    mlx_image_to_window(game->mlx, game->image, 0, 0);
+}*/
 
 
 int main(void)
@@ -400,11 +549,12 @@ int main(void)
     t_game game;
 
     init_game(&game);
-
+    setup_textures(&game);
     perform_raycasting(&game);
     draw_minimap(&game);
     draw_player_on_minimap(&game);
     mlx_image_to_window(game.mlx, game.image, 0, 0);
+    //mlx_loop_hook(game.mlx, game_loop, &game);
     mlx_key_hook(game.mlx, key_hook, &game);
     mlx_scroll_hook(game.mlx, mouse_scroll_hook, &game);
     mlx_close_hook(game.mlx, close_window, &game);

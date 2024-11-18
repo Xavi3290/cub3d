@@ -6,7 +6,7 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/12 21:31:17 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/18 19:06:31 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,22 @@
 # include <stdio.h>
 # include <math.h>
 
+/*typedef struct s_texture {
+    mlx_image_t *img;
+    int width;
+    int height;
+    int *data;
+} t_texture;*/
+
+typedef struct s_texture {
+    char *path;
+    mlx_image_t *texture_ptr;
+    int *wall_texture;
+    int width;
+    int height;
+} t_texture;
+
+
 typedef struct s_player {
     double posX;
     double posY;
@@ -33,6 +49,9 @@ typedef struct s_player {
     double dirY;
     double planeX;
     double planeY;
+    double vertical_offset;
+    double jump_speed;      
+    int is_jumping;  
 } t_player;
 
 typedef struct s_rgb {
@@ -58,6 +77,7 @@ typedef struct s_game {
     t_rgb minimap_floor_color;
     t_rgb minimap_player_color;
     t_rgb color;
+    t_texture wall_textures[4];
 } t_game;
 
 typedef struct s_ray {
@@ -89,6 +109,8 @@ typedef struct s_line_params {
 void perform_raycasting(t_game *game);
 int is_player_cell(t_game *game, int x, int y);
 int is_wall(t_game *game, double x, double y);
+//int is_wall(t_game *game, double x, double y, double margin);
+int is_safe_position(t_game *game, double x, double y);
 int rgb_to_int(t_rgb color);
 
 #endif
