@@ -6,7 +6,7 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/18 19:06:31 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/20 09:54:52 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ typedef struct s_player {
     double dirY;
     double planeX;
     double planeY;
-    double vertical_offset;
+    double view_offset;
     double jump_speed;      
-    int is_jumping;  
+    int     is_jumping;  
 } t_player;
 
 typedef struct s_rgb {

@@ -6,7 +6,7 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/18 19:46:30 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/20 09:32:20 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -414,27 +414,24 @@ void handle_rotation_player(t_game *game, int key)
     game->player.planeY = oldPlaneX * sin(angle) + game->player.planeY * cos(angle);
 }
 
-/*void handle_jump(t_game *game) {
+void handle_jump(t_game *game) {
     if (game->player.is_jumping) {
-        game->player.vertical_offset += game->player.jump_speed;
-        game->player.jump_speed -= 0.02; // Gravedad que reduce la velocidad del salto
+        game->player.view_offset += game->player.jump_speed;
+        game->player.jump_speed -= 0.005; // Gravedad más lenta para un salto más pequeño
 
         // Limitar la altura máxima del salto
-        if (game->player.vertical_offset > 0.2) {
-            game->player.vertical_offset = 0.2;
-            game->player.jump_speed = -0.02; // Inicia la caída
+        if (game->player.view_offset > 0.08) { // Menor altura de salto
+            game->player.jump_speed = -0.005; // Inicia la caída más lenta
         }
 
-        // Finalizar el salto al tocar el suelo
-        if (game->player.vertical_offset <= 0) {
-            game->player.vertical_offset = 0;
-            game->player.is_jumping = 0;
+        // Finalizar el salto al volver a la posición inicial
+        if (game->player.view_offset <= 0) {
+            game->player.view_offset = 0;
             game->player.jump_speed = 0;
+            game->player.is_jumping = 0;
         }
     }
-}*/
-
-
+}
 
 
 
@@ -472,10 +469,10 @@ void key_hook(struct mlx_key_data keydata, void *param)
         handle_movement_sides(game, keydata.key);
     else if (keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_RIGHT)
         handle_rotation_player(game, keydata.key);
-    /*else if (keydata.key == MLX_KEY_SPACE && !game->player.is_jumping) {
+    else if (keydata.key == MLX_KEY_SPACE && !game->player.is_jumping) {
         game->player.is_jumping = 1;
-        game->player.jump_speed = 0.1; // Velocidad inicial del salto
-    }*/
+        game->player.jump_speed = 0.03; // Velocidad inicial del salto
+    }
     printf("Player position1: (%f, %f)\n", game->player.posX, game->player.posY);
 
     // Redibuja la escena después de la actualización de la posición o dirección
@@ -530,7 +527,7 @@ void init_game(t_game *game)
     set_player_position(game);
 }
 
-/*void game_loop(void *param) {
+void game_loop(void *param) {
     t_game *game = (t_game *)param;
 
     if (game->player.is_jumping) {
@@ -541,7 +538,7 @@ void init_game(t_game *game)
     draw_minimap(game);
     draw_player_on_minimap(game);
     mlx_image_to_window(game->mlx, game->image, 0, 0);
-}*/
+}
 
 
 int main(void)
@@ -554,7 +551,7 @@ int main(void)
     draw_minimap(&game);
     draw_player_on_minimap(&game);
     mlx_image_to_window(game.mlx, game.image, 0, 0);
-    //mlx_loop_hook(game.mlx, game_loop, &game);
+    mlx_loop_hook(game.mlx, game_loop, &game);
     mlx_key_hook(game.mlx, key_hook, &game);
     mlx_scroll_hook(game.mlx, mouse_scroll_hook, &game);
     mlx_close_hook(game.mlx, close_window, &game);
