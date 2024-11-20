@@ -6,22 +6,12 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/20 09:32:20 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/20 13:40:07 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-
-/*// Imprime el contenido de worldMap para verificarlo
-void print_world_map(const int worldMap[MAP_HEIGHT][MAP_WIDTH]) {
-    for (int y = 0; y < MAP_HEIGHT; y++) {
-        for (int x = 0; x < MAP_WIDTH; x++) {
-            printf("%d ", worldMap[y][x]);
-        }
-        printf("\n");
-    }
-}*/
 
 void	free_tab(char **tab)
 {
@@ -85,6 +75,19 @@ void free_textures(t_game *game) {
     }
 }
 
+void free_texture_arrays(uint32_t ***texture_arrays, int num_textures, int height) {
+    int i, j;
+
+    for (i = 0; i < num_textures; i++) {
+        for (j = 0; j < height; j++) {
+            free(texture_arrays[i][j]);
+        }
+        free(texture_arrays[i]);
+    }
+    free(texture_arrays);
+}
+
+
 void load_ptr_textures_in_array(t_game *game, t_texture texture[4]) {
     int i = 0;
 
@@ -113,6 +116,52 @@ void load_ptr_textures_in_array(t_game *game, t_texture texture[4]) {
     }
 }
 
+/*void convert_texture_to_array(t_texture *texture, uint32_t ***array) {
+    int x, y;
+
+    *array = malloc(texture->height * sizeof(uint32_t *));
+    if (!*array) {
+        printf("Error: No se pudo asignar memoria para la matriz de texturas.\n");
+        exit(1);
+    }
+
+    for (y = 0; y < texture->height; y++) {
+        (*array)[y] = malloc(texture->width * sizeof(uint32_t));
+        if (!(*array)[y]) {
+            printf("Error: No se pudo asignar memoria para la fila de textura.\n");
+            exit(1);
+        }
+
+        for (x = 0; x < texture->width; x++) {
+            uint8_t *pixels = (uint8_t *)texture->texture_ptr->pixels;
+            int index = (y * texture->width + x) * 4;
+
+            uint8_t r = pixels[index];
+            uint8_t g = pixels[index + 1];
+            uint8_t b = pixels[index + 2];
+            uint8_t a = pixels[index + 3];
+
+            (*array)[y][x] = (a << 24) | (r << 16) | (g << 8) | b; // Combinar RGBA
+        }
+    }
+}
+
+void load_textures_to_arrays(t_game *game, uint32_t ****texture_arrays) {
+    int i;
+
+    *texture_arrays = malloc(4 * sizeof(uint32_t **));
+    if (!*texture_arrays) {
+        printf("Error: No se pudo asignar memoria para las texturas.\n");
+        exit(1);
+    }
+
+    for (i = 0; i < 4; i++) {
+        convert_texture_to_array(&game->wall_textures[i], &(*texture_arrays)[i]);
+    }
+}*/
+
+
+
 
 void setup_textures(t_game *game) {
     t_texture textures[4];
@@ -128,6 +177,8 @@ void setup_textures(t_game *game) {
         game->wall_textures[i] = textures[i]; // Copiar al juego
         i++;
     }
+    // Convertir texturas a matrices de píxeles
+    //load_textures_to_arrays(game, &game->texture_arrays);
 }
 
 
@@ -153,9 +204,9 @@ void draw_minimap_cell(t_game *game) {
 // Dibuja el minimapa en la esquina superior izquierda de la pantalla
 void draw_minimap(t_game *game) {
     int y = 0;
-    while (y < MAP_HEIGHT) {
+    while (y < game->map_height/*MAP_HEIGHT*/) {
         int x = 0;
-        while (x < MAP_WIDTH) {
+        while (x < game->map_width/*MAP_WIDTH*/) {
             game->startX = x * game->tileSize;
             game->startY = y * game->tileSize;
 
@@ -170,6 +221,28 @@ void draw_minimap(t_game *game) {
         y++;
     }
 }
+/*void draw_minimap(t_game *game) {
+    int y = 0;
+    while (y < game->map_height) {
+        int x = 0;
+        while (x < game->map_width) {
+            game->startX = x * game->tileSize;
+            game->startY = y * game->tileSize;
+
+            if (game->map[y][x] == '1') {
+                game->color = game->minimap_wall_color; // Pared
+            } else if (game->map[y][x] == ' ') {
+                game->color = (t_rgb){0, 0, 0}; // Espacio vacío (negro)
+            } else {
+                game->color = game->minimap_floor_color; // Suelo
+            }
+            draw_minimap_cell(game);
+            x++;
+        }
+        y++;
+    }
+}*/
+
 
 
 // Dibuja la posición del jugador en el minimapa
@@ -197,11 +270,11 @@ int is_wall(t_game *game, double x, double y) {
     int mapY = (int)(y);
 
     // Verifica si está dentro de los límites del mapa
-    if (mapX < 0 || mapX >= MAP_WIDTH || mapY < 0 || mapY >= MAP_HEIGHT)
+    if (mapX < 0 || mapX >= game->map_width/*MAP_WIDTH*/ || mapY < 0 || mapY >= game->map_height/*MAP_HEIGHT*/)
         return 1;  // Trata posiciones fuera de los límites como paredes
 
-    // Devuelve 1 si la celda contiene una pared ('1')
-    return game->map[mapY][mapX] == '1';
+    // Devuelve 1 si la celda contiene una pared ('1') o (' ')
+    return (game->map[mapY][mapX] == '1' || game->map[mapY][mapX] == ' ');
 }
 
 int is_safe_position(t_game *game, double x, double y) {
@@ -244,6 +317,10 @@ int is_safe_position(t_game *game, double x, double y) {
 // Función para liberar recursos del juego
 void free_game_resources(t_game *game)
 {
+    /*if (game->texture_arrays) {
+        free_texture_arrays(game->texture_arrays, 4, game->wall_textures[0].height);
+        game->texture_arrays = NULL;
+    }*/
     free_textures(game);
     if (game->map)
         free_tab(game->map);
@@ -303,10 +380,10 @@ void set_player_position_and_direction(t_game *game, int x, int y)
 void set_player_position(t_game *game)
 {
     int y = 0;
-    while (y < MAP_HEIGHT)
+    while (y < game->map_height/*MAP_HEIGHT*/)
     {
         int x = 0;
-        while (x < MAP_WIDTH)
+        while (x < game->map_width/*MAP_WIDTH*/)
         {
             if (is_player_cell(game, x, y))
             {
@@ -433,6 +510,28 @@ void handle_jump(t_game *game) {
     }
 }
 
+void handle_diagonal_movement(t_game *game, int key) {
+    double nextX = game->player.posX;
+    double nextY = game->player.posY;
+
+    if (key == MLX_KEY_E) {
+        // Mover en diagonal hacia adelante y la izquierda
+        nextX += (game->player.dirX - game->player.planeX) * MOVE_SPEED / sqrt(2);
+        nextY += (game->player.dirY - game->player.planeY) * MOVE_SPEED / sqrt(2);
+    } else if (key == MLX_KEY_Q) {
+        // Mover en diagonal hacia adelante y la derecha
+        nextX += (game->player.dirX + game->player.planeX) * MOVE_SPEED / sqrt(2);
+        nextY += (game->player.dirY + game->player.planeY) * MOVE_SPEED / sqrt(2);
+    }
+
+    // Verificar colisiones
+    if (is_safe_position(game, nextX, game->player.posY)) {
+        game->player.posX = nextX;
+    }
+    if (is_safe_position(game, game->player.posX, nextY)) {
+        game->player.posY = nextY;
+    }
+}
 
 
 // Función de enganche para gestionar la rueda del ratón
@@ -467,6 +566,8 @@ void key_hook(struct mlx_key_data keydata, void *param)
         handle_movement(game, keydata.key);
     else if (keydata.key == MLX_KEY_A || keydata.key == MLX_KEY_D)
         handle_movement_sides(game, keydata.key);
+    else if (keydata.key == MLX_KEY_Q || keydata.key == MLX_KEY_E)
+        handle_diagonal_movement(game, keydata.key);
     else if (keydata.key == MLX_KEY_LEFT || keydata.key == MLX_KEY_RIGHT)
         handle_rotation_player(game, keydata.key);
     else if (keydata.key == MLX_KEY_SPACE && !game->player.is_jumping) {
@@ -476,21 +577,90 @@ void key_hook(struct mlx_key_data keydata, void *param)
     printf("Player position1: (%f, %f)\n", game->player.posX, game->player.posY);
 
     // Redibuja la escena después de la actualización de la posición o dirección
-    //handle_jump(game);
     perform_raycasting(game);
     draw_minimap(game);
     draw_player_on_minimap(game);
     mlx_image_to_window(game->mlx, game->image, 0, 0);
 }
 
+void normalize_map(char **map, int *rows, int *cols) {
+    int max_length = 0;
+    int i = 0;
+
+    // Determinar la longitud máxima de las filas
+    while (map[i]) {
+        int length = ft_strlen(map[i]);
+        if (length > max_length) {
+            max_length = length;
+        }
+        i++;
+    }
+    *rows = i;          // Número de filas
+    *cols = max_length; // Longitud máxima de las columnas
+
+    // Ajustar cada fila para que tenga la longitud máxima
+    i = 0;
+    while (map[i]) {
+        int length = ft_strlen(map[i]);
+        if (length < max_length) {
+            char *new_row = ft_calloc(max_length + 1, sizeof(char));
+            ft_memset(new_row, ' ', max_length); // Rellenar con espacios
+            ft_memcpy(new_row, map[i], length); // Copiar contenido existente
+            free(map[i]);
+            map[i] = new_row;
+        }
+        i++;
+    }
+}
+
+
+/*void print_map_to_console(char **map, int map_height, int map_width) {
+    int y = 0;
+
+    printf("Mapa (%d x %d):\n", map_height, map_width);
+    while (y < map_height) {
+        int x = 0;
+        while (x < map_width) {
+            printf("%c", map[y][x]);
+            x++;
+        }
+        printf("\n");
+        y++;
+    }
+    printf("\n");
+}
+
+void print_copied_map(char **map) {
+    int i = 0;
+
+    printf("Contenido de copy_map:\n");
+    while (map[i]) {
+        printf("Fila %d: '%s'\n", i, map[i]);
+        i++;
+    }
+    printf("\n");
+}*/
+
+
+
+
 // Inicialización del juego y asignación de recursos
 void init_game(t_game *game)
 {
     
     char *initial_map[] = {
-        "11111111",
+       /* "11111111",
         "10001001",
         "10001001",
+        "10000001",
+        "10010001",
+        "11110111",
+        "1E000001",
+        "11111111",*/
+        "   111111111",
+        "   100000001",
+        "   100011111",
+        "11110001",
         "10000001",
         "10010001",
         "11110111",
@@ -504,6 +674,15 @@ void init_game(t_game *game)
         printf("Error: Could not allocate memory for map.\n");
         exit(1);
     }
+    //print_copied_map(game->map);
+    int rows, cols;
+    normalize_map(game->map, &rows, &cols);
+    //print_map_to_console(game->map, rows, cols);
+
+    game->map_width = cols;  // Actualizar ancho dinámicamente
+    game->map_height = rows; // Actualizar altura dinámicamente
+ 
+    
     game->mlx = init_mlx();
     game->image = mlx_new_image(game->mlx, WIDTH, HEIGHT);
     if (!game->image)
@@ -515,15 +694,16 @@ void init_game(t_game *game)
     }
     game->startX = 0;   
     game->startY = 0;   
-    game->tileSize = (WIDTH / MAP_WIDTH) / 5;  
+    //game->tileSize = (WIDTH / MAP_WIDTH) / 5;  
     game->sky_color = (t_rgb){135, 206, 235};        // Azul claro para el cielo
     game->floor_color = (t_rgb){139, 69, 19};        // Marrón para el suelo
-    game->wall_color_light = (t_rgb){255, 255, 255}; // Blanco para pared clara
-    game->wall_color_dark = (t_rgb){170, 170, 170};  // Gris para pared oscura
+    //game->wall_color_light = (t_rgb){255, 255, 255}; // Blanco para pared clara
+    //game->wall_color_dark = (t_rgb){170, 170, 170};  // Gris para pared oscura
     game->minimap_wall_color = (t_rgb){85, 85, 85};  // Gris oscuro para paredes del minimapa
     game->minimap_floor_color = (t_rgb){204, 204, 204}; // Gris claro para el suelo del minimapa
     game->minimap_player_color = (t_rgb){0, 255, 0}; // Verde para el jugador en el minimapa
     //load_textures(game);
+    game->tileSize = (WIDTH / game->map_width) / 5;
     set_player_position(game);
 }
 

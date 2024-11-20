@@ -6,20 +6,41 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 19:36:35 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/20 09:51:59 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/20 13:37:56 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
 // Función auxiliar para obtener el color de la textura basado en coordenadas
-int get_texture_color(t_texture *texture, int texX, int texY) {
+/*int get_texture_color(t_texture *texture, int texX, int texY) {
     if (texX >= 0 && texX < texture->width && texY >= 0 && texY < texture->height) {
         int *pixels = (int *)texture->texture_ptr->pixels; // Obtener los píxeles como un array de int
         return pixels[texY * texture->width + texX];
     }
     return 0; // Retorna negro si está fuera de límites
+}*/
+int get_texture_color(t_texture *texture, int texX, int texY) {
+    if (texX >= 0 && texX < texture->width && texY >= 0 && texY < texture->height) {
+        // Obtener el puntero de píxeles
+        uint8_t *pixels = (uint8_t *)texture->texture_ptr->pixels;
+        int index = (texY * texture->width + texX) * 4; // Cada píxel tiene 4 bytes (RGBA)
+
+        // Extraer componentes RGBA
+        uint8_t r = pixels[index];       // Rojo
+        uint8_t g = pixels[index + 1];   // Verde
+        uint8_t b = pixels[index + 2];   // Azul
+        uint8_t a = pixels[index + 3];   // Alfa
+
+        // Si el alfa es 0 (transparente), retorna 0 (negro)
+        if (a == 0) return 0;
+
+        // Combinar los colores en un solo entero (suponiendo formato ABGR para MLX42)
+        return (a << 24) | (b << 16) | (g << 8) | r;
+    }
+    return 0; // Retorna negro si está fuera de límites
 }
+
 
 
 // Función para llenar cielo y suelo con colores
@@ -106,7 +127,7 @@ static void set_step_and_initial_side_dist(t_ray *ray, t_player *player)
 // Función DDA para detectar colisiones
 static void perform_dda(t_ray *ray, t_game *game) {
     int hit = 0;
-    int max_steps = MAP_WIDTH * MAP_HEIGHT;
+    int max_steps = game->map_width * game->map_height/*MAP_WIDTH * MAP_HEIGHT*/;
     int steps = 0;
 
     while (hit == 0 && steps < max_steps) {
@@ -121,7 +142,7 @@ static void perform_dda(t_ray *ray, t_game *game) {
             ray->side = 1;
         }
 
-        if (ray->mapX < 0 || ray->mapX >= MAP_WIDTH || ray->mapY < 0 || ray->mapY >= MAP_HEIGHT) {
+        if (ray->mapX < 0 || ray->mapX >= game->map_width/*MAP_WIDTH*/ || ray->mapY < 0 || ray->mapY >= game->map_height/*MAP_HEIGHT*/) {
             hit = 1;
             break;
         }
@@ -264,6 +285,7 @@ void draw_textured_line(t_game *game, t_ray *ray, t_line_params *line, t_texture
         y++;
     }
 }
+
 
 
 
