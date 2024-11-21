@@ -6,7 +6,7 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/21 19:33:01 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/21 21:04:08 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,100 +75,52 @@ void free_textures(t_game *game) {
     }
 }
 
-/*void free_texture_arrays(uint32_t ***texture_arrays, int num_textures, int height) {
-    int i, j;
-
-    for (i = 0; i < num_textures; i++) {
-        for (j = 0; j < height; j++) {
-            free(texture_arrays[i][j]);
-        }
-        free(texture_arrays[i]);
-    }
-    free(texture_arrays);
-}*/
-
-
 void load_ptr_textures_in_array(t_game *game, t_texture texture[4]) {
     int i = 0;
 
     while (i < 4) {
-        mlx_texture_t *temp_texture = mlx_load_png(texture[i].path); // Cargar textura
+        xpm_t *temp_texture = mlx_load_xpm42(texture[i].path); // Cargar textura XPM
         if (!temp_texture) {
             printf("Error: No se pudo cargar la textura %s\n", texture[i].path);
             exit(1);
         }
 
         // Convertir textura a imagen y guardar puntero
-        texture[i].texture_ptr = mlx_texture_to_image(game->mlx, temp_texture);
+        texture[i].texture_ptr = mlx_texture_to_image(game->mlx, &temp_texture->texture);
         if (!texture[i].texture_ptr) {
-            mlx_delete_texture(temp_texture);
+            mlx_delete_xpm42(temp_texture);
             printf("Error: No se pudo convertir la textura %s a imagen\n", texture[i].path);
             exit(1);
         }
 
         // Configurar dimensiones y datos de textura
-        texture[i].width = temp_texture->width;
-        texture[i].height = temp_texture->height;
+        texture[i].width = temp_texture->texture.width;
+        texture[i].height = temp_texture->texture.height;
         texture[i].wall_texture = (int *)texture[i].texture_ptr->pixels; // Obtener píxeles
 
-        mlx_delete_texture(temp_texture); // Liberar textura temporal después de convertirla
+        mlx_delete_xpm42(temp_texture); // Liberar textura temporal después de convertirla
         i++;
     }
 }
 
-/*void convert_texture_to_array(t_texture *texture, uint32_t ***array) {
-    int x, y;
 
-    *array = malloc(texture->height * sizeof(uint32_t *));
-    if (!*array) {
-        printf("Error: No se pudo asignar memoria para la matriz de texturas.\n");
-        exit(1);
-    }
-
-    for (y = 0; y < texture->height; y++) {
-        (*array)[y] = malloc(texture->width * sizeof(uint32_t));
-        if (!(*array)[y]) {
-            printf("Error: No se pudo asignar memoria para la fila de textura.\n");
-            exit(1);
-        }
-
-        for (x = 0; x < texture->width; x++) {
-            uint8_t *pixels = (uint8_t *)texture->texture_ptr->pixels;
-            int index = (y * texture->width + x) * 4;
-
-            uint8_t r = pixels[index];
-            uint8_t g = pixels[index + 1];
-            uint8_t b = pixels[index + 2];
-            uint8_t a = pixels[index + 3];
-
-            (*array)[y][x] = (a << 24) | (r << 16) | (g << 8) | b; // Combinar RGBA
+/*void test_texture_render(t_game *game, t_texture *texture) {
+    for (int y = 0; y < texture->height; y++) {
+        for (int x = 0; x < texture->width; x++) {
+            int color = get_texture_color(texture, x, y);
+            mlx_put_pixel(game->image, x, y, color);
         }
     }
-}
-
-void load_textures_to_arrays(t_game *game, uint32_t ****texture_arrays) {
-    int i;
-
-    *texture_arrays = malloc(4 * sizeof(uint32_t **));
-    if (!*texture_arrays) {
-        printf("Error: No se pudo asignar memoria para las texturas.\n");
-        exit(1);
-    }
-
-    for (i = 0; i < 4; i++) {
-        convert_texture_to_array(&game->wall_textures[i], &(*texture_arrays)[i]);
-    }
+    mlx_image_to_window(game->mlx, game->image, 0, 0);
 }*/
-
-
 
 
 void setup_textures(t_game *game) {
     t_texture textures[4];
-    textures[0] = (t_texture){"img/img_no.png", NULL, NULL, 0, 0};
-    textures[1] = (t_texture){"img/img_so.png", NULL, NULL, 0, 0};
-    textures[2] = (t_texture){"img/img_ea.png", NULL, NULL, 0, 0};
-    textures[3] = (t_texture){"img/img_we.png", NULL, NULL, 0, 0};
+    textures[0] = (t_texture){"img/bluestone.xpm42", NULL, NULL, 0, 0};
+    textures[1] = (t_texture){"img/bluestone.xpm42", NULL, NULL, 0, 0};
+    textures[2] = (t_texture){"img/eagle.xpm42", NULL, NULL, 0, 0};
+    textures[3] = (t_texture){"img/eagle.xpm42", NULL, NULL, 0, 0};
 
     load_ptr_textures_in_array(game, textures); // Cargar las texturas en memoria
 
@@ -179,9 +131,10 @@ void setup_textures(t_game *game) {
     }
     // Convertir texturas a matrices de píxeles
     //load_textures_to_arrays(game, &game->texture_arrays);
+    //test_texture_render(game, &game->wall_textures[0]);
 }
 
-
+// Función para convertir un color RGB en un entero
 int rgb_to_int(t_rgb color) {
     return (color.r << 24) | (color.g << 16) | (color.b << 8) | 255;
 }
@@ -221,28 +174,6 @@ void draw_minimap(t_game *game) {
         y++;
     }
 }
-/*void draw_minimap(t_game *game) {
-    int y = 0;
-    while (y < game->map_height) {
-        int x = 0;
-        while (x < game->map_width) {
-            game->startX = x * game->tileSize;
-            game->startY = y * game->tileSize;
-
-            if (game->map[y][x] == '1') {
-                game->color = game->minimap_wall_color; // Pared
-            } else if (game->map[y][x] == ' ') {
-                game->color = (t_rgb){0, 0, 0}; // Espacio vacío (negro)
-            } else {
-                game->color = game->minimap_floor_color; // Suelo
-            }
-            draw_minimap_cell(game);
-            x++;
-        }
-        y++;
-    }
-}*/
-
 
 
 // Dibuja la posición del jugador en el minimapa
@@ -270,7 +201,7 @@ int is_wall(t_game *game, double x, double y) {
     int mapY = (int)(y);
 
     // Verifica si está dentro de los límites del mapa
-    if (mapX < 0 || mapX >= game->map_width/*MAP_WIDTH*/ || mapY < 0 || mapY >= game->map_height/*MAP_HEIGHT*/)
+    if (mapX < 0 || mapX >= game->map_width || mapY < 0 || mapY >= game->map_height)
         return 1;  // Trata posiciones fuera de los límites como paredes
 
     // Devuelve 1 si la celda contiene una pared ('1') o (' ')
@@ -294,25 +225,6 @@ int is_safe_position(t_game *game, double x, double y) {
     return 1; // Si ninguna de las esquinas tiene pared, es seguro
 }
 
-/*int is_wall(t_game *game, double x, double y, double margin) {
-    int mapX = (int)x;
-    int mapY = (int)y;
-
-    // Verificar si está dentro de los límites del mapa
-    if (mapX < 0 || mapX >= MAP_WIDTH || mapY < 0 || mapY >= MAP_HEIGHT)
-        return 1;
-
-    // Verificar el margen alrededor del jugador
-    if (game->map[mapY][mapX] == '1') {
-        double dx = x - mapX;
-        double dy = y - mapY;
-
-        if (dx < margin || dx > (1.0 - margin) || dy < margin || dy > (1.0 - margin))
-            return 1;
-    }
-
-    return 0;
-}*/
 
 // Función para liberar recursos del juego
 void free_game_resources(t_game *game)
@@ -403,7 +315,7 @@ mlx_t *init_mlx()
 {
     mlx_t *mlx;
 
-    mlx = mlx_init(WIDTH, HEIGHT, "cub3D", true);
+    mlx = mlx_init(WIDTH, HEIGHT, "cub3D", false);
     if (!mlx)
     {
         printf("Error: MLX could not initialize.\n");
@@ -427,12 +339,6 @@ void handle_movement(t_game *game, int key) {
     }
 
     // Verifica colisiones con el mapa y limita el movimiento a áreas libres
-    /*if (!is_wall(game, nextX, game->player.posY)) {
-        game->player.posX = nextX;
-    }
-    if (!is_wall(game, game->player.posX, nextY)) {
-        game->player.posY = nextY;
-    }*/
     if (is_safe_position(game, nextX, game->player.posY)) {
         game->player.posX = nextX;
     }
@@ -461,10 +367,6 @@ void handle_movement_sides(t_game *game, int key)
         return;
 
     // Verifica si la siguiente posición tiene una pared antes de mover
-    /*if (!is_wall(game, nextX, game->player.posY))
-        game->player.posX = nextX;
-    if (!is_wall(game, game->player.posX, nextY))
-        game->player.posY = nextY;*/
     if (is_safe_position(game, nextX, game->player.posY))
         game->player.posX = nextX;
     if (is_safe_position(game, game->player.posX, nextY))
@@ -641,9 +543,6 @@ void print_copied_map(char **map) {
     printf("\n");
 }*/
 
-
-
-
 // Inicialización del juego y asignación de recursos
 void init_game(t_game *game)
 {
@@ -694,11 +593,8 @@ void init_game(t_game *game)
     }
     game->startX = 0;   
     game->startY = 0;   
-    //game->tileSize = (WIDTH / MAP_WIDTH) / 5;  
     game->sky_color = (t_rgb){135, 206, 235};        // Azul claro para el cielo
     game->floor_color = (t_rgb){139, 69, 19};        // Marrón para el suelo
-    //game->wall_color_light = (t_rgb){255, 255, 255}; // Blanco para pared clara
-    //game->wall_color_dark = (t_rgb){170, 170, 170};  // Gris para pared oscura
     game->minimap_wall_color = (t_rgb){85, 85, 85};  // Gris oscuro para paredes del minimapa
     game->minimap_floor_color = (t_rgb){204, 204, 204}; // Gris claro para el suelo del minimapa
     game->minimap_player_color = (t_rgb){0, 255, 0}; // Verde para el jugador en el minimapa

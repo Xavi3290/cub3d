@@ -6,7 +6,7 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 19:36:35 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/21 19:35:57 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/21 20:59:51 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int get_texture_color(t_texture *texture, int texX, int texY) {
         uint8_t g = pixels[index + 1];   // Verde
         uint8_t b = pixels[index + 2];   // Azul
         uint8_t a = pixels[index + 3];   // Alfa
+        
 
         // Si el alfa es 0 (transparente), retorna 0 (negro)
         if (a == 0) return 0;
@@ -44,23 +45,6 @@ int get_texture_color(t_texture *texture, int texX, int texY) {
 
 
 // Función para llenar cielo y suelo con colores
-/*static void draw_sky_and_floor(t_game *game) {
-    int y = 0;
-    int x;
-    int sky_color = rgb_to_int(game->sky_color);
-    int floor_color = rgb_to_int(game->floor_color);
-
-    while (y < HEIGHT / 2) {
-        x = 0;
-        while (x < WIDTH) {
-            mlx_put_pixel(game->image, x, y, sky_color);
-            mlx_put_pixel(game->image, x, y + HEIGHT / 2, floor_color);
-            x++;
-        }
-        y++;
-    }
-}*/
-
 void draw_sky_and_floor(t_game *game) {
     int y = 0;
     int x;
@@ -127,7 +111,7 @@ static void set_step_and_initial_side_dist(t_ray *ray, t_player *player)
 // Función DDA para detectar colisiones
 static void perform_dda(t_ray *ray, t_game *game) {
     int hit = 0;
-    int max_steps = game->map_width * game->map_height/*MAP_WIDTH * MAP_HEIGHT*/;
+    int max_steps = game->map_width * game->map_height;
     int steps = 0;
 
     while (hit == 0 && steps < max_steps) {
@@ -142,7 +126,7 @@ static void perform_dda(t_ray *ray, t_game *game) {
             ray->side = 1;
         }
 
-        if (ray->mapX < 0 || ray->mapX >= game->map_width/*MAP_WIDTH*/ || ray->mapY < 0 || ray->mapY >= game->map_height/*MAP_HEIGHT*/) {
+        if (ray->mapX < 0 || ray->mapX >= game->map_width || ray->mapY < 0 || ray->mapY >= game->map_height) {
             hit = 1;
             break;
         }
@@ -286,25 +270,7 @@ void draw_textured_line(t_game *game, t_ray *ray, t_line_params *line, t_texture
     }
 }
 
-
-
-
-
-/*void perform_raycasting(t_game *game) {
-    int x = 0;
-
-    draw_sky_and_floor(game);
-    while (x < WIDTH) {
-        t_ray ray;
-        t_line_params line;
-        line.x = x;
-        process_ray(&ray, game, &line);
-        t_texture *texture = select_texture(&ray, game);
-        draw_textured_line(game, &ray, &line, texture);
-        x++;
-    }
-}*/
-
+// Función principal para realizar el raycasting y dibujar las paredes en la pantalla
 void perform_raycasting(t_game *game) {
     int x = 0;
 
@@ -349,6 +315,5 @@ void perform_raycasting(t_game *game) {
         x++;
     }
 }
-
 
 

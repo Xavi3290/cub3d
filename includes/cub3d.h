@@ -6,7 +6,7 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/20 13:17:13 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/21 21:00:02 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,5 +115,6 @@ int is_wall(t_game *game, double x, double y);
 //int is_wall(t_game *game, double x, double y, double margin);
 int is_safe_position(t_game *game, double x, double y);
 int rgb_to_int(t_rgb color);
+//int get_texture_color(t_texture *texture, int texX, int texY);
 
 #endif
