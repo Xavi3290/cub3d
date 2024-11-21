@@ -6,7 +6,7 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/20 13:40:07 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/21 19:33:01 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void free_textures(t_game *game) {
     }
 }
 
-void free_texture_arrays(uint32_t ***texture_arrays, int num_textures, int height) {
+/*void free_texture_arrays(uint32_t ***texture_arrays, int num_textures, int height) {
     int i, j;
 
     for (i = 0; i < num_textures; i++) {
@@ -85,7 +85,7 @@ void free_texture_arrays(uint32_t ***texture_arrays, int num_textures, int heigh
         free(texture_arrays[i]);
     }
     free(texture_arrays);
-}
+}*/
 
 
 void load_ptr_textures_in_array(t_game *game, t_texture texture[4]) {

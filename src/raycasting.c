@@ -6,21 +6,21 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 19:36:35 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/20 13:37:56 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/21 19:35:57 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
 // Función auxiliar para obtener el color de la textura basado en coordenadas
-/*int get_texture_color(t_texture *texture, int texX, int texY) {
+int get_texture_color(t_texture *texture, int texX, int texY) {
     if (texX >= 0 && texX < texture->width && texY >= 0 && texY < texture->height) {
         int *pixels = (int *)texture->texture_ptr->pixels; // Obtener los píxeles como un array de int
         return pixels[texY * texture->width + texX];
     }
     return 0; // Retorna negro si está fuera de límites
-}*/
-int get_texture_color(t_texture *texture, int texX, int texY) {
+}
+/*int get_texture_color(t_texture *texture, int texX, int texY) {
     if (texX >= 0 && texX < texture->width && texY >= 0 && texY < texture->height) {
         // Obtener el puntero de píxeles
         uint8_t *pixels = (uint8_t *)texture->texture_ptr->pixels;
@@ -39,7 +39,7 @@ int get_texture_color(t_texture *texture, int texX, int texY) {
         return (a << 24) | (b << 16) | (g << 8) | r;
     }
     return 0; // Retorna negro si está fuera de límites
-}
+}*/
 
 
 
