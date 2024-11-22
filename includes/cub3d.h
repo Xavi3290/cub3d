@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/18 18:16:20 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/22 11:05:11 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ int        check_textures(t_game *game);
 int        check_map(t_game *game);
 int        ft_strlen_d(char **str);
 char	**copy_map(char **map);
-int flood_fill_recursive(char **map_cpy, int x, int y, t_map *map);
+int	flood_fill_iterative(t_map *maps, char **map_tmp, int start_x, int start_y);
 long long	timestamp(void);
 void	animation_loop(void *param);
 

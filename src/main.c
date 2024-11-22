@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/18 18:18:01 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/20 13:29:50 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,7 +347,6 @@ void init_game(t_game *game)
 	game->minimap_floor_color = (t_rgb){204, 204, 204};	// Gris claro para el suelo del minimapa
 	game->minimap_player_color = (t_rgb){0, 255, 0};	// Verde para el jugador en el minimapa
 	//set_player_position(game);
-	init_anim(game);
 }
 
 int	parce_map(int argc, char **argv, t_game *game)
@@ -380,6 +379,7 @@ int main(int argc, char **argv)
 	if (parce_map(argc, argv, &game))
 		return (1);
 	//game.map = copy_map(game.mapinfo.map);
+	init_anim(&game);
 	set_player_position(&game);
 	perform_raycasting(&game);
 	draw_minimap(&game);
