@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/22 11:05:11 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/23 01:28:33 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,14 @@
 # define ERR_FILE_NOT_XMP "Wrong file extension .xmp"
 # define ERR_IS_DIR "Wrong is a directory"
 # define ERR_IN_MALLOC "Malloc Error"
-# define ERR_IN_MAP "Invadio map not closed"
+# define ERR_IN_MAP "Map is not closed properly"
+# define ERR_IN_SIDES "Map sides are invalid"
+# define ERR_IN_SIZE "Map size is invalid"
+# define ERR_IN_EMPY "Map is empty"
 # define ERR_IN_CHAR "Invalid character in map"
 # define ERR_IN_PLAYER "There must be exactly one player character"
-# define ERR_IN_ARGS "arguments are missing"
-# define ERR_MANY_ARGS "many arguments"
+# define ERR_IN_ARGS "Arguments are missing"
+# define ERR_MANY_ARGS "Many arguments"
 # define BPP sizeof(int32_t)
 
 typedef struct s_tex
@@ -71,6 +74,7 @@ typedef struct s_map
     int            line_count;
     int            height;
     int            width;
+	t_vector2	current;
 }    t_map;
 
 typedef struct s_player {
@@ -107,8 +111,6 @@ typedef struct s_game {
     mlx_t *mlx;
     mlx_image_t *image;
     t_player player;
-    //int (*worldMap)[MAP_HEIGHT];
-    //char **map;
 	t_animation anim;
     t_map        mapinfo;
     t_vector2    player_pos;
@@ -125,9 +127,6 @@ typedef struct s_game {
     t_rgb minimap_player_color;
     t_rgb color;
 } t_game;
-
-void	draw_animation(t_game *game);
-void	init_anim(t_game *game);
 
 typedef struct s_ray {
     double cameraX;
@@ -168,8 +167,9 @@ int        check_textures(t_game *game);
 int        check_map(t_game *game);
 int        ft_strlen_d(char **str);
 char	**copy_map(char **map);
-int	flood_fill_iterative(t_map *maps, char **map_tmp, int start_x, int start_y);
+
 long long	timestamp(void);
 void	animation_loop(void *param);
-
+void	draw_animation(t_game *game);
+void	init_anim(t_game *game);
 #endif

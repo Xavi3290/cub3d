@@ -6,7 +6,7 @@
 #    By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 18:43:43 by xroca-pe          #+#    #+#              #
-#    Updated: 2024/11/18 16:43:01 by cgaratej         ###   ########.fr        #
+#    Updated: 2024/11/23 01:29:01 by cgaratej         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ NONE=\033[0m
 
 BUILD_DIR = build
 SRC = src/main.c src/parsing/check_args.c src/utils.c src/parsing/check_textures.c \
-	src/parsing/parce_data.c src/parsing/check_map.c src/parsing/flood_fill.c \
+	src/parsing/parce_data.c src/parsing/check_map.c \
 	src/raycasting.c src/animation.c
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 DEPS = $(OBJ:.o=.d)
