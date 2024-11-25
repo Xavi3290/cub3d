@@ -6,7 +6,7 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/21 21:00:02 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/25 19:29:02 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,21 @@ int is_wall(t_game *game, double x, double y);
 int is_safe_position(t_game *game, double x, double y);
 int rgb_to_int(t_rgb color);
 //int get_texture_color(t_texture *texture, int texX, int texY);
+void free_textures(t_game *game);
+void setup_textures(t_game *game);
+void draw_minimap(t_game *game);
+void draw_player_on_minimap(t_game *game);
+void handle_movement(t_game *game, int key);
+void handle_movement_sides(t_game *game, int key);
+void handle_diagonal_movement(t_game *game, int key);
+void key_hook(struct mlx_key_data keydata, void *param);
+void mouse_scroll_hook(double xdelta, double ydelta, void *param);
+void game_loop(void *param);
+void set_player_position(t_game *game);
+void close_window(void* param);
+char	**copy_map(char **map);
+void	free_tab(char **tab);
+void process_ray(t_ray *ray, t_game *game, t_line_params *line);
+
 
 #endif

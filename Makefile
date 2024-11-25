@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+         #
+#    By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 18:43:43 by xroca-pe          #+#    #+#              #
-#    Updated: 2024/10/22 20:00:57 by xroca-pe         ###   ########.fr        #
+#    Updated: 2024/11/25 19:32:27 by xavi             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ RED = \033[1;91m
 NONE=\033[0m
 
 BUILD_DIR = build
-SRC = src/main.c src//raycasting.c
+SRC = src/main.c src/raycasting.c src/textures.c src/draw_minimap.c src/movement.c src/movement2.c src/position.c src/utils.c src/draw_map.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 DEPS = $(OBJ:.o=.d)
