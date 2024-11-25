@@ -6,7 +6,7 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:02:25 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/25 19:03:25 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/25 20:06:17 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void free_textures(t_game *game) {
     }
 }
 
-void load_ptr_textures_in_array(t_game *game, t_texture texture[4]) {
+void load_textures_in_array(t_game *game, t_texture texture[4]) {
     int i = 0;
 
     while (i < 4) {
@@ -52,7 +52,6 @@ void load_ptr_textures_in_array(t_game *game, t_texture texture[4]) {
     }
 }
 
-
 /*void test_texture_render(t_game *game, t_texture *texture) {
     for (int y = 0; y < texture->height; y++) {
         for (int x = 0; x < texture->width; x++) {
@@ -63,7 +62,7 @@ void load_ptr_textures_in_array(t_game *game, t_texture texture[4]) {
     mlx_image_to_window(game->mlx, game->image, 0, 0);
 }*/
 
-
+// Inicialización de las texturas del juego
 void setup_textures(t_game *game) {
     t_texture textures[4];
     textures[0] = (t_texture){"img/bluestone.xpm42", NULL, NULL, 0, 0};
@@ -71,7 +70,7 @@ void setup_textures(t_game *game) {
     textures[2] = (t_texture){"img/eagle.xpm42", NULL, NULL, 0, 0};
     textures[3] = (t_texture){"img/eagle.xpm42", NULL, NULL, 0, 0};
 
-    load_ptr_textures_in_array(game, textures); // Cargar las texturas en memoria
+    load_textures_in_array(game, textures); // Cargar las texturas en memoria
 
     int i = 0;
     while (i < 4) {

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycasting2.c                                      :+:      :+:    :+:   */
+/*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:27:14 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/25 19:28:54 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/25 20:04:26 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void init_ray(t_ray *ray, t_player *player, int x)
 }
 
 // Configuración inicial para el DDA
-static void set_step_and_initial_side_dist(t_ray *ray, t_player *player)
+static void init_dda(t_ray *ray, t_player *player)
 {
     if (ray->rayDirX < 0)
     {
@@ -87,7 +87,7 @@ static void perform_dda(t_ray *ray, t_game *game) {
 void process_ray(t_ray *ray, t_game *game, t_line_params *line)
 {
     init_ray(ray, &game->player, line->x);
-    set_step_and_initial_side_dist(ray, &game->player);
+    init_dda(ray, &game->player);
     perform_dda(ray, game);
 
     // Calcula la distancia perpendicular a la pared
