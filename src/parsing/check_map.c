@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:54:15 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/23 01:27:43 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/25 12:20:11 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	is_valid_char(char c)
 {
 	return (c == '0' || c == 'N' || c == 'S' \
-			|| c == 'W' || c == 'E' || c == '1');
+			|| c == 'W' || c == 'E' || c == '1' || ft_isspace(c));
 }
 
 static int	check_top_or_bottom(char **map_tab, int i)
