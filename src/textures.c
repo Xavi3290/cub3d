@@ -6,12 +6,13 @@
 /*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:02:25 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/25 20:06:17 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/25 20:44:03 by xavi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
+// Función para liberar las texturas de la memoria
 void free_textures(t_game *game) {
     int i = 0;
 
@@ -24,6 +25,7 @@ void free_textures(t_game *game) {
     }
 }
 
+// Cargar texturas en un array de texturas
 void load_textures_in_array(t_game *game, t_texture texture[4]) {
     int i = 0;
 
