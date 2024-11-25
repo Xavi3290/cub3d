@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 11:26:23 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/14 11:37:03 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/25 12:39:24 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ int	check_args(char *argv, int flag)
 		err_msg(argv, ERR_IS_DIR, 1);
 	fd = open(argv, O_RDONLY);
 	if (fd == -1)
-		return(err_msg(argv, strerror(errno), 1));
+		return (err_msg(argv, strerror(errno), 1));
 	close(fd);
 	if (flag && is_cub_file(argv))
-		return(err_msg(argv, ERR_FILE_NOT_CUB, 1));
+		return (err_msg(argv, ERR_FILE_NOT_CUB, 1));
 	return (0);
 }

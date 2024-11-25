@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:12:06 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/13 13:36:12 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/25 12:29:19 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,99 +49,6 @@ int	check_texture(char *map_entry, const char *prefix, xpm_t *texture)
 			return (0);
 		return (1);
 	}
-	return (0);
-}
-int	check_nums(char *num)
-{
-	int	i;
-
-	i = 0;
-	while (num[i])
-	{
-		if (!ft_isspace(num[i]))
-			if (!ft_isdigit(num[i]))
-				return (1);
-		i++;
-	}
-	return (0);
-}
-int	check_color_values(char **rgb, t_game *game)
-{
-	int		i;
-	char	*new_rgb0;
-	char	*space;
-	int		rgb_num;
-	int		flag;
-
-	i = -1;
-	rgb_num = 1;
-	space = ft_strchr(rgb[0], ' ');
-	flag = 1;
-	if (space)
-	{
-		*space = '\0';
-		if (rgb[0][0] == 'C')
-			flag = 0;
-		if (ft_strlen(rgb[0]) != 1)
-			return (free_tab(rgb), 0);
-		new_rgb0 = strdup(space + 1);
-		if (!new_rgb0)
-			return (free_tab(rgb), 0);
-		free(rgb[0]);
-		rgb[0] = new_rgb0;
-	}
-	else
-		return (free_tab(rgb), 0);
-	while (rgb[++i])
-	{
-		if (check_nums(rgb[i]) || (ft_atoi(rgb[i]) > 255 || ft_atoi(rgb[i]) < 0 || rgb[i][0] == '\n'))
-			return (free_tab(rgb), 0);
-		if (flag)
-		{
-			if (rgb_num == 1)
-				game->floor_color.r = ft_atoi(rgb[i]);
-			else if (rgb_num == 2)
-				game->floor_color.g = ft_atoi(rgb[i]);
-			else if (rgb_num == 3)
-				game->floor_color.b = ft_atoi(rgb[i]);
-		}
-		else if (!flag)
-		{
-			if (rgb_num == 1)
-				game->sky_color.r = ft_atoi(rgb[i]);
-			else if (rgb_num == 2)
-				game->sky_color.g = ft_atoi(rgb[i]);
-			else if (rgb_num == 3)
-				game->sky_color.b = ft_atoi(rgb[i]);
-		}
-		rgb_num++;
-	}
-	if (rgb_num == 3)
-		return (free_tab(rgb), 0);
-	return (free_tab(rgb),1);
-}
-
-int	check_colors(t_game *game)
-{
-	int	i;
-	int	colors;
-
-	i = 0;
-	colors = 0;
-	while (game->mapinfo.map_textures[i])
-	{
-		if (!ft_strncmp(game->mapinfo.map_textures[i], "F", 1) || \
-			!ft_strncmp(game->mapinfo.map_textures[i], "C", 1))
-		{
-			if (!check_color_values(\
-				ft_split(game->mapinfo.map_textures[i], ','), game))
-				return (err_msg("Colors", "Invalid color values", 1), 1);
-			colors++;
-		}
-		i++;
-	}
-	if (colors != 2)
-		return (err_msg("Colors", "Missing colors", 1), 1);
 	return (0);
 }
 

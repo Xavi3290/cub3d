@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/23 01:28:33 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:10:17 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@
 # define ERR_FILE_NOT_XMP "Wrong file extension .xmp"
 # define ERR_IS_DIR "Wrong is a directory"
 # define ERR_IN_MALLOC "Malloc Error"
+# define ERR_IN_COLOR "Invalid color values"
+# define ERR_IN_COLOR_NONE "Missing colors"
 # define ERR_IN_MAP "Map is not closed properly"
 # define ERR_IN_SIDES "Map sides are invalid"
 # define ERR_IN_SIZE "Map size is invalid"
@@ -152,24 +154,29 @@ typedef struct s_line_params {
     double perpWallDist;
 } t_line_params;
 
+void		perform_raycasting(t_game *game);
+int			is_player_cell(t_game *game, int x, int y);
+int			is_wall(t_game *game, double x, double y);
+int			rgb_to_int(t_rgb color);
 
+int			check_args(char *argv, int flag);
+int			check_colors(t_game *game);
+int			check_textures(t_game *game);
+int			check_map(t_game *game);
+int			err_msg(char *detail, char *str, int code);
+void		free_tab(char **tab);
+void		parce_data(char *path, t_game *game);
+int			ft_strlen_d(char **str);
+char		**copy_map(char **map);
 
-void perform_raycasting(t_game *game);
-int is_player_cell(t_game *game, int x, int y);
-int is_wall(t_game *game, double x, double y);
-int rgb_to_int(t_rgb color);
-
-int        check_args(char *argv, int flag);
-int        err_msg(char *detail, char *str, int code);
-void    free_tab(char **tab);
-void    parce_data(char *path, t_game *game);
-int        check_textures(t_game *game);
-int        check_map(t_game *game);
-int        ft_strlen_d(char **str);
-char	**copy_map(char **map);
+int			check_cells(char **map, int i, int j);
+int			check_top_or_bottom(char **map_tab, int i);
+int			is_valid_char(char c);
 
 long long	timestamp(void);
-void	animation_loop(void *param);
-void	draw_animation(t_game *game);
-void	init_anim(t_game *game);
+void		animation_loop(void *param);
+void		draw_animation(t_game *game);
+void		init_anim(t_game *game);
+void		draw_animation_pixel(t_game *game, mlx_texture_t *texture);
+
 #endif

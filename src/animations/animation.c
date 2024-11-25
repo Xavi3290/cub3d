@@ -6,62 +6,25 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 15:55:32 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/18 18:16:35 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:17:15 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
-
-static int get_rgba(int r, int g, int b, int a) {
-  return (r << 24 | g << 16 | b << 8 | a);
-}
-
-int32_t mlx_get_pixel(mlx_image_t* image, uint32_t x, uint32_t y) {
-  if (x > image->width || y > image->height)
-    return 0xFF000000;
-  uint8_t* pixelstart = image->pixels + (y * image->width + x) * BPP;
-  return get_rgba(*(pixelstart), *(pixelstart + 1),
-    * (pixelstart + 2), *(pixelstart + 3));
-}
+#include "../../includes/cub3d.h"
 
 void	update_animation(t_game *game)
 {
 	static long long	last_time = 0;
 	long long			current_time;
 
-	current_time = timestamp(); // Obtiene el tiempo actual en ms
-	if ((current_time - last_time) > game->anim.time) // Verifica si ha pasado 1 segundo
+	current_time = timestamp();
+	if ((current_time - last_time) > game->anim.time)
 	{
-		game->anim.index++; // Avanza al siguiente cuadro
+		game->anim.index++;
 		if (game->anim.index > 7)
-			game->anim.index = 0; // Reinicia al primer cuadro
-		last_time = current_time; // Actualiza el tiempo del último cambio
+			game->anim.index = 0;
+		last_time = current_time;
 	}
-}
-
-void draw_animation_pixel(t_game *game, mlx_texture_t *texture)
-{
-    int i;
-	int j;
-
-	game->anim.curren_img = mlx_texture_to_image(game->mlx, texture);
-	if (!game->anim.curren_img)
-	{
-		err_msg(NULL, "Failed to create temp image", 1);
-		return ;
-	}
-	i = 0;
-    while (i < 37)
-	{
-        j = 0;
-        while (j < 37)
-		{
-            mlx_put_pixel(game->anim.curren_img, i, j, mlx_get_pixel(game->anim.curren_img, i, j));
-            j++;
-        }
-        i++;
-    }
-	mlx_image_to_window(game->mlx, game->anim.curren_img, 940, 20);
 }
 
 void	draw_animation(t_game *game)
@@ -102,7 +65,7 @@ void	init_anim(t_game *game)
 
 void	animation_loop(void *param)
 {
-	t_game *game;
+	t_game	*game;
 
 	game = (t_game *)param;
 	update_animation(game);
