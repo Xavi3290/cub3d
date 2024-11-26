@@ -1,24 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycasting.c                                       :+:      :+:    :+:   */
+/*   draw_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 19:36:35 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/25 19:30:06 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/26 19:12:40 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
 // Función auxiliar para obtener el color de la textura basado en coordenadas
-static int get_texture_color(t_texture *texture, int texX, int texY) {
+/*static int get_texture_color(t_texture *texture, int texX, int texY) {
     if (texX >= 0 && texX < texture->width && texY >= 0 && texY < texture->height) {
         int *pixels = (int *)texture->texture_ptr->pixels; // Obtener los píxeles como un array de int
         return pixels[texY * texture->width + texX];
     }
     return 0; // Retorna negro si está fuera de límites
+}*/
+
+
+static int32_t	mlx_get_pixel(t_texture *texture, uint32_t x, uint32_t y, t_game *game)
+{
+	uint8_t	*pixelstart;
+
+	if (x > texture->texture_ptr->width || y > texture->texture_ptr->height)
+		return (0);
+	pixelstart = texture->texture_ptr->pixels + (y * texture->texture_ptr->width + x) * BPP;
+    game->color = (t_rgb){*(pixelstart), *(pixelstart + 1), *(pixelstart + 2)};
+    
+    return (rgb_to_int(game->color));
 }
 /*int get_texture_color(t_texture *texture, int texX, int texY) {
     if (texX >= 0 && texX < texture->width && texY >= 0 && texY < texture->height) {
@@ -162,7 +175,7 @@ static void draw_textured_line(t_game *game, t_ray *ray, t_line_params *line, t_
         int texY = ((d * texture->height) / line->lineHeight) / 256;
 
         // Obtener el color del píxel desde la textura
-        int color = get_texture_color(texture, texX, texY);
+        int color = mlx_get_pixel(texture, texX, texY, game); //get_texture_color(texture, texX, texY);
 
         // Dibujar el píxel en la pantalla si el color es válido
         if (y >= 0 && y < HEIGHT) {

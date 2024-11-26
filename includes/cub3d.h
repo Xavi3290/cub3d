@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/25 19:29:02 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/26 19:04:56 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# define WIDTH 1000
-# define HEIGHT 800
+# define WIDTH 700
+# define HEIGHT 600
 //# define MAP_WIDTH 8
 //# define MAP_HEIGHT 8
 # define MOVE_SPEED 0.04
 # define ROTATE_VIEW_SPEED 0.03
 # define ROTATE_PLAYER_SPEED 0.03
+# define BPP sizeof(int32_t)
 
 # include "../libft/libft.h"
 # include "MLX42/MLX42.h"
@@ -71,7 +72,7 @@ typedef struct s_game {
     int tileSize;
     int map_width;  
     int map_height;
-    uint32_t ***texture_arrays;
+    //uint32_t ***texture_arrays;
     t_rgb sky_color;
     t_rgb floor_color;
     //t_rgb wall_color_light;

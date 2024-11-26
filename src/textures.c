@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:02:25 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/25 20:44:03 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/26 19:10:30 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ void load_textures_in_array(t_game *game, t_texture texture[4]) {
 void setup_textures(t_game *game) {
     t_texture textures[4];
     textures[0] = (t_texture){"img/bluestone.xpm42", NULL, NULL, 0, 0};
-    textures[1] = (t_texture){"img/bluestone.xpm42", NULL, NULL, 0, 0};
+    textures[1] = (t_texture){"img/mossy.xpm42", NULL, NULL, 0, 0};
     textures[2] = (t_texture){"img/eagle.xpm42", NULL, NULL, 0, 0};
-    textures[3] = (t_texture){"img/eagle.xpm42", NULL, NULL, 0, 0};
+    textures[3] = (t_texture){"img/greenlight.xpm42", NULL, NULL, 0, 0};
 
     load_textures_in_array(game, textures); // Cargar las texturas en memoria
 
