@@ -6,7 +6,7 @@
 #    By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 18:43:43 by xroca-pe          #+#    #+#              #
-#    Updated: 2024/11/25 13:17:43 by cgaratej         ###   ########.fr        #
+#    Updated: 2024/11/26 12:45:51 by cgaratej         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,8 @@ BUILD_DIR = build
 SRC = src/main.c src/parsing/check_args.c src/utils.c src/parsing/check_textures.c \
 	src/parsing/parce_data.c src/parsing/check_map.c src/parsing/check_colors.c \
 	src/parsing/check_map_utils.c src/raycasting.c src/animations/animation.c \
-	src/animations/animation_utils.c 
+	src/animations/animation_utils.c src/textures.c \
+	src/draw_minimap.c src/movement.c src/movement2.c src/position.c src/draw_map.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 DEPS = $(OBJ:.o=.d)

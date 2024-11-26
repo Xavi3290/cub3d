@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:54:15 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/25 12:47:47 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/26 13:01:36 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	check_player(char **map, t_game *game)
 	int	i;
 	int	j;
 	int	player_count;
+	(void)game;
 
 	i = -1;
 	player_count = 0;
@@ -61,8 +62,8 @@ int	check_player(char **map, t_game *game)
 				player_count++;
 				if (player_count > 1)
 					return (1);
-				game->player_pos.x = i;
-				game->player_pos.y = j;
+				//game->player_pos.x = i;
+				//game->player_pos.y = j;
 			}
 		}
 	}

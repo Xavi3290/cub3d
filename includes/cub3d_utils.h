@@ -6,25 +6,28 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 12:08:52 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/26 12:09:32 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/26 13:12:00 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+# include "MLX42/MLX42.h"
+
+typedef struct s_texture {
+    char *path;
+    mlx_image_t *texture_ptr;
+    int *wall_texture;
+    int width;
+    int height;
+} t_texture;
 
 typedef struct s_tex
 {
-    xpm_t        *no;
-    xpm_t        *so;
-    xpm_t        *we;
-    xpm_t        *ea;
+    char	*no;
+    char	*so;
+    char	*we;
+    char	*ea;
 }    t_tex;
-
-typedef struct s_vectro2
-{
-    int	x;
-    int	y;
-}    t_vector2;
 
 typedef struct s_map
 {
@@ -35,7 +38,6 @@ typedef struct s_map
     int            line_count;
     int            height;
     int            width;
-	t_vector2	current;
 }    t_map;
 
 typedef struct s_player {
@@ -45,6 +47,9 @@ typedef struct s_player {
     double dirY;
     double planeX;
     double planeY;
+    double view_offset;
+    double jump_speed;
+    int     is_jumping;
 } t_player;
 
 typedef struct s_rgb {
@@ -74,20 +79,20 @@ typedef struct s_game {
     t_player player;
 	t_animation anim;
     t_map        mapinfo;
-    t_vector2    player_pos;
     t_tex        textures;
     int startX;
     int startY;
     int tileSize;
     t_rgb sky_color;
     t_rgb floor_color;
-    t_rgb wall_color_light;
-    t_rgb wall_color_dark;
     t_rgb minimap_wall_color;
     t_rgb minimap_floor_color;
     t_rgb minimap_player_color;
     t_rgb color;
+    uint32_t ***texture_arrays;
+    t_texture wall_textures[4];
 } t_game;
+
 
 typedef struct s_ray {
     double cameraX;

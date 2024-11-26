@@ -6,46 +6,52 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:12:06 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/25 12:29:19 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:54:37 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-int	get_texture(char *linea, xpm_t *textures)
+char *get_texture(char *linea)
 {
-	char	*path;
+	char *texture;
 
-	path = ft_strchr(linea, ' ');
-	if (path)
+	if (ft_isspace(linea[0]))
+		return (NULL);
+	else
 	{
-		path++;
-		/*if (check_args(path, 0))
-			return (1);*/
-		textures = mlx_load_xpm42(path);
-		if (!textures)
-			return (1);
-		(void)textures;
+		if (check_args(linea, 0))
+			return (NULL);
+		texture = ft_strdup(linea);
+		if (!texture)
+			return (NULL);
 	}
-	return (0);
+	return (texture);
 }
 
-int	check_texture(char *map_entry, const char *prefix, xpm_t *texture)
+int	check_texture(char *map_entry, const char *prefix, char **texture)
 {
 	char	*space;
+	char	*path;
+	char	*tmp;
 
 	if (!ft_strncmp(map_entry, prefix, 2))
 	{
 		space = ft_strchr(map_entry, ' ');
 		if (space)
 		{
+			path = space + 1;
+			tmp = ft_strchr(path, '\n');
+			if (tmp)
+				*tmp = '\0';
 			*space = '\0';
 			if (ft_strlen(map_entry) != 2)
 				return (0);
 		}
 		else
 			return (0);
-		if (get_texture(map_entry, texture))
+		*texture = get_texture(path);
+		if (!texture)
 			return (0);
 		return (1);
 	}
@@ -62,11 +68,11 @@ int	check_textures(t_game *game)
 	while (game->mapinfo.map_textures[i])
 	{
 		if (check_texture(game->mapinfo.map_textures[i], "NO", \
-			game->textures.no) || check_texture(game->mapinfo.map_textures[i], \
-			"SO", game->textures.so) || check_texture(\
-			game->mapinfo.map_textures[i], "WE", game->textures.we) || \
+			&game->textures.no) || check_texture(game->mapinfo.map_textures[i], \
+			"SO", &game->textures.so) || check_texture(\
+			game->mapinfo.map_textures[i], "WE", &game->textures.we) || \
 			check_texture(game->mapinfo.map_textures[i], "EA", \
-			game->textures.ea))
+			&game->textures.ea))
 			textures++;
 		i++;
 	}
