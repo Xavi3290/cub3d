@@ -6,7 +6,7 @@
 /*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/26 19:04:56 by xroca-pe         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:58:49 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct s_game {
     int tileSize;
     int map_width;  
     int map_height;
+    int need_redraw;
     //uint32_t ***texture_arrays;
     t_rgb sky_color;
     t_rgb floor_color;
