@@ -6,15 +6,15 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:12:06 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/26 14:54:37 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/27 13:48:29 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-char *get_texture(char *linea)
+char	*get_texture(char *linea)
 {
-	char *texture;
+	char	*texture;
 
 	if (ft_isspace(linea[0]))
 		return (NULL);

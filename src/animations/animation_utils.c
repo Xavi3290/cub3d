@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:01:41 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/25 13:17:19 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:28:30 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	get_rgba(int r, int g, int b, int a)
 	return (r << 24 | g << 16 | b << 8 | a);
 }
 
-static int32_t	mlx_get_pixel(mlx_image_t *image, uint32_t x, uint32_t y)
+static int32_t	mlx_get_pixel_png(mlx_image_t *image, uint32_t x, uint32_t y)
 {
 	uint8_t	*pixelstart;
 
@@ -46,7 +46,7 @@ void	draw_animation_pixel(t_game *game, mlx_texture_t *texture)
 		while (j < 37)
 		{
 			mlx_put_pixel(game->anim.curren_img, i, j, \
-								mlx_get_pixel(game->anim.curren_img, i, j));
+								mlx_get_pixel_png(game->anim.curren_img, i, j));
 			j++;
 		}
 		i++;
