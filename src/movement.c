@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:11:25 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/26 12:33:44 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:21:45 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void handle_movement(t_game *game, int key) {
         nextX -= game->player.dirX * MOVE_SPEED;
         nextY -= game->player.dirY * MOVE_SPEED;
     }
+    game->need_redraw = 1;
 
     // Verifica colisiones con el mapa y limita el movimiento a áreas libres
     if (is_safe_position(game, nextX, game->player.posY)) {
@@ -82,6 +83,7 @@ void handle_movement_sides(t_game *game, int key)
     }
     else
         return;
+    game->need_redraw = 1;
 
     // Verifica si la siguiente posición tiene una pared antes de mover
     if (is_safe_position(game, nextX, game->player.posY))
@@ -104,6 +106,7 @@ void handle_diagonal_movement(t_game *game, int key) {
         nextY += (game->player.dirY + game->player.planeY) * MOVE_SPEED / sqrt(2);
     }
 
+    game->need_redraw = 1;
     // Verificar colisiones
     if (is_safe_position(game, nextX, game->player.posY)) {
         game->player.posX = nextX;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xavi <xavi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:14:32 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/25 19:20:23 by xavi             ###   ########.fr       */
+/*   Updated: 2024/11/26 20:12:03 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void handle_rotation_player(t_game *game, int key)
     double oldPlaneX;
     double angle;
 
+    game->need_redraw = 1;
     oldDirX = game->player.dirX;
     oldPlaneX = game->player.planeX;
     angle = 0.0;
@@ -64,10 +65,14 @@ void mouse_scroll_hook(double xdelta, double ydelta, void *param)
         handle_rotation_player(game, MLX_KEY_RIGHT);
 
     // Redibuja la escena después de la rotación
+    if (game->need_redraw)
+    {
     perform_raycasting(game);
     draw_minimap(game);
     draw_player_on_minimap(game);
     mlx_image_to_window(game->mlx, game->image, 0, 0);
+    game->need_redraw = 0;
+    }
 }
 
 // Función de enganche para gestionar teclas
@@ -92,12 +97,16 @@ void key_hook(struct mlx_key_data keydata, void *param)
         game->player.jump_speed = 0.03; // Velocidad inicial del salto
     }
     printf("Player position1: (%f, %f)\n", game->player.posX, game->player.posY);
-
+    
     // Redibuja la escena después de la actualización de la posición o dirección
-    perform_raycasting(game);
-    draw_minimap(game);
-    draw_player_on_minimap(game);
-    mlx_image_to_window(game->mlx, game->image, 0, 0);
+    if (game->need_redraw)
+    {
+        perform_raycasting(game);
+        draw_minimap(game);
+        draw_player_on_minimap(game);
+        mlx_image_to_window(game->mlx, game->image, 0, 0);
+        game->need_redraw = 0;
+    }    
 }
 
 // Función de bucle principal del juegp para el salto y el raycasting
@@ -106,10 +115,14 @@ void game_loop(void *param) {
 
     if (game->player.is_jumping) {
         handle_jump(game);
+        game->need_redraw = 1;
     }
 
-    perform_raycasting(game);
-    draw_minimap(game);
-    draw_player_on_minimap(game);
-    mlx_image_to_window(game->mlx, game->image, 0, 0);
+    if(game->need_redraw) {
+        perform_raycasting(game);
+        draw_minimap(game);
+        draw_player_on_minimap(game);
+        mlx_image_to_window(game->mlx, game->image, 0, 0);
+        game->need_redraw = 0;
+    }   
 }

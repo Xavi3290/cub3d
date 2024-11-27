@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 12:08:52 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/26 13:12:00 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:24:46 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,14 @@ typedef struct s_game {
     int startX;
     int startY;
     int tileSize;
+	int need_redraw;
     t_rgb sky_color;
     t_rgb floor_color;
     t_rgb minimap_wall_color;
     t_rgb minimap_floor_color;
     t_rgb minimap_player_color;
     t_rgb color;
-    uint32_t ***texture_arrays;
+    //uint32_t ***texture_arrays;
     t_texture wall_textures[4];
 } t_game;
 

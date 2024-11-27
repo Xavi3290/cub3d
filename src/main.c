@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/26 13:03:04 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/27 11:58:52 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,8 +166,8 @@ int main(int argc, char **argv)
 	draw_minimap(&game);
 	draw_player_on_minimap(&game);
 	mlx_image_to_window(game.mlx, game.image, 0, 0);
-	mlx_loop_hook(game.mlx, game_loop, &game);
 	mlx_loop_hook(game.mlx, animation_loop, &game);
+	mlx_loop_hook(game.mlx, game_loop, &game);
 	mlx_key_hook(game.mlx, key_hook, &game);
 	mlx_scroll_hook(game.mlx, mouse_scroll_hook, &game);
 	mlx_close_hook(game.mlx, close_window, &game);

@@ -5,20 +5,58 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/22 19:36:35 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/26 13:08:09 by cgaratej         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/11/27 12:22:11 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../includes/cub3d.h"
 
-static int get_texture_color(t_texture *texture, int texX, int texY) {
+// Función auxiliar para obtener el color de la textura basado en coordenadas
+/*static int get_texture_color(t_texture *texture, int texX, int texY) {
     if (texX >= 0 && texX < texture->width && texY >= 0 && texY < texture->height) {
         int *pixels = (int *)texture->texture_ptr->pixels;
         return pixels[texY * texture->width + texX];
     }
-    return (0);
+    return 0; // Retorna negro si está fuera de límites
+}*/
+
+
+static int32_t	mlx_get_pixel(t_texture *texture, uint32_t x, uint32_t y, t_game *game)
+{
+	uint8_t	*pixelstart;
+
+	if (x > texture->texture_ptr->width || y > texture->texture_ptr->height)
+		return (0);
+	pixelstart = texture->texture_ptr->pixels + (y * texture->texture_ptr->width + x) * BPP;
+    game->color = (t_rgb){*(pixelstart), *(pixelstart + 1), *(pixelstart + 2)};
+
+    return (rgb_to_int(game->color));
 }
+/*int get_texture_color(t_texture *texture, int texX, int texY) {
+    if (texX >= 0 && texX < texture->width && texY >= 0 && texY < texture->height) {
+        // Obtener el puntero de píxeles
+        uint8_t *pixels = (uint8_t *)texture->texture_ptr->pixels;
+        int index = (texY * texture->width + texX) * 4; // Cada píxel tiene 4 bytes (RGBA)
+
+        // Extraer componentes RGBA
+        uint8_t r = pixels[index];       // Rojo
+        uint8_t g = pixels[index + 1];   // Verde
+        uint8_t b = pixels[index + 2];   // Azul
+        uint8_t a = pixels[index + 3];   // Alfa
+
+
+        // Si el alfa es 0 (transparente), retorna 0 (negro)
+        if (a == 0) return 0;
+
+        // Combinar los colores en un solo entero (suponiendo formato ABGR para MLX42)
+        return (a << 24) | (b << 16) | (g << 8) | r;
+    }
+    return 0; // Retorna negro si está fuera de límites
+}*/
+
+
 
 // Función para llenar cielo y suelo con colores
 static void draw_sky_and_floor(t_game *game) {
@@ -82,7 +120,7 @@ static void draw_textured_line(t_game *game, t_ray *ray, t_line_params *line, t_
         int texY = ((d * texture->height) / line->lineHeight) / 256;
 
         // Obtener el color del píxel desde la textura
-        int color = get_texture_color(texture, texX, texY);
+        int color = mlx_get_pixel(texture, texX, texY, game); //get_texture_color(texture, texX, texY);
 
         // Dibujar el píxel en la pantalla si el color es válido
         if (y >= 0 && y < HEIGHT) {

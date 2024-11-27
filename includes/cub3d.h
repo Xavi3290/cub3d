@@ -6,9 +6,10 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/26 12:39:04 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:24:02 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef CUB3D_H
 # define CUB3D_H
@@ -25,6 +26,7 @@
 # define ROTATE_VIEW_SPEED 0.03
 # define ROTATE_PLAYER_SPEED 0.03
 # define NUM_TEXTURES 4
+# define BPP sizeof(int32_t)
 
 # include "../libft/libft.h"
 # include "cub3d_utils.h"
