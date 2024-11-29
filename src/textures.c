@@ -6,13 +6,12 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:02:25 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/27 13:46:16 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:51:50 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-// Función para liberar las texturas de la memoria
 void	free_textures(t_game *game)
 {
 	int	i;
@@ -35,8 +34,8 @@ void	load_textures_in_array(t_game *game, t_texture texture[4])
 	int		i;
 	xpm_t	*temp_texture;
 
-	i = 0;
-	while (i < 4)
+	i = -1;
+	while (++i < 4)
 	{
 		temp_texture = mlx_load_xpm42(texture[i].path);
 		if (!temp_texture)
@@ -58,7 +57,6 @@ void	load_textures_in_array(t_game *game, t_texture texture[4])
 		texture[i].height = temp_texture->texture.height;
 		texture[i].wall_texture = (int *)texture[i].texture_ptr->pixels;
 		mlx_delete_xpm42(temp_texture);
-		i++;
 	}
 }
 
@@ -70,8 +68,8 @@ void	setup_textures(t_game *game)
 
 	textures[0] = (t_texture){game->textures.no, NULL, NULL, 0, 0};
 	textures[1] = (t_texture){game->textures.so, NULL, NULL, 0, 0};
-	textures[2] = (t_texture){game->textures.ea, NULL, NULL, 0, 0};
-	textures[3] = (t_texture){game->textures.we, NULL, NULL, 0, 0};
+	textures[2] = (t_texture){game->textures.we, NULL, NULL, 0, 0};
+	textures[3] = (t_texture){game->textures.ea, NULL, NULL, 0, 0};
 	load_textures_in_array(game, textures); // Cargar las texturas en memoria
 	i = 0;
 	while (i < 4)
@@ -81,7 +79,6 @@ void	setup_textures(t_game *game)
 	}
 }
 
-// Función para convertir un color RGB en un entero
 int	rgb_to_int(t_rgb color)
 {
 	return ((color.r << 24) | (color.g << 16) | (color.b << 8) | 255);

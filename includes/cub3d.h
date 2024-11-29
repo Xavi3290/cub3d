@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/27 14:20:43 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:46:31 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # define ERR_IN_MALLOC "Malloc Error"
 # define ERR_IN_COLOR "Invalid color values"
 # define ERR_IN_COLOR_NONE "Missing colors"
+# define ERR_IN_TEXTURE_NONE "Missing Textures"
 # define ERR_IN_MAP "Map is not closed properly"
 # define ERR_IN_SIDES "Map sides are invalid"
 # define ERR_IN_SIZE "Map size is invalid"

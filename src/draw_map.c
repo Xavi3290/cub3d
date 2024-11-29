@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:06:40 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/27 14:31:01 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:55:03 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ static void	draw_textured_line(t_game *game, t_ray *ray, t_line_params *line, \
 	int		tex_x;
 	int		y;
 	int		draw_distance;
+	int		vertical_shift;
 
 	if (ray->side == 0)
 		wall_x = game->player.pos_y + line->perp_wall_dist * ray->ray_dir_y;
@@ -84,11 +85,12 @@ static void	draw_textured_line(t_game *game, t_ray *ray, t_line_params *line, \
 	if ((ray->side == 0 && ray->ray_dir_x > 0) || (ray->side == 1 \
 			&& ray->ray_dir_y < 0))
 		tex_x = texture->width - tex_x - 1; // Invertir la textura
+	vertical_shift = (int)(game->player.view_offset * HEIGHT);
 	y = line->draw_start;
 	while (y < line->draw_end)
 	{
 		// Calcular la coordenada Y en la textura
-		draw_distance = (y - (int)game->player.view_offset * HEIGHT) * 256 \
+		draw_distance = (y - vertical_shift) * 256 \
 			- HEIGHT * 128 + line->line_height * 128;
 		// Dibujar el píxel en la pantalla si el color es válido
 		if (y >= 0 && y < HEIGHT)
