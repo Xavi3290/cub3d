@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:54:15 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/27 13:49:06 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:17:07 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	check_map_sides(t_map *map, char **map_tab)
 	return (0);
 }
 
-int	check_player(char **map)
+int	check_player(char **map, t_game *game)
 {
 	int	i;
 	int	j;
@@ -54,16 +54,18 @@ int	check_player(char **map)
 		while (map[i][++j])
 		{
 			if (!is_valid_char(map[i][j]))
-				return (1);
+				return (err_msg(game->mapinfo.path, "invalid character", 1));
 			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E' \
 				|| map[i][j] == 'W')
 			{
 				player_count++;
 				if (player_count > 1)
-					return (1);
+					return (err_msg(game->mapinfo.path, ERR_IN_PLAYER, 1));
 			}
 		}
 	}
+	if (player_count == 0)
+		return (err_msg(game->mapinfo.path, ERR_IN_PLAYER, 1));
 	return (0);
 }
 
@@ -98,8 +100,8 @@ int	check_map(t_game *game)
 		return (err_msg(game->mapinfo.path, ERR_IN_SIZE, 1));
 	if (check_map_sides(&game->mapinfo, game->mapinfo.map))
 		return (err_msg(game->mapinfo.path, ERR_IN_SIDES, 1));
-	if (check_player(game->mapinfo.map))
-		return (err_msg(game->mapinfo.path, ERR_IN_PLAYER, 1));
+	if (check_player(game->mapinfo.map, game))
+		return (1);
 	if (check_inside_map(game))
 		return (err_msg(game->mapinfo.path, ERR_IN_MAP, 1));
 	return (0);

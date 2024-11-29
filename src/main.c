@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/27 13:57:59 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:03:58 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	parce_map(int argc, char **argv, t_game *game)
 				free_tab(game->mapinfo.map), 1);
 	if (check_map(game))
 		return (free_tab(game->mapinfo.map_textures), \
-				free_tab(game->mapinfo.map), 1);
+				free_tab(game->mapinfo.map), free_text(game), 1);
 	free_tab(game->mapinfo.map_textures);
 	return (0);
 }

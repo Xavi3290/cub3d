@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:53:00 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/27 13:47:51 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:05:36 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,18 @@ long long	timestamp(void)
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
+void	free_text(t_game *game)
+{
+	if (game->textures.no)
+		free(game->textures.no);
+	if (game->textures.so)
+		free(game->textures.so);
+	if (game->textures.we)
+		free(game->textures.we);
+	if (game->textures.ea)
+		free(game->textures.ea);
+}
+
 void	free_game_resources(t_game *game)
 {
 	if (game->mapinfo.map)
@@ -94,6 +106,7 @@ void	free_game_resources(t_game *game)
 	if (game->anim.curren_img)
 		mlx_delete_image(game->mlx, game->anim.curren_img);
 	free_textures(game);
+	free_text(game);
 	if (game->image)
 		mlx_delete_image(game->mlx, game->image);
 	if (game->mlx)

@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 11:12:06 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/29 13:46:42 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:03:45 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ int	check_textures(t_game *game)
 			textures++;
 		i++;
 	}
-	printf("Textures: %d\n", textures);
 	if (textures != NUM_TEXTURES)
 		return (err_msg("Textures", ERR_IN_TEXTURE_NONE, 1));
 	if (check_colors(game))

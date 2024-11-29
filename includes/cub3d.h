@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/11/29 13:46:31 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:13:48 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void		animation_loop(void *param);
 void		draw_animation(t_game *game);
 void		init_anim(t_game *game);
 void		draw_animation_pixel(t_game *game, mlx_texture_t *texture);
+void		free_text(t_game *game);
 
 void		perform_raycasting(t_game *game);
 int			is_player_cell(t_game *game, int x, int y);
