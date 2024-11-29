@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:53:00 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/29 14:05:36 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:21:28 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	err_msg(char *detail, char *str, int code)
 {
-	ft_putstr_fd("cub3D: Error", 2);
+	ft_putstr_fd("cub3D: Error\n", 2);
 	if (detail)
 	{
 		ft_putstr_fd(": ", 2);
