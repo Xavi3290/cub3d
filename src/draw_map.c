@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 19:06:40 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/29 13:55:03 by cgaratej         ###   ########.fr       */
+/*   Created: 2024/12/03 13:45:47 by cgaratej          #+#    #+#             */
+/*   Updated: 2024/12/03 13:55:32 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int32_t	mlx_get_pixel(t_texture *texture, uint32_t x, \
 }
 
 // Función para llenar cielo y suelo con colores
-static void	draw_sky_and_floor(t_game *game)
+void	draw_sky_and_floor(t_game *game)
 {
 	int	y;
 	int	x;
@@ -54,46 +54,20 @@ static void	draw_sky_and_floor(t_game *game)
 	}
 }
 
-// Función para seleccionar la textura correcta basada en el lado de la pared
-t_texture	*select_texture(t_ray *ray, t_game *game)
+void	draw_pixels(t_game *game, t_line_params *line, t_texture *texture, \
+						int tex_x)
 {
-	if (ray->side == 0 && ray->step_x < 0)
-		return (&game->wall_textures[0]); // Norte
-	else if (ray->side == 0 && ray->step_x > 0)
-		return (&game->wall_textures[1]); // Sur
-	else if (ray->side == 1 && ray->step_y < 0)
-		return (&game->wall_textures[2]); // Oeste
-	return (&game->wall_textures[3]); // Este
-}
+	int	y;
+	int	draw_distance;
+	int	vertical_shift;
 
-// Dibuja una línea vertical en la pantalla utilizando texturas
-static void	draw_textured_line(t_game *game, t_ray *ray, t_line_params *line, \
-								t_texture *texture)
-{
-	double	wall_x;
-	int		tex_x;
-	int		y;
-	int		draw_distance;
-	int		vertical_shift;
-
-	if (ray->side == 0)
-		wall_x = game->player.pos_y + line->perp_wall_dist * ray->ray_dir_y;
-	else
-		wall_x = game->player.pos_x + line->perp_wall_dist * ray->ray_dir_x;
-	wall_x -= floor(wall_x); // Mantener la fracción para la coordenada
-	tex_x = (int)(wall_x * texture->width);
-	if ((ray->side == 0 && ray->ray_dir_x > 0) || (ray->side == 1 \
-			&& ray->ray_dir_y < 0))
-		tex_x = texture->width - tex_x - 1; // Invertir la textura
-	vertical_shift = (int)(game->player.view_offset * HEIGHT);
 	y = line->draw_start;
+	vertical_shift = (int)(game->player.view_offset * HEIGHT);
 	while (y < line->draw_end)
 	{
-		// Calcular la coordenada Y en la textura
 		draw_distance = (y - vertical_shift) * 256 \
 			- HEIGHT * 128 + line->line_height * 128;
-		// Dibujar el píxel en la pantalla si el color es válido
-		if (y >= 0 && y < HEIGHT)
+		if (y >= 0 && y < HEIGHT) // Verificar que el píxel esté dentro
 		{
 			mlx_put_pixel(game->image, line->x, y, \
 				mlx_get_pixel(texture, tex_x, \
@@ -104,50 +78,37 @@ static void	draw_textured_line(t_game *game, t_ray *ray, t_line_params *line, \
 	}
 }
 
-// Función principal para realizar el raycasting y dibujar las paredes
-void	perform_raycasting(t_game *game)
+// Dibuja una línea vertical en la pantalla utilizando texturas
+void	draw_textured_line(t_game *game, t_ray *ray, t_line_params *line, \
+								t_texture *texture)
 {
-	int				x;
-	int				y;
-	int				vertical_shift;
-	t_ray			ray;
-	t_line_params	line;
+	double	wall_x;
+	int		tex_x;
 
-	x = 0;
-	// Dibujar cielo y suelo primero
-	draw_sky_and_floor(game);
-	// Ajustar el desplazamiento de la vista para el salto
-	vertical_shift = (int)(game->player.view_offset * HEIGHT);
-	while (x < WIDTH)
+	if (ray->side == 0)
+		wall_x = game->player.pos_y + line->perp_wall_dist * ray->ray_dir_y;
+	else
+		wall_x = game->player.pos_x + line->perp_wall_dist * ray->ray_dir_x;
+	wall_x -= floor(wall_x);
+	tex_x = (int)(wall_x * texture->width);
+	if ((ray->side == 0 && ray->ray_dir_x > 0) || (ray->side == 1 \
+			&& ray->ray_dir_y < 0))
+		tex_x = texture->width - tex_x - 1;
+	draw_pixels(game, line, texture, tex_x);
+}
+
+void	draw_floor(t_game *game, t_line_params *line)
+{
+	int	y;
+
+	if (line->draw_end < HEIGHT)
 	{
-		line.x = x;
-		process_ray(&ray, game, &line);
-		// Ajustar las líneas de las paredes según el desplazamiento
-		line.draw_start = -line.line_height / 2 + HEIGHT / 2 + vertical_shift;
-		if (line.draw_start < 0)
-			line.draw_start = 0;
-		line.draw_end = line.line_height / 2 + HEIGHT / 2 + vertical_shift;
-		if (line.draw_end >= HEIGHT)
-			line.draw_end = HEIGHT - 1;
-		// Dibujar cualquier área "desplazada" como suelo o cielo
-		if (line.draw_start > 0)
+		y = line->draw_end;
+		while (y < HEIGHT)
 		{
-			y = -1;
-			while (++y < line.draw_start)
-				mlx_put_pixel(game->image, line.x, y, \
-								rgb_to_int(game->sky_color));
+			mlx_put_pixel(game->image, line->x, y, \
+							rgb_to_int(game->floor_color));
+			y++;
 		}
-		if (line.draw_end < HEIGHT)
-		{
-			y = line.draw_end;
-			while (y < HEIGHT)
-			{
-				mlx_put_pixel(game->image, line.x, y, \
-								rgb_to_int(game->floor_color));
-				y++;
-			}
-		}
-		draw_textured_line(game, &ray, &line, select_texture(&ray, game));
-		x++;
 	}
 }

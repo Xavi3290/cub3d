@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:27:14 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/27 14:24:33 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/03 13:59:50 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,30 +35,29 @@ static void	init_dda(t_ray *ray, t_player *player)
 	else
 	{
 		ray->step_x = 1;
-		ray->side_dist_x = (ray->map_x + 1.0 - player->pos_x) * ray->delta_dist_x;
+		ray->side_dist_x = (ray->map_x + 1.0 - player->pos_x) \
+			* ray->delta_dist_x;
 	}
 	if (ray->ray_dir_y < 0)
 	{
 		ray->step_y = -1;
-		ray->side_dist_y = (player->pos_y - ray->map_y) * ray->delta_dist_y;
+		ray->side_dist_y = (player->pos_y - ray->map_y) \
+			* ray->delta_dist_y;
 	}
 	else
 	{
 		ray->step_y = 1;
-		ray->side_dist_y = (ray->map_y + 1.0 - player->pos_y) * ray->delta_dist_y;
+		ray->side_dist_y = (ray->map_y + 1.0 - player->pos_y) \
+			* ray->delta_dist_y;
 	}
 }
 
 // Función DDA para detectar colisiones
-static void	perform_dda(t_ray *ray, t_game *game)
+static int	execute_dda_loop(t_ray *ray, t_game *game, int max_steps, int steps)
 {
 	int	hit;
-	int	max_steps;
-	int	steps;
 
 	hit = 0;
-	max_steps = game->mapinfo.width * game->mapinfo.height;
-	steps = 0;
 	while (hit == 0 && steps < max_steps)
 	{
 		steps++;
@@ -75,17 +74,21 @@ static void	perform_dda(t_ray *ray, t_game *game)
 			ray->side = 1;
 		}
 		if (ray->map_x < 0 || ray->map_x >= game->mapinfo.width \
-			|| ray->map_y < 0 || ray->map_y >= game->mapinfo.height)
-		{
+			|| ray->map_y < 0 || ray->map_y >= game->mapinfo.height || \
+			is_wall(game, ray->map_x, ray->map_y))
 			hit = 1;
-			break ;
-		}
-		if (is_wall(game, ray->map_x, ray->map_y))
-		{
-			hit = 1;
-			break ;
-		}
 	}
+	return (hit);
+}
+
+// Función principal dividida
+static void	perform_dda(t_ray *ray, t_game *game)
+{
+	int	hit;
+	int	max_steps;
+
+	max_steps = game->mapinfo.width * game->mapinfo.height;
+	hit = execute_dda_loop(ray, game, max_steps, 0);
 	if (ray->side_dist_x < 0.0001)
 		ray->side_dist_x = 0.0001;
 	if (ray->side_dist_y < 0.0001)

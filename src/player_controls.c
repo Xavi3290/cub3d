@@ -1,52 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   movement.c                                         :+:      :+:    :+:   */
+/*   player_controls.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 19:11:25 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/27 14:11:55 by cgaratej         ###   ########.fr       */
+/*   Created: 2024/12/03 12:22:01 by cgaratej          #+#    #+#             */
+/*   Updated: 2024/12/03 12:27:06 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-// Verifica si una posición específica en el mapa contiene una pared
-int	is_wall(t_game *game, double x, double y)
+// Maneja la rotación del jugador
+void	handle_rotation_player(t_game *game, int key)
 {
-	int	map_x;
-	int	map_y;
+	double	old_dir_x;
+	double	old_plane_x;
+	double	angle;
 
-	map_x = (int)(x);
-	map_y = (int)(y);
-	// Verifica si está dentro de los límites del mapa
-	if (map_x < 0 || map_x >= game->mapinfo.width \
-		|| map_y < 0 || map_y >= game->mapinfo.height)
-		return (1);// Trata posiciones fuera de los límites como paredes
-	// Devuelve 1 si la celda contiene una pared ('1') o (' ')
-	return (game->mapinfo.map[map_y][map_x] == '1' \
-		|| game->mapinfo.map[map_y][map_x] == ' ');
+	game->need_redraw = 1;
+	old_dir_x = game->player.dir_x;
+	old_plane_x = game->player.plane_x;
+	angle = 0.0;
+	if (key == MLX_KEY_RIGHT)
+		angle = ROTATE_PLAYER_SPEED;
+	else if (key == MLX_KEY_LEFT)
+		angle = -ROTATE_PLAYER_SPEED;
+	game->player.dir_x = game->player.dir_x * cos(angle) - game->player.dir_y \
+		* sin(angle);
+	game->player.dir_y = old_dir_x * sin(angle) + game->player.dir_y \
+		* cos(angle);
+	game->player.plane_x = game->player.plane_x * cos(angle) \
+		- game->player.plane_y * sin(angle);
+	game->player.plane_y = old_plane_x * sin(angle) + game->player.plane_y \
+		* cos(angle);
 }
 
-int	is_safe_position(t_game *game, double x, double y)
-{
-	double	margin;
-
-	margin = 0.2;
-	// Verifica las cuatro esquinas alrededor del jugador
-	if (is_wall(game, x - margin, y - margin))
-		return (0);
-	if (is_wall(game, x + margin, y - margin))
-		return (0);
-	if (is_wall(game, x - margin, y + margin))
-		return (0);
-	if (is_wall(game, x + margin, y + margin))
-		return (0);
-	return (1); // Si ninguna de las esquinas tiene pared, es seguro
-}
-
-// Maneja el movimiento con verificación de colisiones
+// Maneja el movimiento hacia adelante y atrás
 void	handle_movement(t_game *game, int key)
 {
 	double	next_x;
@@ -72,7 +63,7 @@ void	handle_movement(t_game *game, int key)
 		game->player.pos_y = next_y;
 }
 
-// Función para manejar la rotación de la vista (sin mover al jugador)
+// Maneja el movimiento lateral
 void	handle_movement_sides(t_game *game, int key)
 {
 	double	next_x;
@@ -98,6 +89,7 @@ void	handle_movement_sides(t_game *game, int key)
 		game->player.pos_y = next_y;
 }
 
+// Maneja el movimiento diagonal
 void	handle_diagonal_movement(t_game *game, int key)
 {
 	double	next_x;
@@ -127,4 +119,24 @@ void	handle_diagonal_movement(t_game *game, int key)
 		game->player.pos_x = next_x;
 	if (is_safe_position(game, game->player.pos_x, next_y))
 		game->player.pos_y = next_y;
+}
+
+// Maneja el salto del jugador
+void	handle_jump(t_game *game)
+{
+	if (game->player.is_jumping)
+	{
+		game->player.view_offset += game->player.jump_speed;
+		game->player.jump_speed -= 0.005;
+		// Limitar la altura máxima del salto
+		if (game->player.view_offset > 0.08) // Menor altura de salto
+			game->player.jump_speed = -0.005; // Inicia la caída más lenta
+		// Finalizar el salto al volver a la posición inicial
+		if (game->player.view_offset <= 0)
+		{
+			game->player.view_offset = 0;
+			game->player.jump_speed = 0;
+			game->player.is_jumping = 0;
+		}
+	}
 }

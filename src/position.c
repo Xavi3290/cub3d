@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:16:43 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/27 14:11:55 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:33:10 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	set_player_position(t_game *game)
 		x = 0;
 		while (map[y][x])
 		{
-			if (map[y][x] == 'N' || map[y][x]  == 'S' || map[y][x]  == 'E' \
-				|| map[y][x]  == 'W')
+			if (map[y][x] == 'N' || map[y][x] == 'S' || map[y][x] == 'E' \
+				|| map[y][x] == 'W')
 			{
 				set_player_position_and_direction(game, x, y);
 				game->player.plane_x = 0.66 * game->player.dir_y;

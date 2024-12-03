@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:02:25 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/29 13:51:50 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:23:58 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	free_textures(t_game *game)
 }
 
 // Cargar texturas en un array de texturas
-void	load_textures_in_array(t_game *game, t_texture texture[4])
+/*void	load_textures_in_array(t_game *game, t_texture texture[4])
 {
 	int		i;
 	xpm_t	*temp_texture;
@@ -57,6 +57,42 @@ void	load_textures_in_array(t_game *game, t_texture texture[4])
 		texture[i].height = temp_texture->texture.height;
 		texture[i].wall_texture = (int *)texture[i].texture_ptr->pixels;
 		mlx_delete_xpm42(temp_texture);
+	}
+}*/
+
+static void	load_single_texture(t_game *game, t_texture *texture)
+{
+	xpm_t	*temp_texture;
+
+	temp_texture = mlx_load_xpm42(texture->path);
+	if (!temp_texture)
+	{
+		err_msg("Texturas", "No se pudo cargar la textura", 1);
+		exit(1);
+	}
+	texture->texture_ptr = mlx_texture_to_image(game->mlx, \
+		&temp_texture->texture);
+	if (!texture->texture_ptr)
+	{
+		mlx_delete_xpm42(temp_texture);
+		err_msg("Texturas", "No se pudo convertir la textura a imagen", 1);
+		exit(1);
+	}
+	texture->width = temp_texture->texture.width;
+	texture->height = temp_texture->texture.height;
+	texture->wall_texture = (int *)texture->texture_ptr->pixels;
+	mlx_delete_xpm42(temp_texture);
+}
+
+void	load_textures_in_array(t_game *game, t_texture texture[4])
+{
+	int	i;
+
+	i = 0;
+	while (i < 4)
+	{
+		load_single_texture(game, &texture[i]);
+		i++;
 	}
 }
 

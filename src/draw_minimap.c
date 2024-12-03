@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:06:40 by xavi              #+#    #+#             */
-/*   Updated: 2024/11/27 14:11:28 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:39:14 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	draw_player_on_minimap(t_game *game)
 	int	i;
 	int	j;
 
-	// Ajustar tamaño del jugador en el minimapa para evitar sobrepasar las paredes
+	// Ajustar tamaño del jugador en el minimapa para evitar sobrepasar
 	game->start_x = (int)(game->player.pos_x * game->tile_size);
 	game->start_y = (int)(game->player.pos_y * game->tile_size);
 	game->color = game->minimap_player_color;
