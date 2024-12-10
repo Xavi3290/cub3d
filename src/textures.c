@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:02:25 by xavi              #+#    #+#             */
-/*   Updated: 2024/12/03 14:23:58 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:00:40 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static void	load_single_texture(t_game *game, t_texture *texture)
 	temp_texture = mlx_load_xpm42(texture->path);
 	if (!temp_texture)
 	{
+		printf("%s\n", texture->path);
 		err_msg("Texturas", "No se pudo cargar la textura", 1);
 		exit(1);
 	}
@@ -100,19 +101,25 @@ void	load_textures_in_array(t_game *game, t_texture texture[4])
 void	setup_textures(t_game *game)
 {
 	t_texture	textures[4];
+	t_texture	door_texture;
 	int			i;
 
 	textures[0] = (t_texture){game->textures.no, NULL, NULL, 0, 0};
 	textures[1] = (t_texture){game->textures.so, NULL, NULL, 0, 0};
 	textures[2] = (t_texture){game->textures.we, NULL, NULL, 0, 0};
 	textures[3] = (t_texture){game->textures.ea, NULL, NULL, 0, 0};
+	game->path_door_texture = ft_strdup("assets/img/mossy.xpm42");
+	door_texture = (t_texture){game->path_door_texture, NULL, NULL, 0, 0};
 	load_textures_in_array(game, textures); // Cargar las texturas en memoria
+	load_single_texture(game, &door_texture);
 	i = 0;
 	while (i < 4)
 	{
 		game->wall_textures[i] = textures[i]; // Copiar al juego
 		i++;
 	}
+	game->door_texture = door_texture;
+	free(game->path_door_texture);
 }
 
 int	rgb_to_int(t_rgb color)

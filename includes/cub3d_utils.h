@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 12:08:52 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/27 14:21:33 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:58:44 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_map
 	int		line_count;
 	int		height;
 	int		width;
+	int		**door_state;
 }	t_map;
 
 typedef struct s_player
@@ -88,6 +89,8 @@ typedef struct s_game
 	mlx_image_t	*image;
 	t_animation	anim;
 	t_texture	wall_textures[4];
+	t_texture	door_texture;
+	char		*path_door_texture;
 	t_tex		textures;
 	t_rgb		sky_color;
 	t_rgb		floor_color;
@@ -111,6 +114,7 @@ typedef struct s_ray
 	int		step_x;
 	int		step_y;
 	int		side;
+	int		special;
 }	t_ray;
 
 typedef struct s_line_params

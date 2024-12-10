@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:27:14 by xavi              #+#    #+#             */
-/*   Updated: 2024/12/03 13:59:50 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:01:31 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	init_dda(t_ray *ray, t_player *player)
 }
 
 // Función DDA para detectar colisiones
-static int	execute_dda_loop(t_ray *ray, t_game *game, int max_steps, int steps)
+/*static int	execute_dda_loop(t_ray *ray, t_game *game, int max_steps, int steps)
 {
 	int	hit;
 
@@ -79,6 +79,36 @@ static int	execute_dda_loop(t_ray *ray, t_game *game, int max_steps, int steps)
 			hit = 1;
 	}
 	return (hit);
+}*/
+
+static int	execute_dda_loop(t_ray *ray, t_game *game, int max_steps, int steps)
+{
+	int	hit;
+
+	hit = 0;
+	while (hit == 0 && steps < max_steps)
+	{
+		steps++;
+		if (ray->side_dist_x < ray->side_dist_y)
+		{
+			ray->side_dist_x += ray->delta_dist_x;
+			ray->map_x += ray->step_x;
+			ray->side = 0;
+		}
+		else
+		{
+			ray->side_dist_y += ray->delta_dist_y;
+			ray->map_y += ray->step_y;
+			ray->side = 1;
+		}
+		if (ray->map_x < 0 || ray->map_x >= game->mapinfo.width \
+			|| ray->map_y < 0 || ray->map_y >= game->mapinfo.height || \
+			is_wall(game, ray->map_x, ray->map_y))
+			hit = 1;
+		if (game->mapinfo.map[ray->map_y][ray->map_x] == 'D')
+			return (2);
+	}
+	return (hit);
 }
 
 // Función principal dividida
@@ -93,6 +123,10 @@ static void	perform_dda(t_ray *ray, t_game *game)
 		ray->side_dist_x = 0.0001;
 	if (ray->side_dist_y < 0.0001)
 		ray->side_dist_y = 0.0001;
+	if (hit == 2) // Si golpea una celda 'D'
+		ray->special = 1; // Marcar el rayo como especial
+	else
+		ray->special = 0;
 }
 
 // Procesa un rayo y calcula los parámetros necesarios para dibujar la pared

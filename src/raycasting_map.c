@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 13:43:34 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/03 13:51:53 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:58:05 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static void	calculate_wall_limits(t_line_params *line, int vertical_shift)
 // Función para seleccionar la textura correcta basada en el lado de la pared
 t_texture	*select_texture(t_ray *ray, t_game *game)
 {
+	if (ray->special)
+		return (&game->door_texture);
 	if (ray->side == 0 && ray->step_x < 0)
 		return (&game->wall_textures[0]); // Norte
 	else if (ray->side == 0 && ray->step_x > 0)
