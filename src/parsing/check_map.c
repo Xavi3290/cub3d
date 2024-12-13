@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 10:54:15 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/29 14:17:07 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/13 10:43:55 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ int	check_map(t_game *game)
 	if (!game->mapinfo.map[0])
 		return (err_msg(game->mapinfo.path, ERR_IN_EMPY, 1));
 	if (game->mapinfo.width < 3 || game->mapinfo.height < 3)
+		return (err_msg(game->mapinfo.path, ERR_IN_SIZE, 1));
+	if (game->mapinfo.width > 1920 || game->mapinfo.height > 1800)
 		return (err_msg(game->mapinfo.path, ERR_IN_SIZE, 1));
 	if (check_map_sides(&game->mapinfo, game->mapinfo.map))
 		return (err_msg(game->mapinfo.path, ERR_IN_SIDES, 1));

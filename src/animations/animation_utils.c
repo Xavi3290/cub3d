@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:01:41 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/27 12:28:30 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/13 10:41:21 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,5 @@ void	draw_animation_pixel(t_game *game, mlx_texture_t *texture)
 		}
 		i++;
 	}
-	mlx_image_to_window(game->mlx, game->anim.curren_img, 940, 20);
+	mlx_image_to_window(game->mlx, game->anim.curren_img, WIDTH - 50, 20);
 }
