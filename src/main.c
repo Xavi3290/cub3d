@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/12/10 12:57:55 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/13 10:57:11 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	init_game(t_game *game)
 	game->minimap_player_color = (t_rgb){0, 255, 0};
 	game->mlx = init_mlx();
 	game->image = mlx_new_image(game->mlx, WIDTH, HEIGHT);
+	game->is_interacting = 0;
 	if (!game->image)
 	{
 		mlx_terminate(game->mlx);

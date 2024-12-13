@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 13:43:34 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/10 12:58:05 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/13 11:10:20 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,30 @@ static void	draw_ceiling(t_game *game, t_line_params *line)
 	}
 }
 
+void check_door_interaction(t_game *game)
+{
+	int player_x = (int)game->player.pos_x;
+	int player_y = (int)game->player.pos_y;
+
+	for (int y = player_y - 1; y <= player_y + 1; y++)
+	{
+		for (int x = player_x - 1; x <= player_x + 1; x++)
+		{
+			if (x >= 0 && x < game->mapinfo.width && y >= 0 && y < game->mapinfo.height)
+			{
+				if (game->mapinfo.map[y][x] == 'D' && game->is_interacting)
+				{
+					game->mapinfo.map[y][x] = 'O';
+				}
+				else if (game->mapinfo.map[y][x] == 'O' && game->is_interacting)
+				{
+					game->mapinfo.map[y][x] = 'D';
+				}
+			}
+		}
+	}
+}
+
 void	perform_raycasting(t_game *game)
 {
 	int				x;
@@ -61,6 +85,7 @@ void	perform_raycasting(t_game *game)
 	x = 0;
 	draw_sky_and_floor(game); // Dibuja el cielo y el suelo
 	vertical_shift = (int)(game->player.view_offset * HEIGHT);
+	check_door_interaction(game);
 	while (x < WIDTH)
 	{
 		line.x = x;

@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:01:41 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/13 10:41:21 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/13 11:21:00 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	draw_animation_pixel(t_game *game, mlx_texture_t *texture)
 	game->anim.curren_img = mlx_texture_to_image(game->mlx, texture);
 	if (!game->anim.curren_img)
 	{
-		err_msg(NULL, "Failed to create temp image", 1);
+		err_msg("Animation", "Failed to create temp image", 1);
 		return ;
 	}
 	i = 0;

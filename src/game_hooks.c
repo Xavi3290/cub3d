@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:23:44 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/10 13:00:21 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/13 11:14:41 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@ int	is_wall(t_game *game, double x, double y)
 	// Verifica si está dentro de los límites del mapa
 	if (map_x < 0 || map_x >= game->mapinfo.width \
 		|| map_y < 0 || map_y >= game->mapinfo.height)
-		return (1);// Trata posiciones fuera de los límites como paredes
+		return (1);
 	// Devuelve 1 si la celda contiene una pared ('1') o (' ')
 	return (game->mapinfo.map[map_y][map_x] == '1' \
-		|| game->mapinfo.map[map_y][map_x] == ' ');
+		|| game->mapinfo.map[map_y][map_x] == ' ' \
+		|| game->mapinfo.map[map_y][map_x] == 'D');
 }
 
 int	is_safe_position(t_game *game, double x, double y)
@@ -74,6 +75,13 @@ void	key_hook(struct mlx_key_data keydata, void *param)
 	game = (t_game *)param;
 	if (keydata.key == MLX_KEY_ESCAPE)
 		close_window(param);
+	if (keydata.key == MLX_KEY_E)
+	{
+		if (game->is_interacting)
+			game->is_interacting = 0;
+		else
+			game->is_interacting = 1;
+	}
 	if (keydata.key == MLX_KEY_W || keydata.key == MLX_KEY_S)
 		handle_movement(game, keydata.key);
 	else if (keydata.key == MLX_KEY_A || keydata.key == MLX_KEY_D)

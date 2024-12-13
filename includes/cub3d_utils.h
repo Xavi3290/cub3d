@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 12:08:52 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/13 10:48:35 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/13 11:10:31 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef struct s_map
 	int		line_count;
 	int		height;
 	int		width;
-	int		**door_state;
 }	t_map;
 
 typedef struct s_player
@@ -98,6 +97,7 @@ typedef struct s_game
 	t_rgb		minimap_floor_color;
 	t_rgb		minimap_player_color;
 	t_rgb		color;
+	int			is_interacting;
 }	t_game;
 
 typedef struct s_ray

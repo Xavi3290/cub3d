@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:02:25 by xavi              #+#    #+#             */
-/*   Updated: 2024/12/10 13:00:40 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/13 11:37:07 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,7 @@ static void	load_single_texture(t_game *game, t_texture *texture)
 	temp_texture = mlx_load_xpm42(texture->path);
 	if (!temp_texture)
 	{
-		printf("%s\n", texture->path);
-		err_msg("Texturas", "No se pudo cargar la textura", 1);
+		err_msg(texture->path, "Could not loading the texture", 1);
 		exit(1);
 	}
 	texture->texture_ptr = mlx_texture_to_image(game->mlx, \
@@ -76,7 +75,7 @@ static void	load_single_texture(t_game *game, t_texture *texture)
 	if (!texture->texture_ptr)
 	{
 		mlx_delete_xpm42(temp_texture);
-		err_msg("Texturas", "No se pudo convertir la textura a imagen", 1);
+		err_msg("Textures", "Could not convert texture to image", 1);
 		exit(1);
 	}
 	texture->width = temp_texture->texture.width;
@@ -108,7 +107,7 @@ void	setup_textures(t_game *game)
 	textures[1] = (t_texture){game->textures.so, NULL, NULL, 0, 0};
 	textures[2] = (t_texture){game->textures.we, NULL, NULL, 0, 0};
 	textures[3] = (t_texture){game->textures.ea, NULL, NULL, 0, 0};
-	game->path_door_texture = ft_strdup("assets/img/mossy.xpm42");
+	game->path_door_texture = ft_strdup("assets/img/door.xpm42");
 	door_texture = (t_texture){game->path_door_texture, NULL, NULL, 0, 0};
 	load_textures_in_array(game, textures); // Cargar las texturas en memoria
 	load_single_texture(game, &door_texture);
