@@ -6,11 +6,11 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:35:51 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/03 12:38:56 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/17 10:10:27 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 void	free_text(t_game *game)
 {

@@ -6,11 +6,11 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:27:14 by xavi              #+#    #+#             */
-/*   Updated: 2024/12/10 13:01:31 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/17 10:10:33 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 // Inicialización del rayo para cada columna de la pantalla
 static void	init_ray(t_ray *ray, t_player *player, int x)

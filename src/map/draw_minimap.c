@@ -6,11 +6,11 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:06:40 by xavi              #+#    #+#             */
-/*   Updated: 2024/12/03 12:39:14 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/17 10:04:32 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 // Dibuja una celda en el minimapa con el color especificado
 void	draw_minimap_cell(t_game *game)
@@ -50,8 +50,13 @@ void	draw_minimap(t_game *game)
 			game->start_y = y * game->tile_size;
 			if (game->mapinfo.map[y][x] == '1')
 				game->color = game->minimap_wall_color; //Pared
-			else
+			else if (game->mapinfo.map[y][x] == 'D')
+				game->color = game->door_color;
+			else if (game->mapinfo.map[y][x] == '0' || is_player(game, x, y) \
+				|| game->mapinfo.map[y][x] == 'O')
 				game->color = game->minimap_floor_color; //Suelo
+			else
+				game->color = game->none_color; //Suelo
 			draw_minimap_cell(game);
 			x++;
 		}

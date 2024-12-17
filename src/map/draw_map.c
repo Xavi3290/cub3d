@@ -6,11 +6,11 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 13:45:47 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/03 13:55:32 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/17 10:04:25 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 static int32_t	mlx_get_pixel(t_texture *texture, uint32_t x, \
 								uint32_t y, t_game *game)

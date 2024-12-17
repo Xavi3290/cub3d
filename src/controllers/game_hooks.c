@@ -6,11 +6,11 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:23:44 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/13 11:14:41 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/17 10:08:55 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 int	is_wall(t_game *game, double x, double y)
 {

@@ -6,7 +6,7 @@
 #    By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 18:43:43 by xroca-pe          #+#    #+#              #
-#    Updated: 2024/12/03 13:51:17 by cgaratej         ###   ########.fr        #
+#    Updated: 2024/12/17 10:15:25 by cgaratej         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,12 +29,26 @@ NONE=\033[0m
 
 BUILD_DIR = build
 
-SRC = src/main.c src/parsing/check_args.c src/utils.c src/parsing/check_textures.c \
-	src/parsing/parce_data.c src/parsing/check_map.c src/parsing/check_colors.c \
-	src/parsing/check_map_utils.c src/raycasting.c src/animations/animation.c \
-	src/animations/animation_utils.c src/textures.c \
-	src/draw_minimap.c src/player_controls.c src/game_hooks.c src/position.c src/draw_map.c \
-	src/free_utils.c src/raycasting_map.c
+SRC = src/main.c \
+	src/animations/animation.c \
+	src/animations/animation_utils.c \
+	src/controllers/player_controller.c \
+	src/controllers/game_hooks.c \
+	src/controllers/door_controller.c \
+	src/controllers/position_controller.c \
+	src/map/draw_map.c \
+	src/map/draw_minimap.c \
+	src/map/raycasting_map.c \
+	src/map/textures.c \
+	src/parsing/check_args.c \
+	src/parsing/check_colors.c \
+	src/parsing/check_map_utils.c \
+	src/parsing/check_map.c \
+	src/parsing/check_textures.c \
+	src/parsing/parce_data.c \
+	src/utils/free_utils.c \
+	src/utils/raycasting.c \
+	src/utils/utils.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 DEPS = $(OBJ:.o=.d)

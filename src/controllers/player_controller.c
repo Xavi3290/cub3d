@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   player_controls.c                                  :+:      :+:    :+:   */
+/*   player_controller.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:22:01 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/03 12:27:06 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/17 10:14:51 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 // Maneja la rotación del jugador
 void	handle_rotation_player(t_game *game, int key)

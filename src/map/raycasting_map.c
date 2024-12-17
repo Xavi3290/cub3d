@@ -6,11 +6,11 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 13:43:34 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/13 11:10:20 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/17 10:04:38 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 static void	calculate_wall_limits(t_line_params *line, int vertical_shift)
 {
@@ -47,30 +47,6 @@ static void	draw_ceiling(t_game *game, t_line_params *line)
 		{
 			mlx_put_pixel(game->image, line->x, y, \
 							rgb_to_int(game->sky_color));
-		}
-	}
-}
-
-void check_door_interaction(t_game *game)
-{
-	int player_x = (int)game->player.pos_x;
-	int player_y = (int)game->player.pos_y;
-
-	for (int y = player_y - 1; y <= player_y + 1; y++)
-	{
-		for (int x = player_x - 1; x <= player_x + 1; x++)
-		{
-			if (x >= 0 && x < game->mapinfo.width && y >= 0 && y < game->mapinfo.height)
-			{
-				if (game->mapinfo.map[y][x] == 'D' && game->is_interacting)
-				{
-					game->mapinfo.map[y][x] = 'O';
-				}
-				else if (game->mapinfo.map[y][x] == 'O' && game->is_interacting)
-				{
-					game->mapinfo.map[y][x] = 'D';
-				}
-			}
 		}
 	}
 }

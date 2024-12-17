@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/12/13 11:21:16 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/17 09:47:01 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,7 @@ void		set_player_position(t_game *game);
 void		close_window(void *param);
 void		free_tab(char **tab);
 void		process_ray(t_ray *ray, t_game *game, t_line_params *line);
+int			is_player(t_game *game, int x, int y);
+void		check_door_interaction(t_game *game);
 
 #endif

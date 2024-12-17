@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   position.c                                         :+:      :+:    :+:   */
+/*   position_controller.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:16:43 by xavi              #+#    #+#             */
-/*   Updated: 2024/12/03 12:33:10 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/17 10:15:06 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 // Establece la dirección y posición del jugador en el juego
 void	set_player_position_and_direction(t_game *game, int x, int y)
@@ -39,6 +39,12 @@ void	set_player_position_and_direction(t_game *game, int x, int y)
 	}
 }
 
+int	is_player(t_game *game, int x, int y)
+{
+	return (game->mapinfo.map[y][x] == 'N' || game->mapinfo.map[y][x] == 'S' \
+		|| game->mapinfo.map[y][x] == 'E' || game->mapinfo.map[y][x] == 'W');
+}
+
 void	set_player_position(t_game *game)
 {
 	int		y;
@@ -52,8 +58,7 @@ void	set_player_position(t_game *game)
 		x = 0;
 		while (map[y][x])
 		{
-			if (map[y][x] == 'N' || map[y][x] == 'S' || map[y][x] == 'E' \
-				|| map[y][x] == 'W')
+			if (is_player(game, x, y))
 			{
 				set_player_position_and_direction(game, x, y);
 				game->player.plane_x = 0.66 * game->player.dir_y;

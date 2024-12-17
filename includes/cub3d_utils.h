@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 12:08:52 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/13 11:10:31 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/17 09:31:20 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ typedef struct s_game
 	t_rgb		minimap_wall_color;
 	t_rgb		minimap_floor_color;
 	t_rgb		minimap_player_color;
+	t_rgb		none_color;
+	t_rgb		door_color;
 	t_rgb		color;
 	int			is_interacting;
 }	t_game;

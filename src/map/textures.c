@@ -6,11 +6,11 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:02:25 by xavi              #+#    #+#             */
-/*   Updated: 2024/12/13 11:37:07 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/17 10:04:44 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 void	free_textures(t_game *game)
 {

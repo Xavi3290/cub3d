@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/12/13 10:57:11 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/17 09:32:09 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	init_game(t_game *game)
 	game->minimap_wall_color = (t_rgb){85, 85, 85};
 	game->minimap_floor_color = (t_rgb){204, 204, 204};
 	game->minimap_player_color = (t_rgb){0, 255, 0};
+	game->door_color = (t_rgb){251, 255, 0};
+	game->none_color = (t_rgb){253, 254, 254};
 	game->mlx = init_mlx();
 	game->image = mlx_new_image(game->mlx, WIDTH, HEIGHT);
 	game->is_interacting = 0;
