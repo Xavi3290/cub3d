@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:45:09 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/17 10:14:35 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:43:51 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,9 @@
 static void	toggle_door_state(t_game *game, int x, int y)
 {
 	if (game->mapinfo.map[y][x] == 'D' && game->is_interacting)
-	{
 		game->mapinfo.map[y][x] = 'O';
-	}
-	else if (game->mapinfo.map[y][x] == 'O' && game->is_interacting)
-	{
+	else if (game->mapinfo.map[y][x] == 'O' && !game->is_interacting)
 		game->mapinfo.map[y][x] = 'D';
-	}
 }
 
 static void	check_position(t_game *game, int x, int y)

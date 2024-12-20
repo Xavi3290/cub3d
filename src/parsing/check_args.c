@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 11:26:23 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/11/25 12:39:24 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:12:53 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,13 @@ static int	is_cub_file(char *arg)
 	return (0);
 }
 
+static int	is_xpm_file(char *arg)
+{
+	if (ft_strncmp(arg + ft_strlen(arg) -6, ".xpm42", 6))
+		return (1);
+	return (0);
+}
+
 int	check_args(char *argv, int flag)
 {
 	int	fd;
@@ -45,5 +52,7 @@ int	check_args(char *argv, int flag)
 	close(fd);
 	if (flag && is_cub_file(argv))
 		return (err_msg(argv, ERR_FILE_NOT_CUB, 1));
+	if (!flag && is_xpm_file(argv))
+		return (err_msg(argv, "Wrong file extension .xmp42", 1));
 	return (0);
 }

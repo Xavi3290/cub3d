@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/12/17 09:47:01 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:17:07 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 #  define O_DIRECTORY 00200000
 # endif
 
-# define WIDTH 1000
-# define HEIGHT 800
+# define WIDTH 1920
+# define HEIGHT 1800
 # define MOVE_SPEED 0.04
 # define ROTATE_VIEW_SPEED 0.03
 # define ROTATE_PLAYER_SPEED 0.03

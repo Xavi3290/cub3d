@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/12/17 09:32:09 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:37:52 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,10 @@ void	init_game(t_game *game)
 	game->mapinfo.width = 0;
 	game->start_x = 0;
 	game->start_y = 0;
+	game->textures.no = NULL;
+	game->textures.so = NULL;
+	game->textures.we = NULL;
+	game->textures.ea = NULL;
 	game->minimap_wall_color = (t_rgb){85, 85, 85};
 	game->minimap_floor_color = (t_rgb){204, 204, 204};
 	game->minimap_player_color = (t_rgb){0, 255, 0};

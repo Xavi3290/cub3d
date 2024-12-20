@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:23:44 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/17 10:08:55 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:41:28 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,18 @@ void	key_hook(struct mlx_key_data keydata, void *param)
 {
 	t_game	*game;
 
+	if (!keydata.action)
+		return;
 	game = (t_game *)param;
 	if (keydata.key == MLX_KEY_ESCAPE)
 		close_window(param);
-	if (keydata.key == MLX_KEY_E)
+	if (keydata.key == MLX_KEY_T)
 	{
 		if (game->is_interacting)
 			game->is_interacting = 0;
 		else
 			game->is_interacting = 1;
+		printf("asd %d\n", game->is_interacting);
 	}
 	if (keydata.key == MLX_KEY_W || keydata.key == MLX_KEY_S)
 		handle_movement(game, keydata.key);
@@ -95,8 +98,9 @@ void	key_hook(struct mlx_key_data keydata, void *param)
 		game->player.is_jumping = 1;
 		game->player.jump_speed = 0.03; // Velocidad inicial del salto
 	}
-	printf("Player position1: (%f, %f)\n", game->player.pos_x, \
-		game->player.pos_y);
+	printf("%d\n", game->is_interacting);
+	/*printf("Player position1: (%f, %f)\n", game->player.pos_x, \
+		game->player.pos_y);*/
 	/*if (game->need_redraw)
 	{
 		perform_raycasting(game);
