@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:06:40 by xavi              #+#    #+#             */
-/*   Updated: 2024/12/17 10:04:32 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:07:16 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	draw_player_on_minimap(t_game *game)
 	game->start_x = (int)(game->player.pos_x * game->tile_size);
 	game->start_y = (int)(game->player.pos_y * game->tile_size);
 	game->color = game->minimap_player_color;
-	player_tile_size = game->tile_size / 2; // Ajuste para el tamaño del jugador
+	player_tile_size = game->tile_size; // Ajuste para el tamaño del jugador
 	i = 0;
 	while (i < player_tile_size)
 	{

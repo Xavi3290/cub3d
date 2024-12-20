@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/12/20 16:17:07 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:18:58 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,14 @@
 #  define O_DIRECTORY 00200000
 # endif
 
-# define WIDTH 1920
-# define HEIGHT 1800
+# define WIDTH 1000
+# define HEIGHT 800
 # define MOVE_SPEED 0.04
 # define ROTATE_VIEW_SPEED 0.03
 # define ROTATE_PLAYER_SPEED 0.03
 # define NUM_TEXTURES 4
 # define BPP 4
+
 # include "../libft/libft.h"
 # include "cub3d_utils.h"
 # include "MLX42/MLX42.h"
@@ -35,6 +36,7 @@
 # include <errno.h>
 # include <string.h>
 # include <sys/time.h>
+
 # define ERR_FILE_NOT_CUB "Wrong file extension .cub"
 # define ERR_FILE_NOT_XMP "Wrong file extension .xmp"
 # define ERR_IS_DIR "Wrong is a directory"
@@ -106,5 +108,6 @@ void		free_tab(char **tab);
 void		process_ray(t_ray *ray, t_game *game, t_line_params *line);
 int			is_player(t_game *game, int x, int y);
 void		check_door_interaction(t_game *game);
+void		check_open_door(t_game *game);
 
 #endif

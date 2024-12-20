@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:45:09 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/20 16:43:51 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:18:47 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,12 @@ void	check_door_interaction(t_game *game)
 		}
 		y++;
 	}
+}
+
+void check_open_door(t_game *game)
+{
+	if (game->is_interacting)
+		game->is_interacting = 0;
+	else
+		game->is_interacting = 1;
 }

@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:23:44 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/20 16:41:28 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:18:17 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,9 @@ int	is_wall(t_game *game, double x, double y)
 
 	map_x = (int)(x);
 	map_y = (int)(y);
-	// Verifica si está dentro de los límites del mapa
 	if (map_x < 0 || map_x >= game->mapinfo.width \
 		|| map_y < 0 || map_y >= game->mapinfo.height)
 		return (1);
-	// Devuelve 1 si la celda contiene una pared ('1') o (' ')
 	return (game->mapinfo.map[map_y][map_x] == '1' \
 		|| game->mapinfo.map[map_y][map_x] == ' ' \
 		|| game->mapinfo.map[map_y][map_x] == 'D');
@@ -34,7 +32,6 @@ int	is_safe_position(t_game *game, double x, double y)
 	double	margin;
 
 	margin = 0.2;
-	// Verifica las cuatro esquinas alrededor del jugador
 	if (is_wall(game, x - margin, y - margin))
 		return (0);
 	if (is_wall(game, x + margin, y - margin))
@@ -43,7 +40,7 @@ int	is_safe_position(t_game *game, double x, double y)
 		return (0);
 	if (is_wall(game, x + margin, y + margin))
 		return (0);
-	return (1); // Si ninguna de las esquinas tiene pared, es seguro
+	return (1);
 }
 
 void	mouse_scroll_hook(double xdelta, double ydelta, void *param)
@@ -52,11 +49,10 @@ void	mouse_scroll_hook(double xdelta, double ydelta, void *param)
 
 	game = (t_game *)param;
 	(void)xdelta;
-	if (ydelta > 0) // La rueda se desplaza hacia arriba
+	if (ydelta > 0)
 		handle_rotation_player(game, MLX_KEY_LEFT);
-	else if (ydelta < 0) // La rueda se desplaza hacia abajo
+	else if (ydelta < 0)
 		handle_rotation_player(game, MLX_KEY_RIGHT);
-	// Redibuja la escena después de la rotación
 	if (game->need_redraw)
 	{
 		perform_raycasting(game);
@@ -78,13 +74,7 @@ void	key_hook(struct mlx_key_data keydata, void *param)
 	if (keydata.key == MLX_KEY_ESCAPE)
 		close_window(param);
 	if (keydata.key == MLX_KEY_T)
-	{
-		if (game->is_interacting)
-			game->is_interacting = 0;
-		else
-			game->is_interacting = 1;
-		printf("asd %d\n", game->is_interacting);
-	}
+		check_open_door(game);
 	if (keydata.key == MLX_KEY_W || keydata.key == MLX_KEY_S)
 		handle_movement(game, keydata.key);
 	else if (keydata.key == MLX_KEY_A || keydata.key == MLX_KEY_D)
@@ -96,22 +86,10 @@ void	key_hook(struct mlx_key_data keydata, void *param)
 	else if (keydata.key == MLX_KEY_SPACE && !game->player.is_jumping)
 	{
 		game->player.is_jumping = 1;
-		game->player.jump_speed = 0.03; // Velocidad inicial del salto
+		game->player.jump_speed = 0.03;
 	}
-	printf("%d\n", game->is_interacting);
-	/*printf("Player position1: (%f, %f)\n", game->player.pos_x, \
-		game->player.pos_y);*/
-	/*if (game->need_redraw)
-	{
-		perform_raycasting(game);
-		draw_minimap(game);
-		draw_player_on_minimap(game);
-		mlx_image_to_window(game->mlx, game->image, 0, 0);
-		game->need_redraw = 0;
-	}*/
 }
 
-// Función de bucle principal del juegp para el salto y el raycasting
 void	game_loop(void *param)
 {
 	t_game	*game;

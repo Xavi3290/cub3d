@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:40 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/12/20 16:37:52 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:09:29 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	main(int argc, char **argv)
 		return (1);
 	init_anim(&game);
 	set_player_position(&game);
-	game.tile_size = (WIDTH / game.mapinfo.width) / 5;
+	game.tile_size = (WIDTH / game.mapinfo.width / 3);
 	setup_textures(&game);
 	perform_raycasting(&game);
 	normalize_map(&game);
