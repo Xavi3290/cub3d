@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:27:14 by xavi              #+#    #+#             */
-/*   Updated: 2024/12/17 10:10:33 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:53:58 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-// Inicialización del rayo para cada columna de la pantalla
 static void	init_ray(t_ray *ray, t_player *player, int x)
 {
 	ray->camera_x = 2 * (WIDTH - x) / (double)WIDTH - 1;
@@ -24,7 +23,6 @@ static void	init_ray(t_ray *ray, t_player *player, int x)
 	ray->delta_dist_y = fabs(1 / ray->ray_dir_y);
 }
 
-// Configuración inicial para el DDA
 static void	init_dda(t_ray *ray, t_player *player)
 {
 	if (ray->ray_dir_x < 0)
@@ -35,51 +33,21 @@ static void	init_dda(t_ray *ray, t_player *player)
 	else
 	{
 		ray->step_x = 1;
-		ray->side_dist_x = (ray->map_x + 1.0 - player->pos_x) \
+		ray->side_dist_x = (ray->map_x + 1.0 - player->pos_x)
 			* ray->delta_dist_x;
 	}
 	if (ray->ray_dir_y < 0)
 	{
 		ray->step_y = -1;
-		ray->side_dist_y = (player->pos_y - ray->map_y) \
-			* ray->delta_dist_y;
+		ray->side_dist_y = (player->pos_y - ray->map_y) * ray->delta_dist_y;
 	}
 	else
 	{
 		ray->step_y = 1;
-		ray->side_dist_y = (ray->map_y + 1.0 - player->pos_y) \
+		ray->side_dist_y = (ray->map_y + 1.0 - player->pos_y)
 			* ray->delta_dist_y;
 	}
 }
-
-// Función DDA para detectar colisiones
-/*static int	execute_dda_loop(t_ray *ray, t_game *game, int max_steps, int steps)
-{
-	int	hit;
-
-	hit = 0;
-	while (hit == 0 && steps < max_steps)
-	{
-		steps++;
-		if (ray->side_dist_x < ray->side_dist_y)
-		{
-			ray->side_dist_x += ray->delta_dist_x;
-			ray->map_x += ray->step_x;
-			ray->side = 0;
-		}
-		else
-		{
-			ray->side_dist_y += ray->delta_dist_y;
-			ray->map_y += ray->step_y;
-			ray->side = 1;
-		}
-		if (ray->map_x < 0 || ray->map_x >= game->mapinfo.width \
-			|| ray->map_y < 0 || ray->map_y >= game->mapinfo.height || \
-			is_wall(game, ray->map_x, ray->map_y))
-			hit = 1;
-	}
-	return (hit);
-}*/
 
 static int	execute_dda_loop(t_ray *ray, t_game *game, int max_steps, int steps)
 {
@@ -101,17 +69,13 @@ static int	execute_dda_loop(t_ray *ray, t_game *game, int max_steps, int steps)
 			ray->map_y += ray->step_y;
 			ray->side = 1;
 		}
-		if (ray->map_x < 0 || ray->map_x >= game->mapinfo.width \
-			|| ray->map_y < 0 || ray->map_y >= game->mapinfo.height || \
-			is_wall(game, ray->map_x, ray->map_y))
-			hit = 1;
+		hit = check_hit(ray, game);
 		if (game->mapinfo.map[ray->map_y][ray->map_x] == 'D')
 			return (2);
 	}
 	return (hit);
 }
 
-// Función principal dividida
 static void	perform_dda(t_ray *ray, t_game *game)
 {
 	int	hit;
@@ -123,30 +87,26 @@ static void	perform_dda(t_ray *ray, t_game *game)
 		ray->side_dist_x = 0.0001;
 	if (ray->side_dist_y < 0.0001)
 		ray->side_dist_y = 0.0001;
-	if (hit == 2) // Si golpea una celda 'D'
-		ray->special = 1; // Marcar el rayo como especial
+	if (hit == 2)
+		ray->special = 1;
 	else
 		ray->special = 0;
 }
 
-// Procesa un rayo y calcula los parámetros necesarios para dibujar la pared
 void	process_ray(t_ray *ray, t_game *game, t_line_params *line)
 {
 	init_ray(ray, &game->player, line->x);
 	init_dda(ray, &game->player);
 	perform_dda(ray, game);
-	// Calcula la distancia perpendicular a la pared
 	if (ray->side == 0)
-		line->perp_wall_dist = (ray->map_x - game->player.pos_x \
-			+ (1 - ray->step_x) / 2) / ray->ray_dir_x;
+		line->perp_wall_dist = (ray->map_x - game->player.pos_x + (1
+					- ray->step_x) / 2) / ray->ray_dir_x;
 	else
-		line->perp_wall_dist = (ray->map_y - game->player.pos_y \
-			+ (1 - ray->step_y) / 2) / ray->ray_dir_y;
+		line->perp_wall_dist = (ray->map_y - game->player.pos_y + (1
+					- ray->step_y) / 2) / ray->ray_dir_y;
 	if (line->perp_wall_dist < 0.01)
 		line->perp_wall_dist = 0.01;
-	// Calcula la altura de la línea a dibujar
 	line->line_height = (int)(HEIGHT / line->perp_wall_dist);
-	// Calcula el inicio y fin de la línea a dibujar
 	line->draw_start = -line->line_height / 2 + HEIGHT / 2;
 	if (line->draw_start < 0)
 		line->draw_start = 0;

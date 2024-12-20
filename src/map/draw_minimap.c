@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   draw_minimap.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:06:40 by xavi              #+#    #+#             */
-/*   Updated: 2024/12/20 17:07:16 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:35:17 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-// Dibuja una celda en el minimapa con el color especificado
 void	draw_minimap_cell(t_game *game)
 {
 	int	i;
@@ -34,7 +33,6 @@ void	draw_minimap_cell(t_game *game)
 	}
 }
 
-// Dibuja el minimapa en la esquina superior izquierda de la pantalla
 void	draw_minimap(t_game *game)
 {
 	int	y;
@@ -49,14 +47,14 @@ void	draw_minimap(t_game *game)
 			game->start_x = x * game->tile_size;
 			game->start_y = y * game->tile_size;
 			if (game->mapinfo.map[y][x] == '1')
-				game->color = game->minimap_wall_color; //Pared
+				game->color = game->minimap_wall_color;
 			else if (game->mapinfo.map[y][x] == 'D')
 				game->color = game->door_color;
 			else if (game->mapinfo.map[y][x] == '0' || is_player(game, x, y) \
 				|| game->mapinfo.map[y][x] == 'O')
-				game->color = game->minimap_floor_color; //Suelo
+				game->color = game->minimap_floor_color;
 			else
-				game->color = game->none_color; //Suelo
+				game->color = game->none_color;
 			draw_minimap_cell(game);
 			x++;
 		}
@@ -64,18 +62,16 @@ void	draw_minimap(t_game *game)
 	}
 }
 
-// Dibuja la posición del jugador en el minimapa
 void	draw_player_on_minimap(t_game *game)
 {
 	int	player_tile_size;
 	int	i;
 	int	j;
 
-	// Ajustar tamaño del jugador en el minimapa para evitar sobrepasar
 	game->start_x = (int)(game->player.pos_x * game->tile_size);
 	game->start_y = (int)(game->player.pos_y * game->tile_size);
 	game->color = game->minimap_player_color;
-	player_tile_size = game->tile_size; // Ajuste para el tamaño del jugador
+	player_tile_size = game->tile_size;
 	i = 0;
 	while (i < player_tile_size)
 	{

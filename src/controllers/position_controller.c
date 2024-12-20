@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   position_controller.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:16:43 by xavi              #+#    #+#             */
-/*   Updated: 2024/12/20 17:17:59 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:32:18 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-// Establece la dirección y posición del jugador en el juego
 void	set_player_position_and_direction(t_game *game, int x, int y)
 {
 	game->player.pos_x = x + 0.5;

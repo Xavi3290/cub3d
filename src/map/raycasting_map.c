@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting_map.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 13:43:34 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/17 10:04:38 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:54:39 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
+
+int	check_hit(t_ray *ray, t_game *game)
+{
+	if (ray->map_x < 0 || ray->map_x >= game->mapinfo.width || \
+		ray->map_y < 0 || ray->map_y >= game->mapinfo.height || \
+		is_wall(game, ray->map_x, ray->map_y))
+	{
+		return (1);
+	}
+	return (0);
+}
 
 static void	calculate_wall_limits(t_line_params *line, int vertical_shift)
 {
@@ -22,18 +33,17 @@ static void	calculate_wall_limits(t_line_params *line, int vertical_shift)
 		line->draw_end = HEIGHT - 1;
 }
 
-// Función para seleccionar la textura correcta basada en el lado de la pared
 t_texture	*select_texture(t_ray *ray, t_game *game)
 {
 	if (ray->special)
 		return (&game->door_texture);
 	if (ray->side == 0 && ray->step_x < 0)
-		return (&game->wall_textures[0]); // Norte
+		return (&game->wall_textures[0]);
 	else if (ray->side == 0 && ray->step_x > 0)
-		return (&game->wall_textures[1]); // Sur
+		return (&game->wall_textures[1]);
 	else if (ray->side == 1 && ray->step_y < 0)
-		return (&game->wall_textures[2]); // Oeste
-	return (&game->wall_textures[3]); // Este
+		return (&game->wall_textures[2]);
+	return (&game->wall_textures[3]);
 }
 
 static void	draw_ceiling(t_game *game, t_line_params *line)
@@ -45,8 +55,7 @@ static void	draw_ceiling(t_game *game, t_line_params *line)
 		y = -1;
 		while (++y < line->draw_start)
 		{
-			mlx_put_pixel(game->image, line->x, y, \
-							rgb_to_int(game->sky_color));
+			mlx_put_pixel(game->image, line->x, y, rgb_to_int(game->sky_color));
 		}
 	}
 }
@@ -59,7 +68,7 @@ void	perform_raycasting(t_game *game)
 	t_line_params	line;
 
 	x = 0;
-	draw_sky_and_floor(game); // Dibuja el cielo y el suelo
+	draw_sky_and_floor(game);
 	vertical_shift = (int)(game->player.view_offset * HEIGHT);
 	check_door_interaction(game);
 	while (x < WIDTH)

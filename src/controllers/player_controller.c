@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   player_controller.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:22:01 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/17 10:14:51 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:32:10 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-// Maneja la rotación del jugador
 void	handle_rotation_player(t_game *game, int key)
 {
 	double	old_dir_x;
@@ -37,7 +36,6 @@ void	handle_rotation_player(t_game *game, int key)
 		* cos(angle);
 }
 
-// Maneja el movimiento hacia adelante y atrás
 void	handle_movement(t_game *game, int key)
 {
 	double	next_x;
@@ -56,14 +54,12 @@ void	handle_movement(t_game *game, int key)
 		next_y -= game->player.dir_y * MOVE_SPEED;
 	}
 	game->need_redraw = 1;
-	// Verifica colisiones con el mapa y limita el movimiento a áreas libres
 	if (is_safe_position(game, next_x, game->player.pos_y))
 		game->player.pos_x = next_x;
 	if (is_safe_position(game, game->player.pos_x, next_y))
 		game->player.pos_y = next_y;
 }
 
-// Maneja el movimiento lateral
 void	handle_movement_sides(t_game *game, int key)
 {
 	double	next_x;
@@ -82,14 +78,12 @@ void	handle_movement_sides(t_game *game, int key)
 	else
 		return ;
 	game->need_redraw = 1;
-	// Verifica si la siguiente posición tiene una pared antes de mover
 	if (is_safe_position(game, next_x, game->player.pos_y))
 		game->player.pos_x = next_x;
 	if (is_safe_position(game, game->player.pos_x, next_y))
 		game->player.pos_y = next_y;
 }
 
-// Maneja el movimiento diagonal
 void	handle_diagonal_movement(t_game *game, int key)
 {
 	double	next_x;
@@ -99,7 +93,6 @@ void	handle_diagonal_movement(t_game *game, int key)
 	next_y = game->player.pos_y;
 	if (key == MLX_KEY_E)
 	{
-		// Mover en diagonal hacia adelante y la izquierda
 		next_x += (game->player.dir_x - game->player.plane_x) \
 			* MOVE_SPEED / sqrt(2);
 		next_y += (game->player.dir_y - game->player.plane_y) \
@@ -107,31 +100,26 @@ void	handle_diagonal_movement(t_game *game, int key)
 	}
 	else if (key == MLX_KEY_Q)
 	{
-		// Mover en diagonal hacia adelante y la derecha
 		next_x += (game->player.dir_x + game->player.plane_x) \
 			* MOVE_SPEED / sqrt(2);
 		next_y += (game->player.dir_y + game->player.plane_y) \
 			* MOVE_SPEED / sqrt(2);
 	}
 	game->need_redraw = 1;
-	// Verificar colisiones
 	if (is_safe_position(game, next_x, game->player.pos_y))
 		game->player.pos_x = next_x;
 	if (is_safe_position(game, game->player.pos_x, next_y))
 		game->player.pos_y = next_y;
 }
 
-// Maneja el salto del jugador
 void	handle_jump(t_game *game)
 {
 	if (game->player.is_jumping)
 	{
 		game->player.view_offset += game->player.jump_speed;
 		game->player.jump_speed -= 0.005;
-		// Limitar la altura máxima del salto
-		if (game->player.view_offset > 0.08) // Menor altura de salto
-			game->player.jump_speed = -0.005; // Inicia la caída más lenta
-		// Finalizar el salto al volver a la posición inicial
+		if (game->player.view_offset > 0.08)
+			game->player.jump_speed = -0.005;
 		if (game->player.view_offset <= 0)
 		{
 			game->player.view_offset = 0;

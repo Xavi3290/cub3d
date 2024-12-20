@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   door_controller.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 09:45:09 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/20 17:18:47 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:38:47 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	check_door_interaction(t_game *game)
 	}
 }
 
-void check_open_door(t_game *game)
+void	check_open_door(t_game *game)
 {
 	if (game->is_interacting)
 		game->is_interacting = 0;

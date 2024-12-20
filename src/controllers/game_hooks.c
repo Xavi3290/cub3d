@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_hooks.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:23:44 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/20 17:18:17 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:40:42 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ int	is_wall(t_game *game, double x, double y)
 
 	map_x = (int)(x);
 	map_y = (int)(y);
-	if (map_x < 0 || map_x >= game->mapinfo.width \
-		|| map_y < 0 || map_y >= game->mapinfo.height)
+	if (map_x < 0 || map_x >= game->mapinfo.width || map_y < 0
+		|| map_y >= game->mapinfo.height)
 		return (1);
-	return (game->mapinfo.map[map_y][map_x] == '1' \
-		|| game->mapinfo.map[map_y][map_x] == ' ' \
+	return (game->mapinfo.map[map_y][map_x] == '1'
+		|| game->mapinfo.map[map_y][map_x] == ' '
 		|| game->mapinfo.map[map_y][map_x] == 'D');
 }
 
@@ -63,13 +63,12 @@ void	mouse_scroll_hook(double xdelta, double ydelta, void *param)
 	}
 }
 
-// Función de enganche para gestionar teclas
 void	key_hook(struct mlx_key_data keydata, void *param)
 {
 	t_game	*game;
 
 	if (!keydata.action)
-		return;
+		return ;
 	game = (t_game *)param;
 	if (keydata.key == MLX_KEY_ESCAPE)
 		close_window(param);

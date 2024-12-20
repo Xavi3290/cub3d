@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
+/*   By: xroca-pe <xroca-pe@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 20:10:27 by xroca-pe          #+#    #+#             */
-/*   Updated: 2024/12/20 17:18:58 by cgaratej         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:59:00 by xroca-pe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,15 @@
 # define BPP 4
 
 # include "../libft/libft.h"
-# include "cub3d_utils.h"
 # include "MLX42/MLX42.h"
-# include <stdio.h>
+# include "cub3d_utils.h"
+# include <errno.h>
+# include <fcntl.h>
 # include <math.h>
 # include <stdio.h>
-# include <fcntl.h>
-# include <unistd.h>
-# include <errno.h>
 # include <string.h>
 # include <sys/time.h>
+# include <unistd.h>
 
 # define ERR_FILE_NOT_CUB "Wrong file extension .cub"
 # define ERR_FILE_NOT_XMP "Wrong file extension .xmp"
@@ -78,6 +77,7 @@ void		init_anim(t_game *game);
 void		draw_animation_pixel(t_game *game, mlx_texture_t *texture);
 void		free_text(t_game *game);
 
+int			check_hit(t_ray *ray, t_game *game);
 void		perform_raycasting(t_game *game);
 int			is_player_cell(t_game *game, int x, int y);
 int			is_wall(t_game *game, double x, double y);
@@ -96,8 +96,8 @@ void		handle_jump(t_game *game);
 
 void		draw_sky_and_floor(t_game *game);
 void		draw_floor(t_game *game, t_line_params *line);
-void		draw_textured_line(t_game *game, t_ray *ray, t_line_params *line, \
-								t_texture *texture);
+void		draw_textured_line(t_game *game, t_ray *ray, t_line_params *line,
+				t_texture *texture);
 
 void		key_hook(struct mlx_key_data keydata, void *param);
 void		mouse_scroll_hook(double xdelta, double ydelta, void *param);
