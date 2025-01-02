@@ -6,7 +6,7 @@
 /*   By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:41:55 by cgaratej          #+#    #+#             */
-/*   Updated: 2024/12/10 13:01:22 by cgaratej         ###   ########.fr       */
+/*   Updated: 2025/01/02 22:55:01 by cgaratej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,18 @@ int	check_top_or_bottom(char **map_tab, int i)
 
 int	check_cells(char **map, int i, int j)
 {
-	if (j == 0 || j - 1 >= (int)ft_strlen(map[i]) \
+	if (j == 0 || map[i][j - 1] == '\0' || map[i][j - 1] == '\n' \
 		|| map[i][j - 1] == ' ')
 		return (1);
 	if (j + 1 >= (int)ft_strlen(map[i]) || map[i][j + 1] == '\0' \
-		|| map[i][j + 1] == ' ')
+		|| map[i][j + 1] == '\n' || map[i][j + 1] == ' ')
 		return (1);
-	if (i == 0 || j >= (int)ft_strlen(map[i - 1]) \
-		|| map[i - 1][j] == '\0' || map[i - 1][j] == ' ')
+	if (i == 0 || j >= (int)ft_strlen(map[i - 1]) || map[i - 1][j] == '\0' \
+		|| map[i - 1][j] == '\n' || map[i - 1][j] == ' ')
 		return (1);
 	if (!map[i + 1] || j >= (int)ft_strlen(map[i + 1]) \
-		|| map[i + 1][j] == '\0' || map[i + 1][j] == ' ')
+		|| map[i + 1][j] == '\0' || map[i + 1][j] == '\n' \
+		|| map[i + 1][j] == ' ')
 		return (1);
 	return (0);
 }
