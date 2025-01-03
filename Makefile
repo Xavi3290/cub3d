@@ -6,7 +6,7 @@
 #    By: cgaratej <cgaratej@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/21 18:43:43 by xroca-pe          #+#    #+#              #
-#    Updated: 2024/12/17 10:15:25 by cgaratej         ###   ########.fr        #
+#    Updated: 2025/01/03 15:58:58 by cgaratej         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,13 +77,13 @@ mlx:
 clean:
 	@$(RM) -r $(BUILD_DIR)
 	@$(LIBFT_MAKE) clean
-	@make -C $(MLX_DIR) clean
+	@make --no-print-directory -C $(MLX_DIR) clean
 	@echo "$(RED)Deleted object files ✔$(NONE)"
 
 fclean: clean
 	@$(RM) $(NAME)
 	@$(LIBFT_MAKE) fclean
-	@make -C $(MLX_DIR) clean
+	@make --no-print-directory -C $(MLX_DIR) clean
 	@echo "$(RED)Executable $(NAME) deleted ✔$(NONE)"
 
 re: fclean all
